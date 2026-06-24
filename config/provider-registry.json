@@ -1,0 +1,11 @@
+{
+  "product": "BUNK",
+  "database": "supabase",
+  "hosting": "vercel",
+  "payments": ["monnify", "paystack", "flutterwave", "stripe"],
+  "maps": ["mapbox", "google_maps", "openstreetmap"],
+  "ai": ["openai", "gemini", "anthropic"],
+  "automation": "n8n",
+  "analytics": "posthog",
+  "monitoring": "sentry"
+}

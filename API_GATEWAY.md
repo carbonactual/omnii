@@ -1,4 +1,4 @@
-# 🚀 Unified API Gateway
+# 🚀 API Gateway - Carbon Actual Ecosystem
 
 ## Overview
 Central API layer for Carbon Actual Ecosystem. Routes all requests to appropriate swirms and coordinates multi-agent task execution.
@@ -8,30 +8,27 @@ Central API layer for Carbon Actual Ecosystem. Routes all requests to appropriat
 ## Architecture
 
 ```
-┌─────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────┐
 │  Client (Web/Mobile/API)            │
-└──────────────┬──────────────────────┘
+└──────────────────────────────────────┬───────────────────────┘
                │
-        ┌──────▼──────┐
-        │ API Gateway │  (omnii/app/api)
-        │ (routing)   │
-        └──────┬──────┘
-               │
-    ┌──────────┼──────────┐
-    │          │          │
-    ▼          ▼          ▼
-┌────────┐ ┌─���──────┐ ┌──────────┐
-│Swirm   │ │Swirm   │ │Swirm     │
-│Selector│ │Executor│ │Monitor   │
-└────────┘ └────────┘ └──────────┘
-    │          │          │
-    └──────────┼──────────┘
-               ▼
-        ┌──────────────────┐
-        │ Integrated Swirms│
-        │ (CrewAI, Aries,  │
-        │  Weaviate, etc)  │
-        └──────────────────┘
+        ┌──────────────┐
+        │ API Gateway  │  (omnii/app/api)
+        │ (routing)    │
+        └──────────────┬──────────────────────┐
+               │          │          │
+               ▼          ▼          ▼
+    ┌──────────────┐ ┌──────────────┐ ┌──────────────────┐
+    │Swirm         │ │Swirm         │ │Swirm             │
+    │Selector      │ │Executor      │ │Monitor           │
+    └──────────────┘ └──────────────┘ └──────────────────┘
+               │          │          │
+               └──────────┬──────────┬┘
+                       ▼
+        ┌──────────────────────────────────────┐
+        │ Integrated Swirms                    │
+        │ (CrewAI, Aries, Weaviate, etc)      │
+        └──────────────────────────────────────┘
 ```
 
 ---

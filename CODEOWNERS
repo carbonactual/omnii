@@ -1,0 +1,43 @@
+# CODEOWNERS - Carbon Actual Ecosystem
+# Define responsibility for different areas
+
+# Core Orchestration
+apps/nexus/ @carbonactual
+services/task-executor/ @carbonactual
+services/swirm-selector/ @carbonactual
+
+# Identity & Minting
+apps/shadow/ @carbonactual
+packages/integrations/aries-adapter/ @carbonactual
+packages/integrations/veramo-adapter/ @carbonactual
+
+# Memory & Knowledge
+services/hapi-world-runtime/ @carbonactual
+packages/integrations/weaviate-adapter/ @carbonactual
+packages/integrations/memgpt-adapter/ @carbonactual
+
+# Asset Management & Marketplace
+apps/bunk/ @carbonactual
+packages/shared-contracts/ @carbonactual
+
+# User Interfaces
+apps/openclaw-wrapper/ @carbonactual
+packages/ui/ @carbonactual
+
+# Integration Layer
+packages/integrations/ @carbonactual
+packages/types/ @carbonactual
+
+# Documentation
+*.md @carbonactual
+.github/ @carbonactual
+
+# CI/CD
+.github/workflows/ @carbonactual
+scripts/ @carbonactual
+docker-compose.yml @carbonactual
+
+# Root configs
+package.json @carbonactual
+tsconfig.json @carbonactual
+turbo.json @carbonactual

@@ -1,0 +1,24 @@
+{
+  "ecosystem": "carbon-actual",
+  "repository": "carbonactual/omnii",
+  "product": "BUNK",
+  "canonicalRole": "property_housing_product",
+  "layer": "products",
+  "owner": "bunk",
+  "capabilities": [
+    "bunk.property.registry",
+    "bunk.unit.registry",
+    "bunk.listing.create",
+    "bunk.listing.verify",
+    "bunk.listing.publish",
+    "bunk.search",
+    "bunk.inspection",
+    "bunk.tenancy",
+    "bunk.maintenance",
+    "bunk.agent.workflow"
+  ],
+  "dependencies": ["carbonactual/omni", "carbonactual/abba", "carbonactual/hapi-world"],
+  "inherited": ["identity", "seal", "actual", "becoming", "pulse", "value", "governance", "execution"],
+  "mustNotOwn": ["master_intelligence", "identity", "trust_verification", "ecosystem_runtime", "canonical_economy"],
+  "contracts": ["product", "identity", "property", "listing", "verification", "activity", "execution"]
+}

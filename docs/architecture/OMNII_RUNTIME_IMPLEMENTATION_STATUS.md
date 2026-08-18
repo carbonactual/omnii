@@ -2,6 +2,8 @@
 
 **Scope:** Final production-readiness closure for the established Phase 1–40 runtime. **Phase 41 is not started.** No constitutional kernel or competing runtime architecture is introduced.
 
+**Current HEAD:** `9868a9e3323af757f4981728ae4a7cd370fb2484`
+
 ## Current evidence matrix
 
 | Capability | Coded | Unit/Contract Tested | Currently Executed | Live Verified | CI Verified | Deployed |
@@ -75,7 +77,7 @@ The two migration files were corrected in commit `ae5482fad9d1cbae22ce81c1d66852
 
 ## Repository execution evidence
 
-The connected GitHub tooling provides repository inspection and workflow-run/status inspection, but no shell execution and no workflow-dispatch operation. For current HEAD `ae5482fad9d1cbae22ce81c1d66852b40c5c513b` there is no observable current workflow run/status evidence.
+The connected GitHub tooling provides repository inspection and workflow-run/status inspection, but no shell execution and no workflow-dispatch operation. For current HEAD `9868a9e3323af757f4981728ae4a7cd370fb2484` there is no observable current workflow run/status evidence.
 
 Therefore:
 

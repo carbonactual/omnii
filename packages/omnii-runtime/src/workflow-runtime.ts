@@ -1,16 +1,16 @@
 import { randomUUID } from "node:crypto";
 import { Authority, JsonObject } from "./types";
 import { Execution, ExecutionHandler, ExecutionRuntime } from "./execution-runtime";
-import { EventStore } from "./event-runtime";
-import { authorize } from "./event-runtime";
+import { EventStore, authorize } from "./event-runtime";
+import { MemoryPersistenceAdapter, PersistencePort } from "./persistence";
 
 export type WorkflowState = "created" | "validated" | "planned" | "authorized" | "executing" | "completed" | "failed" | "escalated";
 
 export interface WorkflowDefinition {
   id: string;
   trigger: string;
-  validate: (context: JsonObject) => boolean;
-  plan: (context: JsonObject) => JsonObject;
+  validate: (context: JsonObject) => boolean | Promise<boolean>;
+  plan: (context: JsonObject) => JsonObject | Promise<JsonObject>;
   capability: string;
   authority: Authority;
   execute: ExecutionHandler;
@@ -30,9 +30,8 @@ export interface WorkflowInstance {
 
 export class WorkflowRuntime {
   private readonly definitions = new Map<string, WorkflowDefinition>();
-  private readonly instances = new Map<string, WorkflowInstance>();
 
-  constructor(private readonly executions: ExecutionRuntime, private readonly events: EventStore) {}
+  constructor(private readonly executions: ExecutionRuntime, private readonly events: EventStore, private readonly persistence: PersistencePort = new MemoryPersistenceAdapter()) {}
 
   register(definition: WorkflowDefinition): WorkflowDefinition {
     if (this.definitions.has(definition.id)) throw new Error(`Workflow already exists: ${definition.id}`);
@@ -40,61 +39,53 @@ export class WorkflowRuntime {
     return definition;
   }
 
-  start(definitionId: string, context: JsonObject): WorkflowInstance {
+  async start(definitionId: string, context: JsonObject): Promise<WorkflowInstance> {
     const definition = this.requireDefinition(definitionId);
-    const instance: WorkflowInstance = { id: randomUUID(), definitionId, state: "created", context, attempts: 0, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
-    if (!definition.validate(context)) throw new Error("Workflow validation failed");
+    const now = new Date().toISOString();
+    const instance: WorkflowInstance = { id: randomUUID(), definitionId, state: "created", context, attempts: 0, createdAt: now, updatedAt: now };
+    if (!(await definition.validate(context))) throw new Error("Workflow validation failed");
     instance.state = "validated";
-    instance.context = definition.plan(context);
+    instance.context = await definition.plan(context);
     instance.state = "planned";
     authorize(definition.authority, definition.capability);
     instance.state = "authorized";
-    this.instances.set(instance.id, structuredClone(instance));
-    this.events.append({ type: "WORKFLOW_AUTHORIZED", actor: definition.authority.subject, subject: instance.id, outcome: "success", provenance: { authority_id: definition.authority.id }, payload: { definition_id: definition.id } });
-    return structuredClone(instance);
+    const created = await this.persistence.create("workflows", instance);
+    await this.events.append({ type: "WORKFLOW_AUTHORIZED", actor: definition.authority.subject, subject: instance.id, outcome: "success", provenance: { authority_id: definition.authority.id }, payload: { definition_id: definition.id }, idempotency_key: `workflow:authorize:${instance.id}` });
+    return structuredClone(created as unknown as WorkflowInstance);
   }
 
-  run(id: string, actorIdentity: string): WorkflowInstance {
-    const instance = this.requireInstance(id);
+  async run(id: string, actorIdentity: string): Promise<WorkflowInstance> {
+    const instance = await this.requireInstance(id);
     const definition = this.requireDefinition(instance.definitionId);
     if (instance.state !== "authorized" && instance.state !== "executing") throw new Error("Workflow is not authorized");
     instance.state = "executing";
     instance.attempts += 1;
-    const execution: Execution = this.executions.create({
-      intentReference: definition.id,
-      actorIdentity,
-      authorityContext: definition.authority,
-      capability: definition.capability,
-      resources: [],
-      dependencies: [],
-      input: instance.context,
-      provenance: { workflow_id: instance.id },
-    });
-    this.executions.validate(execution.id);
-    this.executions.authorize(execution.id);
-    const result = this.executions.run(execution.id, definition.execute);
+    const execution: Execution = await this.executions.create({ intentReference: definition.id, actorIdentity, authorityContext: definition.authority, capability: definition.capability, resources: [], dependencies: [], input: instance.context, provenance: { workflow_id: instance.id }, idempotencyKey: `workflow:${instance.id}:attempt:${instance.attempts}` });
+    await this.executions.validate(execution.id);
+    await this.executions.authorize(execution.id);
+    const result = await this.executions.run(execution.id, definition.execute);
     instance.executionId = result.id;
     if (result.state === "completed") instance.state = "completed";
     else if ((definition.retry?.maxAttempts ?? 0) >= instance.attempts) instance.state = "executing";
     else instance.state = "failed";
     instance.updatedAt = new Date().toISOString();
-    this.instances.set(id, structuredClone(instance));
-    this.events.append({ type: "WORKFLOW_STATE_CHANGED", actor: actorIdentity, subject: id, outcome: instance.state, provenance: { execution_id: result.id }, payload: { state: instance.state, attempts: instance.attempts } });
-    return structuredClone(instance);
+    const updated = await this.persistence.update("workflows", id, instance);
+    await this.events.append({ type: "WORKFLOW_STATE_CHANGED", actor: actorIdentity, subject: id, outcome: instance.state, provenance: { execution_id: result.id }, payload: { state: instance.state, attempts: instance.attempts }, idempotency_key: `workflow:state:${id}:${instance.attempts}` });
+    return structuredClone(updated as unknown as WorkflowInstance);
   }
 
-  escalate(id: string, actorIdentity: string, reason: string): WorkflowInstance {
-    const instance = this.requireInstance(id);
+  async escalate(id: string, actorIdentity: string, reason: string): Promise<WorkflowInstance> {
+    const instance = await this.requireInstance(id);
     instance.state = "escalated";
     instance.updatedAt = new Date().toISOString();
-    this.instances.set(id, structuredClone(instance));
-    this.events.append({ type: "WORKFLOW_ESCALATED", actor: actorIdentity, subject: id, outcome: "escalated", provenance: { workflow_id: id }, payload: { reason } });
-    return structuredClone(instance);
+    const updated = await this.persistence.update("workflows", id, instance);
+    await this.events.append({ type: "WORKFLOW_ESCALATED", actor: actorIdentity, subject: id, outcome: "escalated", provenance: { workflow_id: id }, payload: { reason }, idempotency_key: `workflow:escalate:${id}` });
+    return structuredClone(updated as unknown as WorkflowInstance);
   }
 
-  read(id: string): WorkflowInstance | undefined {
-    const instance = this.instances.get(id);
-    return instance ? structuredClone(instance) : undefined;
+  async read(id: string): Promise<WorkflowInstance | undefined> {
+    const instance = await this.persistence.read("workflows", id);
+    return instance ? structuredClone(instance as unknown as WorkflowInstance) : undefined;
   }
 
   private requireDefinition(id: string): WorkflowDefinition {
@@ -103,9 +94,9 @@ export class WorkflowRuntime {
     return definition;
   }
 
-  private requireInstance(id: string): WorkflowInstance {
-    const instance = this.instances.get(id);
+  private async requireInstance(id: string): Promise<WorkflowInstance> {
+    const instance = await this.read(id);
     if (!instance) throw new Error(`Workflow instance not found: ${id}`);
-    return structuredClone(instance);
+    return instance;
   }
 }

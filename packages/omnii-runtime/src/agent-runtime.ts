@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { Authority, JsonObject } from "./types";
 import { authorize, EventStore } from "./event-runtime";
 import { Execution, ExecutionRuntime } from "./execution-runtime";
+import { MemoryPersistenceAdapter, PersistencePort } from "./persistence";
 
 export type AgentState = "registered" | "verified" | "active" | "suspended" | "revoked";
 
@@ -19,87 +20,86 @@ export interface AgentContract {
 }
 
 export class AgentRuntime {
-  private readonly agents = new Map<string, AgentContract>();
+  constructor(private readonly executions: ExecutionRuntime, private readonly events: EventStore, private readonly persistence: PersistencePort = new MemoryPersistenceAdapter()) {}
 
-  constructor(private readonly executions: ExecutionRuntime, private readonly events: EventStore) {}
-
-  register(input: Omit<AgentContract, "id" | "state">): AgentContract {
+  async register(input: Omit<AgentContract, "id" | "state">): Promise<AgentContract> {
     const agent: AgentContract = { ...input, id: randomUUID(), state: "registered" };
-    if (this.agents.has(agent.identity)) throw new Error(`Agent identity already registered: ${agent.identity}`);
-    this.agents.set(agent.identity, structuredClone(agent));
-    this.events.append({ type: "AGENT_REGISTERED", actor: agent.identity, subject: agent.id, outcome: "success", provenance: { authority_id: agent.authority.id }, payload: { capabilities: agent.capabilities } });
-    return structuredClone(agent);
+    const existing = await this.persistence.query("agents", (record) => record["identity"] === agent.identity);
+    if (existing.length) throw new Error(`Agent identity already registered: ${agent.identity}`);
+    const created = await this.persistence.create("agents", agent);
+    await this.events.append({ type: "AGENT_REGISTERED", actor: agent.identity, subject: agent.id, outcome: "success", provenance: { authority_id: agent.authority.id }, payload: { capabilities: agent.capabilities }, idempotency_key: `agent:register:${agent.identity}` });
+    return structuredClone(created as unknown as AgentContract);
   }
 
-  verify(identity: string): AgentContract {
-    const agent = this.require(identity);
+  async verify(identity: string): Promise<AgentContract> {
+    const agent = await this.require(identity);
     if (!agent.authority.id || !agent.identity) throw new Error("Agent verification failed");
     agent.state = "verified";
-    this.agents.set(identity, structuredClone(agent));
-    return structuredClone(agent);
+    const updated = await this.persistence.update("agents", agent.id, agent);
+    return structuredClone(updated as unknown as AgentContract);
   }
 
-  authorizeAgent(identity: string, capability: string, delegatedAuthority?: Authority): AgentContract {
-    const agent = this.require(identity);
+  async authorizeAgent(identity: string, capability: string, delegatedAuthority?: Authority): Promise<AgentContract> {
+    const agent = await this.require(identity);
     if (!["verified", "active"].includes(agent.state)) throw new Error("Agent is not eligible for authorization");
     const authority = delegatedAuthority ?? agent.authority;
     if (delegatedAuthority && delegatedAuthority.subject !== agent.identity) throw new Error("Delegated authority subject must match the agent identity");
     authorize(authority, capability);
     if (!agent.capabilities.includes(capability) && !agent.capabilities.includes("*")) throw new Error(`Agent capability not declared: ${capability}`);
     agent.state = "active";
-    this.agents.set(identity, structuredClone(agent));
-    return structuredClone(agent);
+    const updated = await this.persistence.update("agents", agent.id, agent);
+    return structuredClone(updated as unknown as AgentContract);
   }
 
-  execute(identity: string, capability: string, intentReference: string, input: JsonObject, handler: (input: JsonObject) => JsonObject, delegatedAuthority?: Authority): Execution {
-    const agent = this.require(identity);
+  async execute(identity: string, capability: string, intentReference: string, input: JsonObject, handler: (input: JsonObject) => JsonObject | Promise<JsonObject>, delegatedAuthority?: Authority): Promise<Execution> {
+    const agent = await this.require(identity);
     if (agent.state !== "active") throw new Error("Agent is not active");
     const authority = delegatedAuthority ?? agent.authority;
     if (delegatedAuthority && delegatedAuthority.subject !== agent.identity) throw new Error("Delegated authority subject must match the agent identity");
     authorize(authority, capability);
     if (!agent.capabilities.includes(capability) && !agent.capabilities.includes("*")) throw new Error(`Agent capability not declared: ${capability}`);
-    const execution = this.executions.create({ intentReference, actorIdentity: agent.identity, authorityContext: authority, capability, resources: [], dependencies: [], input, provenance: { agent_id: agent.id, delegated_authority_id: delegatedAuthority?.id ?? null } });
-    this.executions.validate(execution.id);
-    this.executions.authorize(execution.id);
+    const execution = await this.executions.create({ intentReference, actorIdentity: agent.identity, authorityContext: authority, capability, resources: [], dependencies: [], input, provenance: { agent_id: agent.id, delegated_authority_id: delegatedAuthority?.id ?? null } });
+    await this.executions.validate(execution.id);
+    await this.executions.authorize(execution.id);
     return this.executions.run(execution.id, handler);
   }
 
-  report(identity: string, subject: string, payload: JsonObject): void {
-    const agent = this.require(identity);
-    this.events.append({ type: "AGENT_REPORT", actor: agent.identity, subject, outcome: "reported", provenance: { agent_id: agent.id, authority_id: agent.authority.id }, payload });
+  async report(identity: string, subject: string, payload: JsonObject): Promise<void> {
+    const agent = await this.require(identity);
+    await this.events.append({ type: "AGENT_REPORT", actor: agent.identity, subject, outcome: "reported", provenance: { agent_id: agent.id, authority_id: agent.authority.id }, payload });
   }
 
-  escalate(identity: string, subject: string, reason: string): void {
-    const agent = this.require(identity);
-    this.events.append({ type: "AGENT_ESCALATED", actor: agent.identity, subject, outcome: "escalated", provenance: { agent_id: agent.id }, payload: { reason } });
+  async escalate(identity: string, subject: string, reason: string): Promise<void> {
+    const agent = await this.require(identity);
+    await this.events.append({ type: "AGENT_ESCALATED", actor: agent.identity, subject, outcome: "escalated", provenance: { agent_id: agent.id }, payload: { reason } });
   }
 
-  suspend(identity: string): AgentContract { return this.setState(identity, "suspended"); }
+  async suspend(identity: string): Promise<AgentContract> { return this.setState(identity, "suspended"); }
 
-  revoke(identity: string): AgentContract {
-    const agent = this.require(identity);
+  async revoke(identity: string): Promise<AgentContract> {
+    const agent = await this.require(identity);
     agent.state = "revoked";
     agent.authority.revoked_at = new Date().toISOString();
-    this.agents.set(identity, structuredClone(agent));
-    this.events.append({ type: "AGENT_REVOKED", actor: identity, subject: agent.id, outcome: "revoked", provenance: { authority_id: agent.authority.id } });
-    return structuredClone(agent);
+    const updated = await this.persistence.update("agents", agent.id, agent);
+    await this.events.append({ type: "AGENT_REVOKED", actor: identity, subject: agent.id, outcome: "revoked", provenance: { authority_id: agent.authority.id }, idempotency_key: `agent:revoke:${agent.id}` });
+    return structuredClone(updated as unknown as AgentContract);
   }
 
-  read(identity: string): AgentContract | undefined {
-    const agent = this.agents.get(identity);
-    return agent ? structuredClone(agent) : undefined;
+  async read(identity: string): Promise<AgentContract | undefined> {
+    const records = await this.persistence.query("agents", (record) => record["identity"] === identity);
+    return records.length ? structuredClone(records[0] as unknown as AgentContract) : undefined;
   }
 
-  private setState(identity: string, state: AgentState): AgentContract {
-    const agent = this.require(identity);
+  private async setState(identity: string, state: AgentState): Promise<AgentContract> {
+    const agent = await this.require(identity);
     agent.state = state;
-    this.agents.set(identity, structuredClone(agent));
-    return structuredClone(agent);
+    const updated = await this.persistence.update("agents", agent.id, agent);
+    return structuredClone(updated as unknown as AgentContract);
   }
 
-  private require(identity: string): AgentContract {
-    const agent = this.agents.get(identity);
+  private async require(identity: string): Promise<AgentContract> {
+    const agent = await this.read(identity);
     if (!agent) throw new Error(`Agent not found: ${identity}`);
-    return structuredClone(agent);
+    return agent;
   }
 }

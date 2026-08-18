@@ -1,6 +1,6 @@
 # OMNII Runtime Implementation Status
 
-**Scope:** Persistence integration and empirical verification pass after the audited Phase 1–40 architecture.
+**Scope:** Phase 1–40 runtime hardening. This pass materializes the canonical production authority boundary; it does not start Phase 41 or add constitutional kernels.
 
 | Component | Architecture | Schema | Code | Tested | Persisted | Integrated | CI-Verified | Deployed |
 |---|---|---|---|---|---|---|---|---|
@@ -13,80 +13,71 @@
 | Workflow Runtime | YES | PARTIAL | YES | YES | YES (memory + durable schema) | YES | YES | NO |
 | Agent Runtime | YES | PARTIAL | YES | YES | YES (memory + durable schema) | YES | YES | NO |
 | ABBA Boundary | YES | PARTIAL | YES | YES | Delegation state persistence available | YES | YES | NO |
+| Authority Runtime | YES | YES | YES | **UNVERIFIED** — new authority suite not executed in available runtime environment | YES | YES | **UNVERIFIED** | NO |
 | Audit Runtime | YES | PARTIAL | YES | YES | YES (memory + live durable audit records) | YES | YES | NO |
 | Ledger Boundary | YES | PARTIAL | YES | YES | YES (memory + live ledger/audit RPC) | YES | YES | NO |
 | Memory Persistence Adapter | YES | N/A | YES | YES | YES | YES | YES | NO |
-| Supabase Persistence Adapter | YES | YES | YES | Contract tested; live SQL/RPC smoke verification PASS | YES | YES | YES (prior CI) | NO |
-| Durable PostgreSQL schema/RPCs | YES | YES | YES | **LIVE VERIFIED** | YES | YES | YES (prior CI) | NO |
+| Supabase Persistence Adapter | YES | YES | YES | Prior contract tested; authority RPC smoke verification PASS | PARTIAL | PARTIAL | YES (prior CI) | NO |
+| Durable PostgreSQL schema/RPCs | YES | YES | YES | **LIVE VERIFIED** — authority migration/RPC smoke tests executed | YES | PARTIAL | YES (prior CI) | NO |
 
 ## Canonical durable environment
 
-The canonical durable environment is now explicitly established as:
-
 - **Project:** `omnii-canonical`
 - **Project ref:** `fomkrgrsqakabftymbjn`
-- **Region:** `us-east-1`
-- **Status:** `ACTIVE_HEALTHY`
+- **Status:** ACTIVE and live-accessible through the connected Supabase integration.
 
-This project was newly created specifically to remove the previous ambiguity between inactive Supabase projects. It is now the designated OMNII durable verification environment.
+## Authority hardening evidence
 
-## Live migration evidence
+Repository implementation now contains:
 
-Migrations were applied successfully to the canonical project:
+- `AuthorityRuntime` exported from the canonical runtime package.
+- Authority records persisted through `PersistencePort`.
+- `MemoryPersistenceAdapter` authority lifecycle operations.
+- `SupabasePersistenceAdapter` authority collection and named PostgreSQL RPC operations.
+- `omnii_authorities` durable schema with version, lifecycle, parent authority, provenance, context/resource constraints and idempotency key.
+- Issuer containment and delegation containment checks.
+- Explicit rejection of ABBA as issuer/delegator.
+- Explicit rejection of authority-bearing agents as issuer/delegator.
+- Version-protected revocation and suspension.
+- Consequential authority event generation through the existing `EventStore`.
 
-- `omnii_runtime` — applied successfully
-- `omnii_runtime_atomic_boundaries` — applied successfully
+## Live authority verification
 
-The live migration registry reports both migrations present.
+Canonical project: `fomkrgrsqakabftymbjn`.
 
-The resulting database contains:
+- Migration `0005_omnii_authority_boundary`: **PASS** — applied successfully.
+- `omnii_authorities` table: **PASS** — created with parent foreign key, lifecycle checks and indexes.
+- RLS enabled: **PASS** — `relrowsecurity=true`.
+- Authority RPCs issue/revoke/suspend: **PASS** — all three exist.
+- Durable authority issuance: **PASS** — live RPC returned the requested authority.
+- Idempotent issuance: **PASS** — repeated idempotency key returned the original authority ID.
+- Durable revocation: **PASS** — live RPC changed status to `revoked` and version `1 → 2`.
+- Stale mutation rejection: **PASS** — a second revoke using stale version `1` was rejected.
+- Authenticated/anonymous RLS authorization behavior: **UNVERIFIED** — no explicit OMNII policies exist and the available database tool does not expose a separate application-role session.
 
-- 11 OMNII runtime tables
-- 3 atomic PostgreSQL RPC functions
-- RLS enabled on all 11 OMNII runtime tables
+## Prior CI evidence
 
-## Live durable verification
-
-The following live PostgreSQL operations were successfully exercised:
-
-- canonical object create/read/update/version behavior
-- state persistence
-- state + event atomic RPC
-- execution + audit atomic RPC
-- ledger + audit atomic RPC
-- durable idempotency uniqueness
-- optimistic concurrency rejection of a stale version write
-- live migration presence
-- live RLS enablement
-
-The state/event rollback test also verified that a duplicate idempotency-key failure did not leave the attempted state transition or event record behind.
-
-The database currently has **no explicit `pg_policies` entries for the OMNII tables**. RLS is enabled, but policy behavior for authenticated/anonymous application roles has not been validated and application-specific policies remain an external hosting boundary.
-
-## Empirical CI evidence
-
-GitHub Actions workflow run **32103355581** completed successfully.
-
-Executed on the pull-request merge ref:
+GitHub Actions run **32103355581** remains valid prior evidence for the pre-authority runtime:
 
 - install: PASS
-- TypeScript typecheck: PASS
-- runtime tests: PASS — **23/23**
-- runtime build: PASS — `pnpm --filter @omnii/runtime build`
+- typecheck: PASS
+- runtime tests: PASS — 23/23
+- runtime build: PASS
 
-This remains valid repository-native CI evidence. A new CI run for the current documentation-only verification commit was not required to establish the database facts above.
-
-## Durable-storage evidence boundary
-
-Supabase/PostgreSQL persistence is implemented behind `PersistencePort`. Durable atomic boundaries are provided by narrowly scoped PostgreSQL functions for state+event, execution+audit, and ledger+audit. Those functions have now been executed successfully against the canonical live database.
-
-The durable environment is verified at the schema/RPC/smoke-test level. This does **not** constitute production deployment evidence or a complete application-role security audit.
+No workflow run was observable for the current authority commits through the available workflow-run query, and the connector did not expose workflow dispatch. Therefore the new authority tests, current typecheck and current build are **UNVERIFIED**, not PASS.
 
 ## Security boundary
 
-Verified in code/tests and live database structure: capability does not imply authority; ABBA requests brokered authority and cannot mint it; agent revocation is enforced; canonical runtime does not depend on BUNK; Phase 40 remains an adapter; RLS is enabled on all OMNII runtime tables.
+The implementation preserves:
 
-Not claimed: a complete production security audit or authenticated/anonymous RLS policy verification.
+- capability ≠ authority;
+- intelligence/orchestration ≠ authority;
+- ABBA ≠ authority issuer;
+- agent ≠ governance authority issuer;
+- delegation scope/capability/resource/context/duration cannot exceed parent authority;
+- expired/revoked/suspended authority cannot authorize consequential action.
+
+A complete production security audit and authenticated/anonymous RLS policy verification are not claimed.
 
 ## Phase 27
 
@@ -94,4 +85,4 @@ Not claimed: a complete production security audit or authenticated/anonymous RLS
 
 ## Deployment
 
-No production deployment is claimed. CI verification and live database verification are not deployment evidence.
+No production deployment is claimed. Live database evidence is infrastructure verification, not deployment evidence.

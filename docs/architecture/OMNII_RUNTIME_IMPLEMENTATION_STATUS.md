@@ -1,46 +1,50 @@
 # OMNII Runtime Implementation Status
 
-**Scope:** Runtime materialization after Phase 1–40 constitutional audit.
+**Scope:** Runtime verification and persistence pass after `20006d32a49840acd7f953977db78df222b56fde`.
 
-| Component | Architecture | Schema | Code | Tests | Integration | Deployment |
-|---|---|---|---|---|---|---|
-| Canonical Object Runtime | READY | READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Relationship Runtime | READY | READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Object Registry | READY | PARTIALLY READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Relationship Registry | READY | READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Dependency Registry | READY | PARTIALLY READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Capability Registry | READY | PARTIALLY READY | READY | PARTIALLY READY | PARTIALLY READY | UNVERIFIED |
-| Resource Registry | READY | PARTIALLY READY | READY | PARTIALLY READY | PARTIALLY READY | UNVERIFIED |
-| Event Store | READY | READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| State/Transition Runtime | READY | PARTIALLY READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Graph Runtime | READY | READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Phase 40 Graph Adapter | READY | N/A | READY | READY (created) | NOT READY for production | UNVERIFIED |
-| Execution Runtime | READY | PARTIALLY READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Workflow Runtime | READY | PARTIALLY READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Agent Runtime | READY | PARTIALLY READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| ABBA Boundary Runtime | READY | PARTIALLY READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Audit Runtime | READY | PARTIALLY READY | READY | READY (created) | PARTIALLY READY | UNVERIFIED |
-| Economic/Ledger Boundary | READY | PARTIALLY READY | READY | READY (created) | NOT READY for production economics | UNVERIFIED |
+| Component | Architecture | Schema | Code | Tested | Persisted | Integrated | CI-Verified | Deployed |
+|---|---|---|---|---|---|---|---|---|
+| Canonical Object Runtime | YES | YES | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
+| Relationship Runtime | YES | YES | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
+| Registries | YES | PARTIAL | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
+| Event/State Runtime | YES | YES | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
+| Graph Runtime | YES | YES | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
+| Execution Runtime | YES | PARTIAL | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
+| Workflow Runtime | YES | PARTIAL | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
+| Agent Runtime | YES | PARTIAL | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
+| ABBA Boundary | YES | PARTIAL | YES | PARTIAL | NO | PARTIAL | UNVERIFIED | NO |
+| Audit Runtime | YES | PARTIAL | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
+| Ledger Boundary | YES | PARTIAL | YES | PARTIAL | PARTIAL | NO | UNVERIFIED | NO |
+| Memory Persistence Adapter | YES | N/A | YES | PARTIAL | YES | YES | UNVERIFIED | NO |
+| Supabase Persistence Adapter | YES | YES | YES | PARTIAL | YES | PARTIAL | UNVERIFIED | NO |
+| Durable PostgreSQL schema | YES | YES | YES | NOT EXECUTED | YES | NOT VERIFIED | UNVERIFIED | NO |
 
-## Interpretation
+## Verification environment
 
-**READY** at code level means the minimum in-memory contract is materialized and has non-trivial tests. It does not mean production deployment readiness.
+The connected GitHub tooling provides repository inspection and GitHub Actions configuration, but it does not expose a general-purpose repository shell. Therefore local `pnpm` commands could not be executed in this chat. The repository now contains a CI workflow that will execute install/typecheck/runtime-test/build on GitHub Actions.
 
-The runtime currently provides a coherent executable substrate, but persistence, distributed transport, production graph storage, deployment, CI execution, and production ABBA intelligence are not proven by this repository.
+**Current direct execution status:** NOT EXECUTED — ENVIRONMENT LIMITATION.
 
-## Phase 21–40 integration
+No claim of passing tests, typecheck, build, migration application, or deployment is made until GitHub Actions produces those results.
 
-- Phase 21–26: remain reference implementations; adapters can consume the universal runtime contracts.
-- Phase 27: **IMPLEMENTATION GAP**; no package or commit evidence exists.
-- Phase 28–30: remain reference implementations until production integration is demonstrated.
-- Phase 31–35: future/reference composition.
-- Phase 36–40: horizon architecture; not promoted into the foundational runtime.
-- Phase 40: its civilization model is explicitly adapted through `Phase40GraphAdapter` rather than becoming a competing graph.
+## Persistence
+
+`PersistencePort` is the storage boundary. `MemoryPersistenceAdapter` is deterministic and transactional for tests. `SupabasePersistenceAdapter` provides durable CRUD/query/version/archive operations against the existing Supabase/PostgreSQL stack.
+
+The durable adapter intentionally refuses to fake multi-record transactions; database RPCs are required for true atomicity. See `OMNII_RUNTIME_CONSISTENCY_MODEL.md`.
+
+## CI
+
+`.github/workflows/omnii-runtime.yml` installs dependencies, runs root typecheck, runtime contract tests, and the existing build command. CI status remains UNVERIFIED until a workflow run exists.
+
+## Phase 27
+
+**IMPLEMENTATION GAP.** No Phase 27 implementation was added.
 
 ## ABBA
 
-ABBA is implemented only as a constitutional orchestration boundary. It has no fabricated reasoning engine, model provider, autonomous authority, or self-grant mechanism. Authority comes through the injected `AuthorityBroker` boundary.
+**BOUNDARY IMPLEMENTED; PRODUCTION INTELLIGENCE NOT IMPLEMENTED.** ABBA remains an orchestrator whose authority comes from `AuthorityBroker` and delegated authority is passed to the target agent. It cannot self-authorize.
 
-## Testing limitation
+## BUNK
 
-The repository has TypeScript source and no existing test runner configuration. Contract tests were created using Node's `node:test` API, but no shell execution environment was available through the connected GitHub tooling during this pass. Therefore **NOT EXECUTED — ENVIRONMENT LIMITATION** is the correct status for the test suite.
+BUNK remains the product/application layer. The runtime persistence schema and runtime code do not import BUNK product semantics.

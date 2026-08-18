@@ -1,11 +1,11 @@
 # OMNII Constitutional Index
 
-**Status:** Constitutional Index — Builds 13–23 materialized  
+**Status:** Constitutional Index — Builds 13–24 materialized  
 **Canonical authority:** OMNII Canonical Architecture
 
 ## 1. Purpose
 
-This index is the navigational, dependency, evidence, and constitutional-drift control map for the OMNII constitutional corpus. It records the intended progression from structural foundation through behavioral law, reality, coordination, becoming, and civilization.
+This index is the navigational, dependency, evidence, and constitutional-drift control map for the OMNII constitutional corpus. It records the progression from structural foundation through behavioral law, reality, coordination, becoming, civilization, and executable constitutional enforcement.
 
 The index is descriptive and normative. It does not replace the individual doctrines.
 
@@ -62,6 +62,8 @@ Being
 Becoming
     ↓
 Civilization
+    ↓
+Constitutional Runtime
 ```
 
 The sequence is a dependency model, not a claim that the ecosystem operates as a strictly linear process.
@@ -87,10 +89,11 @@ The sequence is a dependency model, not a claim that the ecosystem operates as a
 | 21 | OMNII Constitutional Becoming | Becoming | Transformation, trajectory, capability, and what an entity becomes | Being, Continuity, Intelligence |
 | 22 | OMNII Constitutional Civilization | Civilization | Collective emergence of people, institutions, markets, territories, cultures, and systems | Becoming, Governance, Ecology |
 | 23 | OMNII Constitutional Index | Foundation / Control | Canonical navigation, dependency mapping, evidence discipline, and terminology-drift control | Entire corpus |
+| 24 | OMNII Constitutional Runtime | Runtime / Enforcement | Materialized doctrine registry, dependency validation, and constitutional terminology safeguards | Constitutional Index, Runtime |
 
 ## 5. Materialized Build Status
 
-The following Build 13–23 doctrine files are now materialized in `docs/architecture`:
+The following Build 13–24 doctrine/runtime files and components are materialized:
 
 - `OMNII_CONSTITUTIONAL_CONTINUITY.md`
 - `OMNII_CONSTITUTIONAL_TERRITORY.md`
@@ -103,17 +106,24 @@ The following Build 13–23 doctrine files are now materialized in `docs/archite
 - `OMNII_CONSTITUTIONAL_BECOMING.md`
 - `OMNII_CONSTITUTIONAL_CIVILIZATION.md`
 - `OMNII_CONSTITUTIONAL_INDEX.md`
+- `OMNII_CONSTITUTIONAL_RUNTIME.md`
+- `packages/omnii-runtime/src/constitutional.ts`
+- `packages/omnii-runtime/src/constitutional-registry.ts`
+- `packages/omnii-runtime/src/constitutional-validator.ts`
+- `packages/omnii-runtime/tests/constitutional-runtime.test.ts`
 
-This section records repository materialization, not runtime implementation. Executable behavior still requires separate evidence from code, tests, workflows, and runtime execution.
+This section records repository materialization. It does not claim production compliance merely because the registry validates. Executable compliance still requires code, tests, workflows, persistence, authority, consent, deployment, and operational evidence.
 
 ## 6. Runtime Relationship
 
-The constitutional corpus provides meaning and constraints to executable infrastructure. Runtime components must not silently become constitutional authorities merely because they implement a doctrine.
+The constitutional corpus provides meaning and constraints to executable infrastructure.
 
 ```text
 Constitutional Doctrine
         ↓
 Invariant / Principle
+        ↓
+Registry
         ↓
 Runtime Contract
         ↓
@@ -128,7 +138,7 @@ Implementation may change while constitutional meaning remains stable.
 
 A doctrine may depend upon another doctrine without making the dependency a software import. Constitutional dependency means that the dependent doctrine's meaning must remain coherent with the doctrine it relies upon.
 
-Where a dependency changes, affected downstream doctrines must be reviewed.
+Build 24 materializes this dependency graph in the runtime so unknown dependencies and dependency cycles can be rejected before a doctrine is treated as valid executable constitutional infrastructure.
 
 ## 8. Constitutional Amendment Rule
 
@@ -191,7 +201,7 @@ OMNI  = omnidirectional movement state
 
 ## 12. Constitutional Layering
 
-The corpus can be understood as five major layers:
+The corpus can be understood as six major layers:
 
 ### Foundation
 Architecture, Universal Ecosystem Model, Semantics.
@@ -202,14 +212,17 @@ Mathematics, Economics, Intelligence, Continuity.
 ### Reality
 Territory, Ecology.
 
-### Coordination
+### Connection and Coordination
 Relationship, Governance, Authority, Consent.
 
 ### Becoming and Civilization
 Being, Becoming, Civilization.
 
+### Runtime Enforcement
+Constitutional Runtime and its registry, dependency validation, and invariant safeguards.
+
 The layers are conceptual. Runtime components may cross layers while remaining constitutionally subordinate to their relevant doctrines.
 
 ## 13. Final Principle
 
-> **The constitutional index exists so the ecosystem can grow without forgetting what it means.**
+> **The constitutional index exists so the ecosystem can grow without forgetting what it means, and the runtime exists so implementation cannot silently forget what the constitution means.**

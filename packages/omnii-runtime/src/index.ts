@@ -16,3 +16,6 @@ export * from "./audit-runtime";
 export * from "./ledger-boundary";
 export * from "./persistence";
 export * from "./supabase-persistence";
+export * from "./constitutional";
+export * from "./constitutional-registry";
+export * from "./constitutional-validator";

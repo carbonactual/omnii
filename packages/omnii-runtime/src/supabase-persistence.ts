@@ -2,17 +2,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { PersistenceCollection, PersistencePort, PersistenceRecord } from "./persistence";
 
 const TABLES: Record<PersistenceCollection, string> = {
-  objects: "omnii_objects",
-  relationships: "omnii_relationships",
-  dependencies: "omnii_dependencies",
-  registries: "omnii_registries",
-  events: "omnii_events",
-  state: "omnii_state",
-  executions: "omnii_executions",
-  workflows: "omnii_workflows",
-  agents: "omnii_agents",
-  audit: "omnii_audit",
-  ledger: "omnii_ledger",
+  objects: "omnii_objects", relationships: "omnii_relationships", dependencies: "omnii_dependencies", registries: "omnii_registries", events: "omnii_events", state: "omnii_state", executions: "omnii_executions", workflows: "omnii_workflows", agents: "omnii_agents", audit: "omnii_audit", ledger: "omnii_ledger",
 };
 
 export class SupabasePersistenceAdapter implements PersistencePort {
@@ -36,9 +26,14 @@ export class SupabasePersistenceAdapter implements PersistencePort {
     return data as PersistenceRecord;
   }
 
-  async archive(collection: PersistenceCollection, id: string) {
-    return this.update(collection, id, { lifecycle: "archived" });
+  async updateIfVersion(collection: PersistenceCollection, id: string, expectedVersion: string, patch: Partial<PersistenceRecord>) {
+    const { data, error } = await this.client.from(TABLES[collection]).update({ ...patch, updated_at: new Date().toISOString() }).eq("id", id).eq("version", expectedVersion).select("*").single();
+    if (error) throw error;
+    if (!data) throw new Error(`Persistence version conflict: ${collection}/${id}`);
+    return data as PersistenceRecord;
   }
+
+  async archive(collection: PersistenceCollection, id: string) { return this.update(collection, id, { lifecycle: "archived" }); }
 
   async query(collection: PersistenceCollection, predicate?: (record: PersistenceRecord) => boolean) {
     const { data, error } = await this.client.from(TABLES[collection]).select("*");
@@ -47,15 +42,28 @@ export class SupabasePersistenceAdapter implements PersistencePort {
     return predicate ? records.filter(predicate) : records;
   }
 
-  async version(collection: PersistenceCollection, id: string, version: string) {
-    return this.update(collection, id, { version });
+  async version(collection: PersistenceCollection, id: string, version: string) { return this.update(collection, id, { version }); }
+
+  async stateEvent(input: Record<string, unknown>) {
+    const { data, error } = await this.client.rpc("omnii_atomic_state_event", input);
+    if (error) throw error;
+    return data as Record<string, unknown>;
   }
 
-  async transaction<T>(work: (tx: PersistencePort) => Promise<T>): Promise<T> {
-    // Supabase/PostgREST does not expose a client-side transaction primitive.
-    // Atomic multi-record work must therefore be implemented by a database RPC.
-    // This adapter deliberately refuses to imply atomicity it cannot guarantee.
-    throw new Error("Durable transaction requires a database RPC; use an explicit transactional operation instead");
+  async executionAudit(input: Record<string, unknown>) {
+    const { data, error } = await this.client.rpc("omnii_atomic_execution_audit", input);
+    if (error) throw error;
+    return data as Record<string, unknown>;
+  }
+
+  async ledgerAudit(input: Record<string, unknown>) {
+    const { data, error } = await this.client.rpc("omnii_atomic_ledger_audit", input);
+    if (error) throw error;
+    return data as Record<string, unknown>;
+  }
+
+  async transaction<T>(_work: (tx: PersistencePort) => Promise<T>): Promise<T> {
+    throw new Error("Durable transaction requires an explicit PostgreSQL RPC; use stateEvent, executionAudit, or ledgerAudit");
   }
 }
 

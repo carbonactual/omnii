@@ -9,6 +9,13 @@ export class EventStore {
   async bySubject(subject: string): Promise<OmniiEvent[]> { const events = await this.persistence.query("events", (record) => record["subject"] === subject); return events.map((event) => structuredClone(event as unknown as OmniiEvent)); }
   async all(): Promise<OmniiEvent[]> { const events = await this.persistence.query("events"); return events.map((event) => structuredClone(event as unknown as OmniiEvent)); }
 }
-export function authorize(authority: Authority, operation: string, now = new Date()): void { if (authority.revocable && authority.revoked_at) throw new Error("Authority has been revoked"); if (authority.expires_at && new Date(authority.expires_at).getTime() <= now.getTime()) throw new Error("Authority has expired"); if (!authority.capabilities.includes(operation) && !authority.capabilities.includes("*")) throw new Error(`Capability not delegated: ${operation}`); if (!authority.scope.includes(operation) && !authority.scope.includes("*")) throw new Error(`Authority scope does not permit: ${operation}`); }
+export function authorize(authority: Authority, operation: string, now = new Date()): void {
+  const lifecycle = (authority as Authority & { status?: string }).status;
+  if (lifecycle === "revoked" || (authority.revocable && authority.revoked_at)) throw new Error("Authority has been revoked");
+  if (lifecycle === "suspended") throw new Error("Authority has been suspended");
+  if (lifecycle === "expired" || (authority.expires_at && new Date(authority.expires_at).getTime() <= now.getTime())) throw new Error("Authority has expired");
+  if (!authority.capabilities.includes(operation) && !authority.capabilities.includes("*")) throw new Error(`Capability not delegated: ${operation}`);
+  if (!authority.scope.includes(operation) && !authority.scope.includes("*")) throw new Error(`Authority scope does not permit: ${operation}`);
+}
 export type Transition = { from: string; to: string };
 export class StateMachine { constructor(private readonly transitions: Transition[]) {} canTransition(from: string, to: string): boolean { return this.transitions.some((transition) => transition.from === from && transition.to === to); } transition(from: string, to: string): string { if (!this.canTransition(from, to)) throw new Error(`Invalid state transition: ${from} -> ${to}`); return to; } }

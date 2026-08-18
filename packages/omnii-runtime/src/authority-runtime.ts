@@ -1,0 +1,192 @@
+import { randomUUID } from "node:crypto";
+import { authorize } from "./event-runtime";
+import { PersistencePort, MemoryPersistenceAdapter } from "./persistence";
+import { Authority, JsonObject } from "./types";
+
+export interface AuthorityIssueRequest {
+  id?: string;
+  subject: string;
+  scope: string[];
+  capabilities: string[];
+  constraints?: JsonObject;
+  context?: JsonObject;
+  issued_at?: string;
+  expires_at?: string;
+  revocable?: boolean;
+  provenance?: JsonObject;
+  idempotency_key?: string;
+}
+
+export interface AuthorityDecisionContext {
+  resourceId?: string;
+  context?: JsonObject;
+  now?: Date;
+}
+
+export interface AuthorityRecord extends Authority {
+  version: string;
+  status: "active" | "suspended" | "revoked" | "expired";
+  parent_authority_id?: string;
+  context?: JsonObject;
+  idempotency_key?: string;
+}
+
+export interface AuthorityRuntimeOptions {
+  persistence?: PersistencePort;
+  abbaIdentity?: string;
+  agentIdentityPrefix?: string;
+}
+
+const ISSUE = "authority:issue";
+const DELEGATE = "authority:delegate";
+const REVOKE = "authority:revoke";
+const SUSPEND = "authority:suspend";
+const WILDCARD = "*";
+
+function includesBounded(parent: string[], child: string[]): boolean {
+  return child.every((value) => parent.includes(value) || parent.includes(WILDCARD));
+}
+
+function durationBounded(parent: AuthorityRecord, childExpiresAt?: string): boolean {
+  if (!parent.expires_at) return true;
+  if (!childExpiresAt) return false;
+  return new Date(childExpiresAt).getTime() <= new Date(parent.expires_at).getTime();
+}
+
+function isExpired(authority: AuthorityRecord, now: Date): boolean {
+  return !!authority.expires_at && new Date(authority.expires_at).getTime() <= now.getTime();
+}
+
+export class AuthorityRuntime {
+  private readonly persistence: PersistencePort;
+  private readonly abbaIdentity: string;
+  private readonly agentIdentityPrefix: string;
+
+  constructor(options: AuthorityRuntimeOptions = {}) {
+    this.persistence = options.persistence ?? new MemoryPersistenceAdapter();
+    this.abbaIdentity = options.abbaIdentity ?? "ABBA";
+    this.agentIdentityPrefix = options.agentIdentityPrefix ?? "agent:";
+  }
+
+  async issue(request: AuthorityIssueRequest, issuerAuthority: AuthorityRecord): Promise<AuthorityRecord> {
+    if (!issuerAuthority.subject || issuerAuthority.subject === this.abbaIdentity) {
+      throw new Error("ABBA cannot issue authority");
+    }
+    authorize(issuerAuthority, ISSUE);
+    if (!request.subject) throw new Error("Authority subject is required");
+    if (!request.scope.length || !request.capabilities.length) throw new Error("Authority scope and capabilities are required");
+    if (!includesBounded(issuerAuthority.scope, request.scope)) throw new Error("Issued scope exceeds issuer authority");
+    if (!includesBounded(issuerAuthority.capabilities, request.capabilities)) throw new Error("Issued capabilities exceed issuer authority");
+    if (!durationBounded(issuerAuthority, request.expires_at)) throw new Error("Issued duration exceeds issuer authority");
+
+    if (request.idempotency_key) {
+      const existing = await this.persistence.query("authorities", (record) => record["idempotency_key"] === request.idempotency_key);
+      if (existing.length) return structuredClone(existing[0] as unknown as AuthorityRecord);
+    }
+
+    const now = request.issued_at ?? new Date().toISOString();
+    const authority: AuthorityRecord = {
+      id: request.id ?? randomUUID(),
+      subject: request.subject,
+      issuer: issuerAuthority.subject,
+      scope: [...request.scope],
+      capabilities: [...request.capabilities],
+      constraints: structuredClone(request.constraints ?? {}),
+      issued_at: now,
+      expires_at: request.expires_at,
+      revocable: request.revocable ?? true,
+      provenance: { ...(request.provenance ?? {}), issuer_authority_id: issuerAuthority.id },
+      version: "1",
+      status: "active",
+      context: structuredClone(request.context ?? {}),
+      idempotency_key: request.idempotency_key,
+    };
+    return structuredClone(await this.persistence.create("authorities", authority) as unknown as AuthorityRecord);
+  }
+
+  async inspect(id: string): Promise<AuthorityRecord | undefined> {
+    const record = await this.persistence.read("authorities", id);
+    return record ? structuredClone(record as unknown as AuthorityRecord) : undefined;
+  }
+
+  async validate(id: string, decision: AuthorityDecisionContext = {}): Promise<AuthorityRecord> {
+    const authority = await this.require(id);
+    const now = decision.now ?? new Date();
+    if (authority.status === "revoked" || authority.revoked_at) throw new Error("Authority has been revoked");
+    if (authority.status === "suspended") throw new Error("Authority has been suspended");
+    if (isExpired(authority, now)) {
+      if (authority.status !== "expired") await this.markExpired(authority);
+      throw new Error("Authority has expired");
+    }
+    if (decision.resourceId && !this.resourceAllowed(authority, decision.resourceId)) throw new Error("Authority resource scope does not permit: " + decision.resourceId);
+    if (decision.context && !this.contextAllowed(authority, decision.context)) throw new Error("Authority context is not permitted");
+    return authority;
+  }
+
+  async authorizeAction(id: string, capability: string, decision: AuthorityDecisionContext = {}): Promise<AuthorityRecord> {
+    const authority = await this.validate(id, decision);
+    authorize(authority, capability, decision.now ?? new Date());
+    return authority;
+  }
+
+  async delegate(parentId: string, request: AuthorityIssueRequest, delegator: AuthorityRecord): Promise<AuthorityRecord> {
+    const parent = await this.validate(parentId);
+    if (delegator.id !== parent.id || delegator.subject !== parent.subject) throw new Error("Delegator must possess the parent authority");
+    authorize(delegator, DELEGATE);
+    if (delegator.subject === this.abbaIdentity) throw new Error("ABBA cannot mint delegated authority");
+    if (request.subject.startsWith(this.agentIdentityPrefix) && !request.subject) throw new Error("Invalid agent subject");
+    if (!includesBounded(parent.scope, request.scope)) throw new Error("Delegated scope exceeds parent authority");
+    if (!includesBounded(parent.capabilities, request.capabilities)) throw new Error("Delegated capabilities exceed parent authority");
+    if (!durationBounded(parent, request.expires_at)) throw new Error("Delegated duration exceeds parent authority");
+    return this.issue({ ...request, provenance: { ...(request.provenance ?? {}), parent_authority_id: parent.id } }, delegator);
+  }
+
+  async revoke(id: string, actor: AuthorityRecord, expectedVersion?: string): Promise<AuthorityRecord> {
+    const authority = await this.require(id);
+    if (expectedVersion && authority.version !== expectedVersion) throw new Error(`Authority version conflict: expected ${expectedVersion}, found ${authority.version}`);
+    if (actor.subject === this.abbaIdentity) throw new Error("ABBA cannot revoke authority without governance authority");
+    authorize(actor, REVOKE);
+    if (!authority.revocable) throw new Error("Authority is not revocable");
+    if (authority.revoked_at) return authority;
+    return structuredClone(await this.persistence.updateIfVersion("authorities", id, authority.version, { status: "revoked", revoked_at: new Date().toISOString(), version: String(Number(authority.version) + 1) }) as unknown as AuthorityRecord);
+  }
+
+  async suspend(id: string, actor: AuthorityRecord, expectedVersion?: string): Promise<AuthorityRecord> {
+    const authority = await this.require(id);
+    if (expectedVersion && authority.version !== expectedVersion) throw new Error(`Authority version conflict: expected ${expectedVersion}, found ${authority.version}`);
+    authorize(actor, SUSPEND);
+    return structuredClone(await this.persistence.updateIfVersion("authorities", id, authority.version, { status: "suspended", version: String(Number(authority.version) + 1) }) as unknown as AuthorityRecord);
+  }
+
+  async expire(id: string, now = new Date()): Promise<AuthorityRecord> {
+    const authority = await this.require(id);
+    if (!isExpired(authority, now)) throw new Error("Authority has not expired");
+    return this.markExpired(authority);
+  }
+
+  async listBySubject(subject: string): Promise<AuthorityRecord[]> {
+    const records = await this.persistence.query("authorities", (record) => record["subject"] === subject);
+    return records.map((record) => structuredClone(record as unknown as AuthorityRecord));
+  }
+
+  private async markExpired(authority: AuthorityRecord): Promise<AuthorityRecord> {
+    if (authority.status === "expired") return authority;
+    return structuredClone(await this.persistence.updateIfVersion("authorities", authority.id, authority.version, { status: "expired", version: String(Number(authority.version) + 1) }) as unknown as AuthorityRecord);
+  }
+
+  private resourceAllowed(authority: AuthorityRecord, resourceId: string): boolean {
+    const resources = Array.isArray(authority.constraints?.["resourceIds"]) ? authority.constraints["resourceIds"] as unknown[] : [];
+    return resources.length === 0 || resources.includes(WILDCARD) || resources.includes(resourceId);
+  }
+
+  private contextAllowed(authority: AuthorityRecord, context: JsonObject): boolean {
+    const required = authority.context ?? {};
+    return Object.entries(required).every(([key, value]) => context[key] === value);
+  }
+
+  private async require(id: string): Promise<AuthorityRecord> {
+    const authority = await this.inspect(id);
+    if (!authority) throw new Error(`Authority not found: ${id}`);
+    return authority;
+  }
+}

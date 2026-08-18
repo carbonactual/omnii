@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { Authority, JsonObject } from "./types";
 import { authorize, EventStore, OmniiEvent } from "./event-runtime";
+import { MemoryPersistenceAdapter, PersistencePort } from "./persistence";
 
 export type ExecutionState = "created" | "validated" | "authorized" | "running" | "completed" | "failed" | "cancelled";
 
@@ -19,98 +20,107 @@ export interface Execution {
   updatedAt: string;
   provenance: JsonObject;
   auditReference?: string;
+  correlationId?: string;
+  idempotencyKey?: string;
 }
 
-export type ExecutionHandler = (input: JsonObject) => JsonObject;
+export type ExecutionHandler = (input: JsonObject) => JsonObject | Promise<JsonObject>;
 
 export class ExecutionRuntime {
-  private readonly executions = new Map<string, Execution>();
+  constructor(private readonly events: EventStore, private readonly persistence: PersistencePort = new MemoryPersistenceAdapter()) {}
 
-  constructor(private readonly events: EventStore) {}
-
-  create(input: Omit<Execution, "id" | "state" | "createdAt" | "updatedAt">): Execution {
+  async create(input: Omit<Execution, "id" | "state" | "createdAt" | "updatedAt">): Promise<Execution> {
+    if (input.idempotencyKey) {
+      const existing = await this.persistence.query("executions", (record) => record["idempotencyKey"] === input.idempotencyKey);
+      if (existing.length) return structuredClone(existing[0] as unknown as Execution);
+    }
     const now = new Date().toISOString();
     const execution: Execution = { ...input, id: randomUUID(), state: "created", createdAt: now, updatedAt: now };
-    this.executions.set(execution.id, structuredClone(execution));
-    return structuredClone(execution);
+    const created = await this.persistence.create("executions", execution);
+    return structuredClone(created as unknown as Execution);
   }
 
-  validate(id: string): Execution {
-    const execution = this.require(id);
+  async validate(id: string): Promise<Execution> {
+    const execution = await this.require(id);
     if (!execution.intentReference || !execution.actorIdentity || !execution.capability) throw new Error("Execution contract is incomplete");
     return this.setState(execution, "validated");
   }
 
-  authorize(id: string): Execution {
-    const execution = this.require(id);
+  async authorize(id: string): Promise<Execution> {
+    const execution = await this.require(id);
     if (execution.state !== "validated") throw new Error("Execution must be validated before authorization");
     authorize(execution.authorityContext, execution.capability);
     return this.setState(execution, "authorized");
   }
 
-  run(id: string, handler: ExecutionHandler): Execution {
-    const execution = this.require(id);
+  async run(id: string, handler: ExecutionHandler): Promise<Execution> {
+    const execution = await this.require(id);
     if (execution.state !== "authorized") throw new Error("Execution must be authorized before run");
-    const running = this.setState(execution, "running");
+    const running = await this.setState(execution, "running");
     try {
-      const output = handler(structuredClone(running.input));
-      const completed = this.setState({ ...running, output }, "completed");
-      const event = this.record(completed, "EXECUTION_COMPLETED", "success");
-      return { ...completed, auditReference: event.id };
+      const output = await handler(structuredClone(running.input));
+      return this.completeWithOutput(running, output);
     } catch (error) {
-      const failed = this.setState({ ...running, output: { error: error instanceof Error ? error.message : String(error) } }, "failed");
-      this.record(failed, "EXECUTION_FAILED", "failure");
+      const failed = await this.setState({ ...running, output: { error: error instanceof Error ? error.message : String(error) } }, "failed");
+      await this.record(failed, "EXECUTION_FAILED", "failure");
       return failed;
     }
   }
 
-  fail(id: string, reason: string): Execution {
-    const execution = this.require(id);
-    const failed = this.setState({ ...execution, output: { error: reason } }, "failed");
-    this.record(failed, "EXECUTION_FAILED", "failure");
+  async fail(id: string, reason: string): Promise<Execution> {
+    const execution = await this.require(id);
+    const failed = await this.setState({ ...execution, output: { error: reason } }, "failed");
+    await this.record(failed, "EXECUTION_FAILED", "failure");
     return failed;
   }
 
-  cancel(id: string): Execution {
-    const execution = this.require(id);
+  async cancel(id: string): Promise<Execution> {
+    const execution = await this.require(id);
     if (["completed", "failed", "cancelled"].includes(execution.state)) throw new Error("Terminal execution cannot be cancelled");
     return this.setState(execution, "cancelled");
   }
 
-  complete(id: string, output: JsonObject = {}): Execution {
-    const execution = this.require(id);
+  async complete(id: string, output: JsonObject = {}): Promise<Execution> {
+    const execution = await this.require(id);
     if (execution.state !== "running") throw new Error("Only running executions can complete");
-    const completed = this.setState({ ...execution, output }, "completed");
-    const event = this.record(completed, "EXECUTION_COMPLETED", "success");
-    return { ...completed, auditReference: event.id };
+    return this.completeWithOutput(execution, output);
   }
 
-  audit(id: string): OmniiEvent[] {
-    return this.events.bySubject(id);
+  async audit(id: string): Promise<OmniiEvent[]> { return this.events.bySubject(id); }
+
+  async read(id: string): Promise<Execution | undefined> { return this.requireOptional(id); }
+
+  private async completeWithOutput(execution: Execution, output: JsonObject): Promise<Execution> {
+    const completed = await this.setState({ ...execution, output }, "completed");
+    const event = await this.record(completed, "EXECUTION_COMPLETED", "success");
+    const persisted = await this.persistence.update("executions", completed.id, { auditReference: event.id });
+    return structuredClone(persisted as unknown as Execution);
   }
 
-  read(id: string): Execution | undefined {
-    const execution = this.executions.get(id);
-    return execution ? structuredClone(execution) : undefined;
+  private async requireOptional(id: string): Promise<Execution | undefined> {
+    const execution = await this.persistence.read("executions", id);
+    return execution ? structuredClone(execution as unknown as Execution) : undefined;
   }
 
-  private require(id: string): Execution {
-    const execution = this.executions.get(id);
+  private async require(id: string): Promise<Execution> {
+    const execution = await this.requireOptional(id);
     if (!execution) throw new Error(`Execution not found: ${id}`);
-    return structuredClone(execution);
+    return execution;
   }
 
-  private setState(execution: Execution, state: ExecutionState): Execution {
+  private async setState(execution: Execution, state: ExecutionState): Promise<Execution> {
     const updated = { ...execution, state, updatedAt: new Date().toISOString() };
-    this.executions.set(updated.id, structuredClone(updated));
-    return structuredClone(updated);
+    const persisted = await this.persistence.update("executions", updated.id, updated);
+    return structuredClone(persisted as unknown as Execution);
   }
 
-  private record(execution: Execution, type: string, outcome: string): OmniiEvent {
+  private async record(execution: Execution, type: string, outcome: string): Promise<OmniiEvent> {
     return this.events.append({
       type,
       actor: execution.actorIdentity,
       subject: execution.id,
+      correlation_id: execution.correlationId,
+      idempotency_key: execution.idempotencyKey ? `${execution.idempotencyKey}:${type}` : undefined,
       outcome,
       provenance: { authority_id: execution.authorityContext.id, capability: execution.capability },
       payload: { state: execution.state },

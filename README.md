@@ -1,40 +1,31 @@
-# BUNK
+# OMNII
 
-Property, properly connected.
+**Constitutional operating-environment architecture for the Carbon Actual ecosystem.**
 
-BUNK is the property and housing route of the Carbon Actual ecosystem. It combines property discovery, verified listings, property operations, tenancy, inspections, agreements, payments, maintenance, agent workflows, proof, and AI-assisted matching.
+This repository contains the canonical OMNII constitutional and universal architecture, together with an active BUNK product/reference implementation.
 
-## Current build
+## Repository boundary
 
-This repository is now the active BUNK product repository.
+- **OMNII** — constitutional kernels, canonical objects, relationships, dependencies, governance, authority, runtime contracts, universal composition and ecosystem/world architecture.
+- **BUNK** — property and housing product implementation. It is an implementation/product composition beneath OMNII and is not a constitutional dependency.
 
-Initial vertical slice:
+See `docs/architecture/OMNII_REPOSITORY_BOUNDARY.md` for the authoritative boundary decision.
 
-1. Property registry
-2. Unit registry
-3. Listing creation
-4. Verification submission
-5. Human review
-6. Listing publication
-7. Public search
-8. Inspection booking
-9. Proof and Pulse events
+## Canonical sources
 
-## Architecture
+- Constitution: `docs/constitution/`
+- Architecture: `docs/architecture/OMNII_CANONICAL_ARCHITECTURE.md`
+- Terminology: `docs/architecture/OMNII_CANONICAL_TERMINOLOGY.md`
+- Dependency graph: `docs/architecture/OMNII_FINAL_DEPENDENCY_GRAPH.md`
 
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- Supabase
-- Zod validation
-- HAPI adapter for shared identity, SEAL, Actual, Becoming, and Pulse
+Historical Carbon Actual architecture documents remain in the repository for provenance but do not override these canonical OMNII sources.
 
-## Product boundaries
+## BUNK product
 
-BUNK owns property, listing, inspection, tenancy, maintenance, finance references, CRM, and property operations.
+BUNK is the current product application in this repository. It owns property discovery, listings, inspections, tenancy, maintenance, finance references, CRM and property operations. Its implementation-specific package name remains `bunk`.
 
-HAPI supplies shared human identity, consent, context, continuity, and event return through a versioned adapter.
+## Phase 21–40
 
-## Status
+Phase 21–40 artifacts are preserved and explicitly classified by implementation status. They do not redefine the Phase 1–20 constitutional substrate. Phase 31–40 are civilization-scale composition/horizon layers, not foundational kernels.
 
-Foundation implementation in progress.
+**Phase 41 is not defined by this repository.**

@@ -1,15 +1,12 @@
 # OMNII Constitution
 
-This directory contains the constitutional layer of OMNII.
+This repository contains two explicitly separated concerns:
 
-## Constitutional Domains
+1. **OMNII** — the canonical constitutional operating-environment architecture, whose authoritative constitutional definitions live under `docs/constitution/`.
+2. **BUNK** — a product-specific implementation/reference application hosted in this repository. BUNK consumes shared ecosystem contracts but is not a constitutional dependency of OMNII.
 
-- Ontology
-- Governance
-- States
-- Relationships
-- Security
+## Canonical source
 
-OMNII is the constitutional core of the ecosystem.
+Use `docs/constitution/` for constitutional kernels, objects, relationships, dependencies, governance and agent rules.
 
-Constitutional objects, state models, relationship graphs, and governance rules are defined here and versioned independently from product implementations.
+This file is a compatibility pointer only. It must not define competing constitutional semantics.

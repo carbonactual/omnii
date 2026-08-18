@@ -1,43 +1,52 @@
 # OMNII Implementation Gap Register
 
-**Scope:** Phase 1–40 runtime hardening and empirical verification. **No Phase 41 work is included.**
+**Scope:** Final production-readiness closure for the established Phase 1–40 runtime. **Phase 41 = NOT STARTED.**
 
-| Priority | Gap | Consequence | Status | Dependency |
-|---|---|---|---|---|
-| P0 | Phase 27 has no repository implementation evidence. | Phase 26→27→28 remains intentionally incomplete. | IMPLEMENTATION GAP | Phase 26, governance |
-| P1 | Current repository execution/typecheck/tests/build/CI evidence is not observable through connected GitHub tooling. | Current source cannot be called empirically verified in this environment. | UNVERIFIED — ENVIRONMENT LIMITATION | GitHub Actions execution or shell |
-| P1 | Production ABBA intelligence is not implemented. | ABBA is an orchestration/intelligence boundary, not production intelligence. | UNIMPLEMENTED | Authorized intelligence provider + governance |
-| P2 | Authenticated/anonymous application-role RLS behavior is not defined. | Browser/application-role access cannot be safely claimed. RLS remains restrictive. | UNVERIFIED/BLOCKED by missing identity binding | Identity → Authority contract |
-| P2 | Full database-side parent-authority containment is not implemented. | Constitutional containment remains runtime-owned; SQL is not a second authority engine. | PARTIAL by design | Existing AuthorityRuntime contract |
-| P2 | Distributed event transport remains local. | Durable event storage exists, but distributed delivery is not proven. | UNIMPLEMENTED | Event transport adapter |
-| P2 | Workflow/agent production integration remains local. | Production orchestration is not proven. | PARTIAL | Deployment adapters |
-| P3 | Distributed observability remains unimplemented. | Production telemetry is incomplete. | UNIMPLEMENTED | Deployment stack |
-| P3 | Economic boundary is not a production settlement engine. | Settlement/ownership processing remains incomplete. | PARTIAL | Ledger adapters |
-| P4 | Phase 31–40 production implementation remains future/horizon. | Civilization-scale semantics remain composition concerns. | FUTURE | Universal runtime |
+| Priority | Gap | Status | Exact evidence required to close |
+|---|---|---|---|
+| P0 | Phase 27 has no package/commit evidence. | IMPLEMENTATION GAP / NOT EVIDENCED | Explicit Phase 27 implementation or an authoritative decision that it is not required for the canonical runtime. No implementation was fabricated in this pass. |
+| P1 | Current repository execution is unavailable through connected tooling. | UNVERIFIED — ENVIRONMENT LIMITATION | Fresh execution of `pnpm install`, `pnpm typecheck`, `pnpm test`, `pnpm test:runtime`, and runtime build in an execution-capable environment. |
+| P1 | Current CI run is unavailable. | UNVERIFIED — ENVIRONMENT LIMITATION | A current GitHub Actions run for the current HEAD with install, typecheck, runtime tests and runtime build all successful. |
+| P1 | Production deployment is not evidenced. | UNVERIFIED | Actual deployment target, environment configuration, deployment run and post-deploy health evidence. |
+| P1 | Production ABBA intelligence is not implemented in this repository. | UNIMPLEMENTED / INTEGRATION BOUNDARY | Authorized production intelligence/model provider connected behind the existing ABBA boundary, with authority remaining external to ABBA. |
+| P2 | Authenticated/anonymous application-role identity → authority mapping is not canonical. | BLOCKED / RESTRICTIVE BY DESIGN | Authoritative identity contract sufficient to define narrow RLS policies, followed by live authenticated/anonymous policy tests. |
+| P2 | Full database-side parent-authority containment is not implemented. | PARTIAL BY DESIGN | Only required if the canonical runtime needs atomic database-side delegation; otherwise runtime containment remains the single authority semantic. |
+| P2 | Distributed event transport is not proven. | UNIMPLEMENTED | Production transport adapter and live delivery evidence without changing canonical event semantics. |
+| P2 | Workflow/agent production integration remains local/reference-level. | PARTIAL | Deployment adapter and live end-to-end workflow/agent evidence. |
+| P3 | Distributed observability is incomplete. | PARTIAL | Deployment-specific telemetry, alerting and operational dashboards. |
+| P3 | Ledger is a boundary, not a production settlement engine. | PARTIAL BY DESIGN | Domain-specific settlement implementation only if a product requires it. |
+| P4 | Phase 31–40 are horizon/composition concerns. | FUTURE | Future implementation only when explicitly authorized; not required to close the current runtime boundary. |
 
-## Resolved in current hardening
+## Resolved in this closure pass
 
-- Mutable PostgreSQL function `search_path` findings resolved by migration 0006.
-- Mutating OMNII RPC execution restricted to `service_role` by migration 0007.
-- State/event expected-version, authority provenance, idempotency and atomic rollback hardened by migration 0008.
-- ExecutionRuntime terminal mutation now uses the existing execution/audit atomic boundary.
-- Relationship mutation now uses optimistic CAS semantics.
-- Execution state transitions now use optimistic CAS semantics.
-- Durable execution/audit RPC now requires expected version and rejects stale finalization by migration 0009.
-- Memory adapter execution/state atomic semantics now mirror the named durable boundaries for idempotency and version checks.
-- Fresh live 0009 commit, stale-version rejection and rollback behavior verified on `omnii-canonical`.
+- Repository migration defects in `0008` and `0009` were found and corrected: their `GRANT EXECUTE` signatures now exactly match the created PostgreSQL functions.
+- Canonical Supabase `omnii-canonical` (`fomkrgrsqakabftymbjn`) is `ACTIVE_HEALTHY`.
+- Live migrations `0003` through `0009` are present.
+- Live OMNII mutating RPCs use `search_path = public, pg_temp`.
+- Live OMNII mutating RPCs are `SECURITY INVOKER` and execution is granted to `service_role`; no anon/authenticated execution was observed.
+- Fresh live state/event, execution/audit and ledger/audit transaction paths were exercised with isolated verification identifiers.
+- Fresh live authority issuance, idempotency, revocation, suspension and stale-version behavior were exercised.
+- RLS remains enabled and restrictive with no invented application-role policies.
 
-## Explicit non-resolutions
+## Evidence boundary
 
-- Current repository test/typecheck/build/CI execution remains unverified because the connected GitHub tooling does not expose workflow dispatch or a shell execution environment.
-- Phase 27 remains an implementation gap.
-- ABBA production intelligence remains unimplemented.
-- Authenticated/anonymous RLS policy behavior remains unresolved because application identity → authority mapping is not authoritative.
-- Full database-side parent-authority containment remains intentionally runtime-owned.
-- Distributed event transport remains unimplemented.
-- Production workflow/agent integration remains unproven.
-- Production deployment remains unclaimed.
+The live database evidence is real database execution evidence. It does not prove current repository compilation/tests/build, GitHub Actions execution, browser/authenticated RLS behavior, or production deployment.
 
-## Readiness rule
+## Architectural invariants preserved
 
-A component is production-ready only when contract, implementation, empirical tests, persistence integration, current CI evidence and deployment evidence exist. Documentation or source presence alone is insufficient.
+- `CAPABILITY ≠ AUTHORITY`
+- `INTELLIGENCE ≠ AUTHORITY`
+- `ABBA ≠ AUTHORITY ISSUER`
+- `ORCHESTRATION ≠ OWNERSHIP`
+- delegated scope/capabilities/resources/context/duration remain bounded by parent authority
+- one canonical object model
+- one canonical relationship/dependency model
+- one canonical authority model
+- one persistence boundary
+- Phase 40 remains an adapter/view, not a competing graph
+- BUNK remains downstream; no BUNK → OMNII dependency
+- Phase 41 not started
+
+## Final status
+
+The remaining gaps are verification, deployment, application-identity integration and intentionally unimplemented production integrations. No new constitutional architecture is required by the evidence gathered in this pass.

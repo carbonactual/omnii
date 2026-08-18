@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "omnii://schemas/authority/v1",
+  "title": "OMNII Authority",
+  "type": "object",
+  "required": ["id", "subject", "scope", "capabilities", "issued_at", "revocable"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "subject": {"type": "string", "minLength": 1},
+    "issuer": {"type": "string"},
+    "scope": {"type": "array", "items": {"type": "string"}},
+    "capabilities": {"type": "array", "items": {"type": "string"}},
+    "constraints": {"type": "object"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "revocable": {"type": "boolean"},
+    "revoked_at": {"type": "string", "format": "date-time"},
+    "provenance": {"type": "object"}
+  },
+  "additionalProperties": false
+}

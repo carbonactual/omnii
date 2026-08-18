@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "omnii://schemas/relationship/v1",
+  "title": "OMNII Relationship",
+  "type": "object",
+  "required": ["id", "type", "source", "target", "direction", "status", "authority", "provenance"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "type": {"type": "string", "minLength": 1},
+    "source": {"type": "string", "minLength": 1},
+    "target": {"type": "string", "minLength": 1},
+    "direction": {"enum": ["directed", "undirected"]},
+    "status": {"type": "string", "minLength": 1},
+    "effective_from": {"type": "string", "format": "date-time"},
+    "effective_to": {"type": "string", "format": "date-time"},
+    "authority": {"type": "object"},
+    "provenance": {"type": "object"},
+    "constraints": {"type": "object"},
+    "metadata": {"type": "object"}
+  },
+  "additionalProperties": true
+}

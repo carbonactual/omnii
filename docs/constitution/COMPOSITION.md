@@ -1,50 +1,55 @@
 # COMPOSITION
 
+**Status: CANONICAL CONSTITUTIONAL KERNEL**
+
 ## Purpose
-Composition is the constitutional kernel governing how kernels, objects, capabilities, resources, agents, humans, services, workflows, and institutions are assembled into coherent products and systems.
+Composition assembles constitutional kernels, canonical objects, relationships, capabilities, resources, agents, humans, services, workflows and interfaces into governed higher-order systems and products.
 
 ## Canonical Objects
 - Composition
 - Component
-- System
+- Module
 - Product
 - Service
-- Module
+- System
+- World
+- Composition manifest
+- Version
+- Dependency
 - Interface
-- Assembly
-- Configuration
-- Composition contract
 
 ## Invariants
-1. Composition does not redefine the constitutional meaning of its components.
-2. Every component has an identity and declared boundary.
-3. Composition exposes dependencies, capabilities, resources, authority, and lifecycle.
-4. A composed system must preserve provenance and accountability to constituent components.
-5. Components may be replaced only where compatibility and authority rules permit.
+1. Composition reuses canonical primitives before creating new universal primitives.
+2. Composition preserves identity, authority, provenance, lifecycle and auditability.
+3. Specialization declares its parent contract and cannot silently redefine inherited constitutional semantics.
+4. Dependencies are explicit and versioned.
+5. Components can be added, replaced, split or recombined without corrupting historical provenance.
+6. A product is not permitted to create a parallel universal identity, graph, authority, event, value or execution system.
 
 ## Inputs
-Constitutional kernels, canonical objects, capabilities, resources, intents, relationships, interfaces, constraints, and composition rules.
+Intent, canonical objects, relationships, capabilities, resources, policies, workflows, interfaces and component versions.
 
 ## Outputs
-A defined system/product/service composition, dependency graph, interfaces, executable configuration, and composition provenance.
+A governed composition manifest, resolved component graph, executable configuration, lifecycle state and audit/provenance record.
 
 ## Lifecycle
-Proposed → Designed → Validated → Assembled → Activated → Evolved → Suspended/Retired.
+`Proposed → Designed → Resolved → Authorized → Instantiated → Active → Modified/Suspended → Retired/Archived`
 
-## Relationships
-Composition is the convergence layer: it assembles Being, Identity, Knowledge, Motion, Value, Trust, Relationship, Intent, Execution, Capability, Resource, Continuity, and Integration without collapsing their distinctions.
-
-## Dependencies
-All foundational kernels may participate in Composition; Composition depends especially on Relationship, Capability, Resource, Execution, and Integration.
+## Dependencies and Relationships
+Composition consumes all preceding kernels: Being, Identity, Knowledge, Motion, Value, Trust, Relationship, Intent, Execution, Capability and Resource. Continuity preserves compositions; Integration supplies external adapters.
 
 ## Composition Rules
-- Compose before redefining.
-- Prefer canonical objects over product-specific duplicates.
-- Preserve authority boundaries.
-- Declare dependencies explicitly.
-- Preserve constituent provenance.
-- Permit human and machine components to coexist.
-- Treat ABBA as orchestration, not as an implicit replacement for the composed components.
+The universal assembly equation is:
+
+`intent + canonical objects + relationships + capabilities + resources + workflows + policy + interfaces = governed composition`
+
+Products and worlds are compositions inside the same OMNII environment. BUNK is the current reference composition; HAPI, NGIN and future systems use the same substrate.
+
+## Implementation Contract
+A composition must have a stable identity, manifest, component references, dependency graph, declared interfaces, policies, lifecycle/version and provenance. Resolution must detect missing dependencies, contract conflicts and unauthorized substitutions before activation.
+
+## Nothing-is-wasted rule
+Existing assets are preserved by value and provenance. An artifact may become infrastructure, reusable primitive, composition, adapter, compatibility layer, migration source, test/evidence fixture or historical provenance. Supersession does not imply deletion unless governed.
 
 ## ABBA
-ABBA is the master intelligence and orchestration layer capable of discovering components, designing compositions, selecting capabilities, allocating resources, coordinating execution, monitoring outcomes, and adapting systems within governance and delegated authority.
+ABBA is the master intelligence/orchestration layer for discovering, planning, resolving, coordinating and operating compositions within delegated authority. ABBA does not become the constitution and cannot redefine canonical semantics.

@@ -1,50 +1,51 @@
 # OMNII Runtime Implementation Status
 
-**Scope:** Runtime verification and persistence pass after `20006d32a49840acd7f953977db78df222b56fde`.
+**Scope:** Persistence integration and empirical verification pass after the audited Phase 1–40 architecture.
 
 | Component | Architecture | Schema | Code | Tested | Persisted | Integrated | CI-Verified | Deployed |
 |---|---|---|---|---|---|---|---|---|
-| Canonical Object Runtime | YES | YES | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
-| Relationship Runtime | YES | YES | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
-| Registries | YES | PARTIAL | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
-| Event/State Runtime | YES | YES | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
-| Graph Runtime | YES | YES | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
-| Execution Runtime | YES | PARTIAL | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
-| Workflow Runtime | YES | PARTIAL | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
-| Agent Runtime | YES | PARTIAL | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
-| ABBA Boundary | YES | PARTIAL | YES | PARTIAL | NO | PARTIAL | UNVERIFIED | NO |
-| Audit Runtime | YES | PARTIAL | YES | PARTIAL | PARTIAL | PARTIAL | UNVERIFIED | NO |
-| Ledger Boundary | YES | PARTIAL | YES | PARTIAL | PARTIAL | NO | UNVERIFIED | NO |
-| Memory Persistence Adapter | YES | N/A | YES | PARTIAL | YES | YES | UNVERIFIED | NO |
-| Supabase Persistence Adapter | YES | YES | YES | PARTIAL | YES | PARTIAL | UNVERIFIED | NO |
-| Durable PostgreSQL schema | YES | YES | YES | NOT EXECUTED | YES | NOT VERIFIED | UNVERIFIED | NO |
+| Canonical Object Runtime | YES | YES | YES | YES | YES (memory), durable adapter implemented | YES | YES | NO |
+| Relationship Runtime | YES | YES | YES | YES | YES (memory), durable adapter implemented | YES | YES | NO |
+| Registries | YES | PARTIAL | YES | YES | YES (memory), durable adapter implemented | YES | YES | NO |
+| Event/State Runtime | YES | YES | YES | YES | YES (memory atomic boundary), durable RPC implemented | YES | YES | NO |
+| Graph Runtime | YES | YES | YES | YES | YES through canonical object/relationship persistence | YES | YES | NO |
+| Execution Runtime | YES | PARTIAL | YES | YES | YES (memory atomic audit boundary), durable RPC implemented | YES | YES | NO |
+| Workflow Runtime | YES | PARTIAL | YES | YES | YES (memory), durable adapter implemented | YES | YES | NO |
+| Agent Runtime | YES | PARTIAL | YES | YES | YES (memory), durable adapter implemented | YES | YES | NO |
+| ABBA Boundary | YES | PARTIAL | YES | YES | Delegation state persistence available | YES | YES | NO |
+| Audit Runtime | YES | PARTIAL | YES | YES | YES (memory), durable table/RPC boundary | YES | YES | NO |
+| Ledger Boundary | YES | PARTIAL | YES | YES | YES (memory atomic audit boundary), durable RPC implemented | YES | YES | NO |
+| Memory Persistence Adapter | YES | N/A | YES | YES | YES | YES | YES | NO |
+| Supabase Persistence Adapter | YES | YES | YES | Contract tested; durable live execution unavailable | PARTIAL | PARTIAL | YES (compile/typecheck) | NO |
+| Durable PostgreSQL schema/RPCs | YES | YES | YES | NOT EXECUTED against live DB | YES | PARTIAL | YES (source/build) | NO |
 
-## Verification environment
+## Empirical CI evidence
 
-The connected GitHub tooling provides repository inspection and GitHub Actions configuration, but it does not expose a general-purpose repository shell. Therefore local `pnpm` commands could not be executed in this chat. The repository now contains a CI workflow that will execute install/typecheck/runtime-test/build on GitHub Actions.
+GitHub Actions workflow run **32103355581** completed successfully.
 
-**Current direct execution status:** NOT EXECUTED — ENVIRONMENT LIMITATION.
+Executed on the pull-request merge ref:
 
-No claim of passing tests, typecheck, build, migration application, or deployment is made until GitHub Actions produces those results.
+- install: PASS
+- TypeScript typecheck: PASS
+- runtime tests: PASS — **23/23**
+- runtime build: PASS — `pnpm --filter @omnii/runtime build`
 
-## Persistence
+Earlier CI failures were fixed from their actual root causes: the repository-level Next.js build was not applicable to the runtime package, runtime tests exposed registry/transition/persistence parity defects, and the standalone runtime package build initially lacked Node type inclusion.
 
-`PersistencePort` is the storage boundary. `MemoryPersistenceAdapter` is deterministic and transactional for tests. `SupabasePersistenceAdapter` provides durable CRUD/query/version/archive operations against the existing Supabase/PostgreSQL stack.
+## Durable-storage evidence boundary
 
-The durable adapter intentionally refuses to fake multi-record transactions; database RPCs are required for true atomicity. See `OMNII_RUNTIME_CONSISTENCY_MODEL.md`.
+Supabase/PostgreSQL persistence is implemented behind `PersistencePort`. Durable atomic boundaries are provided by narrowly scoped PostgreSQL functions for state+event, execution+audit, and ledger+audit. The connected environment did not provide configured Supabase/database credentials, so those RPCs are **not claimed as executed against a live database**.
 
-## CI
+## Security boundary
 
-`.github/workflows/omnii-runtime.yml` installs dependencies, runs root typecheck, runtime contract tests, and the existing build command. CI status remains UNVERIFIED until a workflow run exists.
+Verified in code/tests: capability does not imply authority; ABBA requests brokered authority and cannot mint it; agent revocation is enforced; canonical runtime does not depend on BUNK; Phase 40 remains an adapter.
+
+Not claimed: a complete production security audit or live RLS verification.
 
 ## Phase 27
 
-**IMPLEMENTATION GAP.** No Phase 27 implementation was added.
+**IMPLEMENTATION GAP.** No Phase 27 implementation was fabricated.
 
-## ABBA
+## Deployment
 
-**BOUNDARY IMPLEMENTED; PRODUCTION INTELLIGENCE NOT IMPLEMENTED.** ABBA remains an orchestrator whose authority comes from `AuthorityBroker` and delegated authority is passed to the target agent. It cannot self-authorize.
-
-## BUNK
-
-BUNK remains the product/application layer. The runtime persistence schema and runtime code do not import BUNK product semantics.
+No production deployment is claimed. CI verification is not deployment evidence.

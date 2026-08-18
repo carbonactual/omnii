@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { PersistenceCollection, PersistencePort, PersistenceRecord } from "./persistence";
-const TABLES: Record<PersistenceCollection, string> = { objects: "omnii_objects", relationships: "omnii_relationships", dependencies: "omnii_dependencies", registries: "omnii_registries", events: "omnii_events", state: "omnii_state", executions: "omnii_executions", workflows: "omnii_workflows", agents: "omnii_agents", audit: "omnii_audit", ledger: "omnii_ledger" };
+const TABLES: Record<PersistenceCollection, string> = { objects: "omnii_objects", relationships: "omnii_relationships", dependencies: "omnii_dependencies", registries: "omnii_registries", events: "omnii_events", state: "omnii_state", executions: "omnii_executions", workflows: "omnii_workflows", agents: "omnii_agents", audit: "omnii_audit", ledger: "omnii_ledger", authorities: "omnii_authorities" };
 export class SupabasePersistenceAdapter implements PersistencePort {
   constructor(private readonly client: SupabaseClient) {}
   async create<T extends { id: string }>(collection: PersistenceCollection, record: T): Promise<PersistenceRecord> { const { data, error } = await this.client.from(TABLES[collection]).insert(record).select("*").single(); if (error) throw error; return data as PersistenceRecord; }

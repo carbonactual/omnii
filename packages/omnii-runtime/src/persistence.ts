@@ -1,15 +1,5 @@
 export type PersistenceCollection =
-  | "objects"
-  | "relationships"
-  | "dependencies"
-  | "registries"
-  | "events"
-  | "state"
-  | "executions"
-  | "workflows"
-  | "agents"
-  | "audit"
-  | "ledger";
+  | "objects" | "relationships" | "dependencies" | "registries" | "events" | "state" | "executions" | "workflows" | "agents" | "audit" | "ledger";
 
 export interface PersistenceRecord {
   id: string;
@@ -22,16 +12,19 @@ export interface PersistenceRecord {
   [key: string]: unknown;
 }
 
-export interface PersistenceTransaction {
-  readonly id: string;
-  commit(): Promise<void>;
-  rollback(): Promise<void>;
+export interface PersistenceTransaction { readonly id: string; commit(): Promise<void>; rollback(): Promise<void>; }
+
+export interface AtomicRuntimeOperations {
+  stateEvent(input: Record<string, unknown>): Promise<Record<string, unknown>>;
+  executionAudit(input: Record<string, unknown>): Promise<Record<string, unknown>>;
+  ledgerAudit(input: Record<string, unknown>): Promise<Record<string, unknown>>;
 }
 
-export interface PersistencePort {
+export interface PersistencePort extends AtomicRuntimeOperations {
   create(collection: PersistenceCollection, record: PersistenceRecord): Promise<PersistenceRecord>;
   read(collection: PersistenceCollection, id: string): Promise<PersistenceRecord | undefined>;
   update(collection: PersistenceCollection, id: string, patch: Partial<PersistenceRecord>): Promise<PersistenceRecord>;
+  updateIfVersion(collection: PersistenceCollection, id: string, expectedVersion: string, patch: Partial<PersistenceRecord>): Promise<PersistenceRecord>;
   archive(collection: PersistenceCollection, id: string): Promise<PersistenceRecord>;
   query(collection: PersistenceCollection, predicate?: (record: PersistenceRecord) => boolean): Promise<PersistenceRecord[]>;
   version(collection: PersistenceCollection, id: string, version: string): Promise<PersistenceRecord>;
@@ -43,10 +36,7 @@ export class MemoryPersistenceAdapter implements PersistencePort {
 
   private store(collection: PersistenceCollection) {
     let store = this.stores.get(collection);
-    if (!store) {
-      store = new Map();
-      this.stores.set(collection, store);
-    }
+    if (!store) { store = new Map(); this.stores.set(collection, store); }
     return store;
   }
 
@@ -72,25 +62,55 @@ export class MemoryPersistenceAdapter implements PersistencePort {
     return structuredClone(updated);
   }
 
-  async archive(collection: PersistenceCollection, id: string) {
-    return this.update(collection, id, { lifecycle: "archived" });
+  async updateIfVersion(collection: PersistenceCollection, id: string, expectedVersion: string, patch: Partial<PersistenceRecord>) {
+    const current = await this.read(collection, id);
+    if (!current) throw new Error(`Persistence record not found: ${collection}/${id}`);
+    if (current.version !== expectedVersion) throw new Error(`Persistence version conflict: expected ${expectedVersion}, found ${current.version}`);
+    return this.update(collection, id, patch);
   }
+
+  async archive(collection: PersistenceCollection, id: string) { return this.update(collection, id, { lifecycle: "archived" }); }
 
   async query(collection: PersistenceCollection, predicate?: (record: PersistenceRecord) => boolean) {
     const values = [...this.store(collection).values()].map(structuredClone);
     return predicate ? values.filter(predicate) : values;
   }
 
-  async version(collection: PersistenceCollection, id: string, version: string) {
-    return this.update(collection, id, { version });
+  async version(collection: PersistenceCollection, id: string, version: string) { return this.update(collection, id, { version }); }
+
+  async stateEvent(input: Record<string, unknown>) {
+    return this.transaction(async () => {
+      const stateId = String(input["stateId"]);
+      const current = await this.read("state", stateId);
+      if (!current) throw new Error(`State record not found: ${stateId}`);
+      const expected = String(input["expectedVersion"] ?? current.version ?? "1");
+      const state = await this.updateIfVersion("state", stateId, expected, (input["statePatch"] as PersistenceRecord) ?? {});
+      const event = await this.create("events", (input["event"] as PersistenceRecord));
+      return { state, event };
+    });
+  }
+
+  async executionAudit(input: Record<string, unknown>) {
+    return this.transaction(async () => {
+      const execution = await this.update("executions", String(input["executionId"]), (input["executionPatch"] as PersistenceRecord) ?? {});
+      const audit = await this.create("audit", input["audit"] as PersistenceRecord);
+      return { execution, audit };
+    });
+  }
+
+  async ledgerAudit(input: Record<string, unknown>) {
+    return this.transaction(async () => {
+      const ledger = await this.create("ledger", input["ledger"] as PersistenceRecord);
+      const audit = await this.create("audit", input["audit"] as PersistenceRecord);
+      return { ledger, audit };
+    });
   }
 
   async transaction<T>(work: (tx: PersistencePort) => Promise<T>) {
     const snapshot = new Map<PersistenceCollection, Map<string, PersistenceRecord>>();
     for (const [collection, records] of this.stores) snapshot.set(collection, new Map([...records].map(([id, record]) => [id, structuredClone(record)])));
-    try {
-      return await work(this);
-    } catch (error) {
+    try { return await work(this); }
+    catch (error) {
       this.stores.clear();
       for (const [collection, records] of snapshot) this.stores.set(collection, records);
       throw error;

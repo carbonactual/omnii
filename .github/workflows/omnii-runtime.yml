@@ -19,12 +19,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
       - name: Install
         run: pnpm install --no-frozen-lockfile
       - name: Typecheck
         run: pnpm typecheck
       - name: Runtime tests
         run: pnpm test:runtime
-      - name: Build
-        run: pnpm build
+      - name: Runtime build
+        run: pnpm --filter @omnii/runtime build

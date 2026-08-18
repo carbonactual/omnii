@@ -3,19 +3,19 @@ import { AgentRuntime } from "./agent-runtime";
 import { EventStore } from "./event-runtime";
 
 export interface DelegationRequest { subject: string; capability: string; purpose: string; resourceIds: string[]; context: JsonObject; }
-export interface AuthorityBroker { request(request: DelegationRequest): Authority | null; }
+export interface AuthorityBroker { request(request: DelegationRequest): Authority | null | Promise<Authority | null>; }
 export interface AbbaPlan { purpose: string; capability: string; targetAgent: string; input: JsonObject; }
 export interface AbbaBoundary {
   perceive(input: JsonObject): JsonObject;
   contextualize(perception: JsonObject): JsonObject;
   reason(context: JsonObject): JsonObject;
   plan(reasoning: JsonObject): AbbaPlan;
-  requestAuthority(request: DelegationRequest): Authority;
+  requestAuthority(request: DelegationRequest): Promise<Authority>;
   selectCapability(plan: AbbaPlan): string;
-  delegate(plan: AbbaPlan, authority: Authority): void;
-  observe(subject: string): JsonObject;
-  report(subject: string, result: JsonObject): void;
-  escalate(subject: string, reason: string): void;
+  delegate(plan: AbbaPlan, authority: Authority): Promise<void>;
+  observe(subject: string): Promise<JsonObject>;
+  report(subject: string, result: JsonObject): Promise<void>;
+  escalate(subject: string, reason: string): Promise<void>;
 }
 
 export class AbbaRuntime implements AbbaBoundary {
@@ -30,18 +30,18 @@ export class AbbaRuntime implements AbbaBoundary {
     if (typeof request.capability !== "string" || typeof request.targetAgent !== "string") throw new Error("ABBA plan requires capability and target agent");
     return { purpose: typeof request.purpose === "string" ? request.purpose : "orchestration", capability: request.capability, targetAgent: request.targetAgent, input: (request.input as JsonObject | undefined) ?? {} };
   }
-  requestAuthority(request: DelegationRequest): Authority {
-    const authority = this.broker.request(request);
+  async requestAuthority(request: DelegationRequest): Promise<Authority> {
+    const authority = await this.broker.request(request);
     if (!authority) throw new Error("ABBA authority request denied");
     return structuredClone(authority);
   }
   selectCapability(plan: AbbaPlan): string { if (!plan.capability) throw new Error("ABBA cannot select an empty capability"); return plan.capability; }
-  delegate(plan: AbbaPlan, authority: Authority): void {
+  async delegate(plan: AbbaPlan, authority: Authority): Promise<void> {
     if (authority.subject !== plan.targetAgent) throw new Error("Delegated authority subject must match the target agent");
-    this.agents.authorizeAgent(plan.targetAgent, plan.capability, authority);
-    this.events.append({ type: "ABBA_DELEGATION", actor: this.abbaIdentity, subject: plan.targetAgent, outcome: "delegated", provenance: { authority_id: authority.id }, payload: { capability: plan.capability, purpose: plan.purpose } });
+    await this.agents.authorizeAgent(plan.targetAgent, plan.capability, authority);
+    await this.events.append({ type: "ABBA_DELEGATION", actor: this.abbaIdentity, subject: plan.targetAgent, outcome: "delegated", provenance: { authority_id: authority.id }, payload: { capability: plan.capability, purpose: plan.purpose }, idempotency_key: `abba:delegation:${authority.id}:${plan.targetAgent}:${plan.capability}` });
   }
-  observe(subject: string): JsonObject { return { subject, events: this.events.bySubject(subject) }; }
-  report(subject: string, result: JsonObject): void { this.events.append({ type: "ABBA_REPORT", actor: this.abbaIdentity, subject, outcome: "reported", provenance: { orchestrator: this.abbaIdentity }, payload: result }); }
-  escalate(subject: string, reason: string): void { this.events.append({ type: "ABBA_ESCALATION", actor: this.abbaIdentity, subject, outcome: "escalated", provenance: { orchestrator: this.abbaIdentity }, payload: { reason } }); }
+  async observe(subject: string): Promise<JsonObject> { return { subject, events: await this.events.bySubject(subject) }; }
+  async report(subject: string, result: JsonObject): Promise<void> { await this.events.append({ type: "ABBA_REPORT", actor: this.abbaIdentity, subject, outcome: "reported", provenance: { orchestrator: this.abbaIdentity }, payload: result }); }
+  async escalate(subject: string, reason: string): Promise<void> { await this.events.append({ type: "ABBA_ESCALATION", actor: this.abbaIdentity, subject, outcome: "escalated", provenance: { orchestrator: this.abbaIdentity }, payload: { reason } }); }
 }

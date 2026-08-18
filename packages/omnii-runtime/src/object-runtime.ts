@@ -1,64 +1,15 @@
 import { randomUUID } from "node:crypto";
 import { CanonicalObject, RuntimeResult } from "./types";
 import { assertValid, validateCanonicalObject } from "./validation";
-
+import { MemoryPersistenceAdapter, PersistencePort } from "./persistence";
 export type ObjectTransition = { from: string; to: string };
-
 export class ObjectRuntime {
-  private readonly objects = new Map<string, CanonicalObject>();
-  private readonly transitions = new Map<string, ObjectTransition[]>();
-
-  create(input: Omit<CanonicalObject, "id" | "version" | "timestamps"> & Partial<Pick<CanonicalObject, "id" | "version" | "timestamps">>): CanonicalObject {
-    const now = new Date().toISOString();
-    const object: CanonicalObject = {
-      ...input,
-      id: input.id ?? randomUUID(),
-      version: input.version ?? "1",
-      timestamps: input.timestamps ?? { created_at: now, updated_at: now },
-    };
-    assertValid(validateCanonicalObject(object));
-    if (this.objects.has(object.id)) throw new Error(`Object already exists: ${object.id}`);
-    this.objects.set(object.id, structuredClone(object));
-    this.transitions.set(object.id, []);
-    return structuredClone(object);
-  }
-
-  read(id: string): CanonicalObject | undefined {
-    const object = this.objects.get(id);
-    return object ? structuredClone(object) : undefined;
-  }
-
-  update(id: string, patch: Partial<Omit<CanonicalObject, "id">>): CanonicalObject {
-    const current = this.objects.get(id);
-    if (!current) throw new Error(`Object not found: ${id}`);
-    const updated = { ...current, ...patch, id, timestamps: { ...current.timestamps, updated_at: new Date().toISOString() } };
-    assertValid(validateCanonicalObject(updated));
-    this.objects.set(id, structuredClone(updated));
-    return structuredClone(updated);
-  }
-
-  validate(id: string) {
-    const object = this.objects.get(id);
-    if (!object) return { valid: false, errors: [`Object not found: ${id}`] };
-    return validateCanonicalObject(object);
-  }
-
-  transition(id: string, to: string): RuntimeResult<CanonicalObject> {
-    const current = this.objects.get(id);
-    if (!current) throw new Error(`Object not found: ${id}`);
-    if (!to) throw new Error("Transition target is required");
-    const transitions = this.transitions.get(id) ?? [];
-    transitions.push({ from: current.status, to });
-    const updated = this.update(id, { status: to });
-    this.transitions.set(id, transitions);
-    return { value: updated, eventIds: [] };
-  }
-
-  archive(id: string): CanonicalObject {
-    return this.update(id, { status: "archived" });
-  }
-
-  list(): CanonicalObject[] {
-    return [...this.objects.values()].map((object) => structuredClone(object));
-  }
+  constructor(private readonly persistence: PersistencePort = new MemoryPersistenceAdapter()) {}
+  async create(input: Omit<CanonicalObject, "id" | "version" | "timestamps"> & Partial<Pick<CanonicalObject, "id" | "version" | "timestamps">>): Promise<CanonicalObject> { const now = new Date().toISOString(); const object = { ...input, id: input.id ?? randomUUID(), version: input.version ?? "1", timestamps: input.timestamps ?? { created_at: now, updated_at: now } } as CanonicalObject; assertValid(validateCanonicalObject(object)); const created = await this.persistence.create("objects", object); return structuredClone(created as unknown as CanonicalObject); }
+  async read(id: string): Promise<CanonicalObject | undefined> { const object = await this.persistence.read("objects", id); return object ? structuredClone(object as unknown as CanonicalObject) : undefined; }
+  async update(id: string, patch: Partial<Omit<CanonicalObject, "id">>, expectedVersion?: string): Promise<CanonicalObject> { const current = await this.read(id); if (!current) throw new Error(`Object not found: ${id}`); const expected = expectedVersion ?? current.version; if (current.version !== expected) throw new Error(`Object version conflict: expected ${expected}, found ${current.version}`); const updated = { ...current, ...patch, id, version: String(Number(current.version) + 1), timestamps: { ...current.timestamps, updated_at: new Date().toISOString() } } as CanonicalObject; assertValid(validateCanonicalObject(updated)); const persisted = await this.persistence.updateIfVersion("objects", id, expected, updated); return structuredClone(persisted as unknown as CanonicalObject); }
+  async validate(id: string) { const object = await this.read(id); return object ? validateCanonicalObject(object) : { valid: false, errors: [`Object not found: ${id}`] }; }
+  async transition(id: string, to: string, expectedVersion?: string): Promise<RuntimeResult<CanonicalObject>> { if (!to) throw new Error("Transition target is required"); const current = await this.read(id); if (!current) throw new Error(`Object not found: ${id}`); const updated = await this.update(id, { status: to }, expectedVersion ?? current.version); return { value: updated, eventIds: [] }; }
+  async archive(id: string, expectedVersion?: string): Promise<CanonicalObject> { return this.update(id, { status: "archived" }, expectedVersion); }
+  async list(): Promise<CanonicalObject[]> { const objects = await this.persistence.query("objects"); return objects.map((object) => structuredClone(object as unknown as CanonicalObject)); }
 }

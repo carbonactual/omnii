@@ -1,43 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { JsonObject } from "./types";
 import { EventStore } from "./event-runtime";
-
-export interface LedgerEntry {
-  id: string;
-  transactionReference: string;
-  valueReference: string;
-  resourceReference?: string;
-  contributionReference?: string;
-  quantity?: number;
-  unit?: string;
-  moneyAmount?: number;
-  moneyCurrency?: string;
-  ownershipReference?: string;
-  obligationReference?: string;
-  provenance: JsonObject;
-  authority: JsonObject;
-  recordedAt: string;
-}
-
+import { MemoryPersistenceAdapter, PersistencePort } from "./persistence";
+export interface LedgerEntry { id: string; transactionReference: string; valueReference: string; resourceReference?: string; contributionReference?: string; quantity?: number; unit?: string; moneyAmount?: number; moneyCurrency?: string; ownershipReference?: string; obligationReference?: string; provenance: JsonObject; authority: JsonObject; recordedAt: string; idempotencyKey?: string; }
 export class LedgerBoundary {
-  private readonly entries = new Map<string, LedgerEntry>();
-
-  constructor(private readonly events: EventStore) {}
-
-  append(input: Omit<LedgerEntry, "id" | "recordedAt">): LedgerEntry {
-    const entry: LedgerEntry = { ...input, id: randomUUID(), recordedAt: new Date().toISOString() };
-    if (!entry.transactionReference || !entry.valueReference) throw new Error("Ledger entry requires transactionReference and valueReference");
-    this.entries.set(entry.id, structuredClone(entry));
-    this.events.append({ type: "LEDGER_ENTRY_RECORDED", actor: String(entry.authority["subject"] ?? "unknown"), subject: entry.transactionReference, outcome: "recorded", provenance: entry.provenance, payload: entry as unknown as JsonObject });
-    return structuredClone(entry);
-  }
-
-  read(id: string): LedgerEntry | undefined {
-    const entry = this.entries.get(id);
-    return entry ? structuredClone(entry) : undefined;
-  }
-
-  byTransaction(transactionReference: string): LedgerEntry[] {
-    return [...this.entries.values()].filter((entry) => entry.transactionReference === transactionReference).map((entry) => structuredClone(entry));
-  }
+  constructor(private readonly events: EventStore, private readonly persistence: PersistencePort = new MemoryPersistenceAdapter()) {}
+  async append(input: Omit<LedgerEntry, "id" | "recordedAt">): Promise<LedgerEntry> { if (!input.transactionReference || !input.valueReference) throw new Error("Ledger entry requires transactionReference and valueReference"); if (input.idempotencyKey) { const existing = await this.persistence.query("ledger", (record) => record["idempotencyKey"] === input.idempotencyKey); if (existing.length) return structuredClone(existing[0] as unknown as LedgerEntry); } const entry = { ...input, id: randomUUID(), recordedAt: new Date().toISOString() }; const audit = { id: randomUUID(), who: String(entry.authority["subject"] ?? "unknown"), what: "ledger.append", why: entry.transactionReference, authority: String(entry.authority["id"] ?? entry.authority["subject"] ?? "unknown"), capability: "ledger.append", resource: entry.resourceReference ? [entry.resourceReference] : [], when: new Date().toISOString(), object: entry.id, result: "recorded", provenance: entry.provenance }; await this.persistence.ledgerAudit({ ledger: entry, audit }); await this.events.append({ type: "LEDGER_ENTRY_RECORDED", actor: String(entry.authority["subject"] ?? "unknown"), subject: entry.transactionReference, outcome: "recorded", provenance: entry.provenance, payload: entry as unknown as JsonObject, idempotency_key: input.idempotencyKey ? `ledger:${input.idempotencyKey}` : undefined }); return structuredClone(entry); }
+  async read(id: string): Promise<LedgerEntry | undefined> { const entry = await this.persistence.read("ledger", id); return entry ? structuredClone(entry as unknown as LedgerEntry) : undefined; }
+  async byTransaction(transactionReference: string): Promise<LedgerEntry[]> { const entries = await this.persistence.query("ledger", (record) => record["transactionReference"] === transactionReference); return entries.map((entry) => structuredClone(entry as unknown as LedgerEntry)); }
 }

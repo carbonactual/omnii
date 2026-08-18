@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { JsonObject } from "./types";
 import { EventStore } from "./event-runtime";
+import { MemoryPersistenceAdapter, PersistencePort } from "./persistence";
 
 export interface AuditRecord {
   id: string;
@@ -17,22 +18,22 @@ export interface AuditRecord {
 }
 
 export class AuditRuntime {
-  private readonly records: AuditRecord[] = [];
+  constructor(private readonly events: EventStore, private readonly persistence: PersistencePort = new MemoryPersistenceAdapter()) {}
 
-  constructor(private readonly events: EventStore) {}
-
-  record(input: Omit<AuditRecord, "id" | "when">): AuditRecord {
+  async record(input: Omit<AuditRecord, "id" | "when">): Promise<AuditRecord> {
     const record: AuditRecord = { ...input, id: randomUUID(), when: new Date().toISOString() };
-    this.records.push(structuredClone(record));
-    this.events.append({ type: "AUDIT_RECORDED", actor: record.who, subject: record.object, outcome: record.result, provenance: { audit_id: record.id, authority_id: record.authority }, payload: record as unknown as JsonObject });
-    return structuredClone(record);
+    const created = await this.persistence.create("audit", record);
+    await this.events.append({ type: "AUDIT_RECORDED", actor: record.who, subject: record.object, outcome: record.result, provenance: { audit_id: record.id, authority_id: record.authority }, payload: record as unknown as JsonObject, idempotency_key: `audit:${record.id}` });
+    return structuredClone(created as unknown as AuditRecord);
   }
 
-  byObject(object: string): AuditRecord[] {
-    return this.records.filter((record) => record.object === object).map((record) => structuredClone(record));
+  async byObject(object: string): Promise<AuditRecord[]> {
+    const records = await this.persistence.query("audit", (record) => record["object"] === object);
+    return records.map((record) => structuredClone(record as unknown as AuditRecord));
   }
 
-  all(): AuditRecord[] {
-    return this.records.map((record) => structuredClone(record));
+  async all(): Promise<AuditRecord[]> {
+    const records = await this.persistence.query("audit");
+    return records.map((record) => structuredClone(record as unknown as AuditRecord));
   }
 }

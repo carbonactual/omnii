@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { Authority, JsonObject } from "./types";
+import { MemoryPersistenceAdapter, PersistencePort } from "./persistence";
 
 export interface OmniiEvent {
   id: string;
@@ -9,36 +10,38 @@ export interface OmniiEvent {
   actor: string;
   subject?: string;
   correlation_id?: string;
+  idempotency_key?: string;
   outcome?: string;
   provenance: JsonObject;
   payload?: JsonObject;
 }
 
 export class EventStore {
-  private readonly events: OmniiEvent[] = [];
+  constructor(private readonly persistence: PersistencePort = new MemoryPersistenceAdapter()) {}
 
-  append(input: Omit<OmniiEvent, "id" | "occurred_at" | "recorded_at">): OmniiEvent {
-    const event: OmniiEvent = {
-      ...input,
-      id: randomUUID(),
-      occurred_at: new Date().toISOString(),
-      recorded_at: new Date().toISOString(),
-    };
-    this.events.push(structuredClone(event));
-    return structuredClone(event);
+  async append(input: Omit<OmniiEvent, "id" | "occurred_at" | "recorded_at">): Promise<OmniiEvent> {
+    if (input.idempotency_key) {
+      const existing = await this.persistence.query("events", (record) => record["idempotency_key"] === input.idempotency_key);
+      if (existing.length) return structuredClone(existing[0] as unknown as OmniiEvent);
+    }
+    const event: OmniiEvent = { ...input, id: randomUUID(), occurred_at: new Date().toISOString(), recorded_at: new Date().toISOString() };
+    const created = await this.persistence.create("events", event);
+    return structuredClone(created as unknown as OmniiEvent);
   }
 
-  get(id: string): OmniiEvent | undefined {
-    const event = this.events.find((candidate) => candidate.id === id);
-    return event ? structuredClone(event) : undefined;
+  async get(id: string): Promise<OmniiEvent | undefined> {
+    const event = await this.persistence.read("events", id);
+    return event ? structuredClone(event as unknown as OmniiEvent) : undefined;
   }
 
-  bySubject(subject: string): OmniiEvent[] {
-    return this.events.filter((event) => event.subject === subject).map((event) => structuredClone(event));
+  async bySubject(subject: string): Promise<OmniiEvent[]> {
+    const events = await this.persistence.query("events", (record) => record["subject"] === subject);
+    return events.map((event) => structuredClone(event as unknown as OmniiEvent));
   }
 
-  all(): OmniiEvent[] {
-    return this.events.map((event) => structuredClone(event));
+  async all(): Promise<OmniiEvent[]> {
+    const events = await this.persistence.query("events");
+    return events.map((event) => structuredClone(event as unknown as OmniiEvent));
   }
 }
 
@@ -54,10 +57,7 @@ export type Transition = { from: string; to: string };
 export class StateMachine {
   constructor(private readonly transitions: Transition[]) {}
 
-  canTransition(from: string, to: string): boolean {
-    return this.transitions.some((transition) => transition.from === from && transition.to === to);
-  }
-
+  canTransition(from: string, to: string): boolean { return this.transitions.some((transition) => transition.from === from && transition.to === to); }
   transition(from: string, to: string): string {
     if (!this.canTransition(from, to)) throw new Error(`Invalid state transition: ${from} -> ${to}`);
     return to;

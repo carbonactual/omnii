@@ -1,6 +1,7 @@
 import { CanonicalObject, JsonObject, Relationship, ValidationResult } from "./types";
 import { Registry, RegistryRecord } from "./registry";
 import { validateCanonicalObject, validateRelationship } from "./validation";
+import { MemoryPersistenceAdapter, PersistencePort } from "./persistence";
 
 export interface DependencyRecord extends RegistryRecord {
   source: string;
@@ -39,9 +40,17 @@ const dependencyValidation = (record: DependencyRecord): ValidationResult => {
 };
 
 export class RegistryRuntime {
-  readonly objects = new Registry<CanonicalObject & RegistryRecord>("object", validateCanonicalObject);
-  readonly relationships = new Registry<Relationship & RegistryRecord>("relationship", validateRelationship);
-  readonly dependencies = new Registry<DependencyRecord>("dependency", dependencyValidation);
-  readonly capabilities = new Registry<CapabilityRecord>("capability", registryRecordValidation);
-  readonly resources = new Registry<ResourceRecord>("resource", registryRecordValidation);
+  readonly objects: Registry<CanonicalObject & RegistryRecord>;
+  readonly relationships: Registry<Relationship & RegistryRecord>;
+  readonly dependencies: Registry<DependencyRecord>;
+  readonly capabilities: Registry<CapabilityRecord>;
+  readonly resources: Registry<ResourceRecord>;
+
+  constructor(persistence: PersistencePort = new MemoryPersistenceAdapter()) {
+    this.objects = new Registry("object", validateCanonicalObject, persistence);
+    this.relationships = new Registry("relationship", validateRelationship, persistence);
+    this.dependencies = new Registry("dependency", dependencyValidation, persistence);
+    this.capabilities = new Registry("capability", registryRecordValidation, persistence);
+    this.resources = new Registry("resource", registryRecordValidation, persistence);
+  }
 }

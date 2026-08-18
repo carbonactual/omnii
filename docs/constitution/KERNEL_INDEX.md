@@ -1,29 +1,45 @@
 # OMNII Constitutional Kernel Index
 
-## Purpose
-The Constitutional Kernel Index defines the foundational kernels from which all OMNII capabilities, products, agents, services, workflows, and institutions are composed.
+**Status: CANONICAL**
+
+The Constitutional Kernel Index defines the foundational kernels from which all OMNII capabilities, products, agents, services, workflows, institutions, territories and worlds are composed.
 
 ## Kernels
-- BEING
-- IDENTITY
-- KNOWLEDGE
-- MOTION
-- VALUE
-- TRUST
-- RELATIONSHIP
-- EXECUTION
-- CAPABILITY
-- RESOURCE
-- COMPOSITION
-- CONTINUITY
-- INTEGRATION
-- INTENT
 
-## Composition Principle
-Products compose kernels rather than redefining them.
+1. BEING — existence and governed participation
+2. IDENTITY — distinguishability, identity evidence and canonical identity
+3. KNOWLEDGE — information, evidence, provenance, memory and learning
+4. MOTION — change, transition, flow and time-bound movement
+5. VALUE — value, economics, contribution and allocation
+6. TRUST — security, privacy, consent, verification, reputation, risk and redress
+7. RELATIONSHIP — first-class connections between governed objects
+8. INTENT — purpose and desired outcome
+9. EXECUTION — governed action and state transition
+10. CAPABILITY — what an actor/system can perform or provide
+11. RESOURCE — what execution can consume, control or allocate
+12. COMPOSITION — assembly of canonical primitives into higher-order systems
+13. CONTINUITY — persistence, legacy, succession, recovery and resilience
+14. INTEGRATION — connection and adaptation across system boundaries
 
-## Human Principle
-Human + Intelligence = Amplification, not replacement.
+## Cross-cutting constitutional concerns
+
+Governance, authority, security, economics, ABBA/orchestration, observability and audit operate across the kernels. They do not create competing foundational kernels.
+
+## Canonical principles
+
+- Products compose kernels rather than redefining them.
+- Relationships are first-class.
+- Universal objects use one canonical envelope.
+- Events record consequential occurrences; state is modeled separately.
+- Capability never implies authority.
+- Human authority remains explicit.
+- Integrate, compose and adapt before rebuilding.
+- Existing value is preserved through reuse, migration, compatibility or provenance.
+
+## One-repository principle
+
+All compositions live inside the same OMNII environment. BUNK is an existing reference product composition; HAPI, NGIN and future systems use the same substrate rather than creating parallel foundations.
 
 ## Orchestration
-ABBA acts as the master intelligence and orchestration layer across the constitutional kernel system.
+
+ABBA acts as the master intelligence and orchestration layer across the constitutional kernel system while remaining subordinate to constitutional authority and policy.

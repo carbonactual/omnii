@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\"",
+    "test:runtime": "node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\""
   },
   "dependencies": {
     "@supabase/ssr": "latest",
@@ -23,6 +25,7 @@
     "@types/react-dom": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "tsx": "latest",
     "typescript": "latest"
   }
 }

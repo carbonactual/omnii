@@ -25,5 +25,5 @@ jobs:
         run: pnpm typecheck
       - name: Runtime tests
         run: pnpm test:runtime
-      - name: Build
-        run: pnpm build
+      - name: Runtime build
+        run: pnpm --filter @omnii/runtime build

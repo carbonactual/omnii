@@ -9,6 +9,7 @@
 | P1 | Production ABBA intelligence is not implemented. | ABBA is an executable orchestration boundary, not production intelligence. | Integrate an authorized intelligence provider behind the existing boundary only when available. | ABBA + governance |
 | P2 | Authenticated/anonymous application-role RLS behavior has not been live-tested. | RLS is enabled, but no explicit OMNII policies exist because the application identity/authority mapping is not yet authoritative. | Define and test narrow application policies only when that identity model exists. | Authority contract + deployment |
 | P2 | Live parent-authority containment is not enforced by the PostgreSQL issue RPC itself. | Constitutional delegation containment is correctly enforced in `AuthorityRuntime`, but the durable RPC is intentionally a storage boundary rather than a second authority semantics engine. | Preserve runtime containment; add a durable transactional delegation operation only if the existing runtime contract later requires database-side atomic delegation. | AuthorityRuntime + persistence |
+| P2 | Supabase security advisor reports mutable `search_path` on OMNII PostgreSQL functions, including the authority issue/revoke/suspend functions. | Function name resolution is less constrained than a hardened deployment should require. | Add explicit function `search_path` settings in a narrowly scoped migration after confirming the repository's existing migration convention. | Database hardening |
 | P2 | Event transport remains local EventStore. | Durable event storage exists, but distributed consumer delivery is not proven. | Add transport adapter without changing event semantics when integration requires it. | Event runtime |
 | P2 | Workflow/agent production integration remains local. | Production orchestration is not proven. | Add adapters after durable runtime parity is established. | Workflow/agent runtime |
 | P3 | Distributed observability remains unimplemented. | Production telemetry is incomplete. | Add provider adapter when deployment stack requires it. | Audit/event runtime |
@@ -17,7 +18,7 @@
 
 ## Resolved / verified in this pass
 
-- Current `main` remained at the authority-hardening line before corrective verification changes.
+- Current `main` remained within the Phase 1–40 architecture.
 - `AuthorityRuntime` remains exported and persistence-backed.
 - The shared authorization guard was corrected to reject suspended authority and explicit revoked/expired lifecycle states.
 - A regression test was added for suspended-authority rejection.
@@ -38,6 +39,7 @@
 - ABBA production intelligence remains unimplemented.
 - Authenticated/anonymous RLS policy behavior remains unverified.
 - Live database-side delegation containment remains intentionally unimplemented in the named issue RPC; constitutional containment remains in `AuthorityRuntime`.
+- Supabase security-advisor search-path warnings remain open and were not silently treated as resolved.
 - Distributed event transport remains unimplemented.
 - Production workflow/agent integration remains unproven.
 - Production deployment remains unclaimed.

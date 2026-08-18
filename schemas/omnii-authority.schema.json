@@ -3,7 +3,7 @@
   "$id": "omnii://schemas/authority/v1",
   "title": "OMNII Authority",
   "type": "object",
-  "required": ["id", "subject", "scope", "capabilities", "issued_at", "revocable"],
+  "required": ["id", "subject", "scope", "capabilities", "issued_at", "revocable", "version", "status"],
   "properties": {
     "id": {"type": "string", "minLength": 1},
     "subject": {"type": "string", "minLength": 1},
@@ -15,7 +15,12 @@
     "expires_at": {"type": "string", "format": "date-time"},
     "revocable": {"type": "boolean"},
     "revoked_at": {"type": "string", "format": "date-time"},
-    "provenance": {"type": "object"}
+    "provenance": {"type": "object"},
+    "version": {"type": "string", "minLength": 1},
+    "status": {"enum": ["active", "suspended", "revoked", "expired"]},
+    "parent_authority_id": {"type": "string", "minLength": 1},
+    "context": {"type": "object"},
+    "idempotency_key": {"type": "string", "minLength": 1}
   },
   "additionalProperties": false
 }

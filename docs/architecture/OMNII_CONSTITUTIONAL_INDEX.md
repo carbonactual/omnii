@@ -1,11 +1,11 @@
 # OMNII Constitutional Index
 
-**Status:** Constitutional Index  
+**Status:** Constitutional Index — Builds 13–23 materialized  
 **Canonical authority:** OMNII Canonical Architecture
 
 ## 1. Purpose
 
-This index is the navigational and dependency map for the OMNII constitutional corpus. It prevents terminology drift, records the intended progression of constitutional doctrines, and identifies the relationship between foundational meaning, behavioral laws, reality, coordination, becoming, and civilization.
+This index is the navigational, dependency, evidence, and constitutional-drift control map for the OMNII constitutional corpus. It records the intended progression from structural foundation through behavioral law, reality, coordination, becoming, and civilization.
 
 The index is descriptive and normative. It does not replace the individual doctrines.
 
@@ -68,34 +68,43 @@ The sequence is a dependency model, not a claim that the ecosystem operates as a
 
 ## 4. Constitutional Corpus Map
 
-| Document | Layer | Purpose | Depends On |
-|---|---|---|---|
-| OMNII Canonical Architecture | Foundation | Structural foundation | None |
-| OMNII Universal Ecosystem Model | Foundation | Scope of physical, digital, biological, human, and AI reality | Architecture |
-| OMNII Constitutional Semantics | Foundation | Meaning and interpretation | Architecture, Ecosystem Model |
-| OMNII Constitutional Mathematics | Behavioral | Pattern, relation, quantity, transformation, and formal behavior | Semantics |
-| OMNII Constitutional Economics | Behavioral | Value, allocation, exchange, resource, and obligation behavior | Mathematics |
-| OMNII Constitutional Intelligence | Behavioral | Intelligence behavior and ecosystem reasoning | Semantics, Mathematics |
-| OMNII Constitutional Continuity | Behavioral | Persistence, identity, provenance, state transition, and temporal coherence | Economics, Intelligence |
-| OMNII Constitutional Territory | Reality | Place, spatial context, jurisdictional context, and territorial relationships | Continuity |
-| OMNII Constitutional Ecology | Reality | Interdependence, flows, dependencies, feedback, and ecosystem relationships | Territory |
-| OMNII Constitutional Relationship | Connection | Relationship as a first-class constitutional structure | Ecology, Continuity |
-| OMNII Constitutional Governance | Coordination | Coordination behavior and collective ordering | Intelligence, Territory, Relationship |
-| OMNII Constitutional Authority | Coordination | Legitimation, delegation, and valid power to act | Governance |
-| OMNII Constitutional Consent | Coordination | Participation boundaries and legitimate agreement | Authority |
-| OMNII Constitutional Being | Becoming | Identity, existence, state, and what an entity is | Semantics, Continuity, Relationship |
-| OMNII Constitutional Becoming | Becoming | Transformation, trajectory, capability, and what an entity becomes | Being, Continuity, Intelligence |
-| OMNII Constitutional Civilization | Civilization | Collective emergence of people, institutions, markets, territories, cultures, and systems | Becoming, Governance, Ecology |
+| Build | Document | Layer | Purpose | Depends On |
+|---:|---|---|---|---|
+| — | OMNII Canonical Architecture | Foundation | Structural foundation | None |
+| — | OMNII Universal Ecosystem Model | Foundation | Scope of physical, digital, biological, human, and AI reality | Architecture |
+| — | OMNII Constitutional Semantics | Foundation | Meaning and interpretation | Architecture, Ecosystem Model |
+| — | OMNII Constitutional Mathematics | Behavioral | Pattern, relation, quantity, transformation, and formal behavior | Semantics |
+| — | OMNII Constitutional Economics | Behavioral | Value, allocation, exchange, resource, and obligation behavior | Mathematics |
+| — | OMNII Constitutional Intelligence | Behavioral | Intelligence behavior and ecosystem reasoning | Semantics, Mathematics |
+| 13 | OMNII Constitutional Continuity | Behavioral | Persistence, identity, provenance, state transition, and temporal coherence | Economics, Intelligence |
+| 14 | OMNII Constitutional Territory | Reality | Place, spatial context, jurisdictional context, and territorial relationships | Continuity |
+| 15 | OMNII Constitutional Ecology | Reality | Interdependence, flows, dependencies, feedback, and ecosystem relationships | Territory |
+| 16 | OMNII Constitutional Relationship | Connection | Relationship as a first-class constitutional structure | Ecology, Continuity |
+| 17 | OMNII Constitutional Governance | Coordination | Coordination behavior and collective ordering | Intelligence, Territory, Relationship |
+| 18 | OMNII Constitutional Authority | Coordination | Legitimation, delegation, and valid bounded capacity to act | Governance |
+| 19 | OMNII Constitutional Consent | Coordination | Participation boundaries and legitimate agreement | Authority |
+| 20 | OMNII Constitutional Being | Becoming | Identity, existence, state, and what an entity is | Semantics, Continuity, Relationship |
+| 21 | OMNII Constitutional Becoming | Becoming | Transformation, trajectory, capability, and what an entity becomes | Being, Continuity, Intelligence |
+| 22 | OMNII Constitutional Civilization | Civilization | Collective emergence of people, institutions, markets, territories, cultures, and systems | Becoming, Governance, Ecology |
+| 23 | OMNII Constitutional Index | Foundation / Control | Canonical navigation, dependency mapping, evidence discipline, and terminology-drift control | Entire corpus |
 
-## 5. Doctrine Status
+## 5. Materialized Build Status
 
-At the time of this index, the following newly materialized constitutional doctrines are evidenced in `docs/architecture`:
+The following Build 13–23 doctrine files are now materialized in `docs/architecture`:
 
 - `OMNII_CONSTITUTIONAL_CONTINUITY.md`
 - `OMNII_CONSTITUTIONAL_TERRITORY.md`
 - `OMNII_CONSTITUTIONAL_ECOLOGY.md`
+- `OMNII_CONSTITUTIONAL_RELATIONSHIP.md`
+- `OMNII_CONSTITUTIONAL_GOVERNANCE.md`
+- `OMNII_CONSTITUTIONAL_AUTHORITY.md`
+- `OMNII_CONSTITUTIONAL_CONSENT.md`
+- `OMNII_CONSTITUTIONAL_BEING.md`
+- `OMNII_CONSTITUTIONAL_BECOMING.md`
+- `OMNII_CONSTITUTIONAL_CIVILIZATION.md`
+- `OMNII_CONSTITUTIONAL_INDEX.md`
 
-Existing constitutional and architecture documents remain authoritative where they cover their respective subjects. This index does not claim that every future doctrine listed above has already been materialized.
+This section records repository materialization, not runtime implementation. Executable behavior still requires separate evidence from code, tests, workflows, and runtime execution.
 
 ## 6. Runtime Relationship
 
@@ -113,9 +122,46 @@ Implementation
 Evidence / Event / State
 ```
 
-Implementation may change while the constitutional meaning remains stable.
+Implementation may change while constitutional meaning remains stable.
 
-## 7. OMNII / OMNI Relationship
+## 7. Constitutional Dependency Rule
+
+A doctrine may depend upon another doctrine without making the dependency a software import. Constitutional dependency means that the dependent doctrine's meaning must remain coherent with the doctrine it relies upon.
+
+Where a dependency changes, affected downstream doctrines must be reviewed.
+
+## 8. Constitutional Amendment Rule
+
+A proposed constitutional change must:
+
+1. identify the affected doctrine;
+2. identify dependent doctrines;
+3. identify affected invariants;
+4. reconcile terminology across the corpus;
+5. preserve the OMNII / OMNI distinction unless explicitly amended;
+6. record the change and its provenance;
+7. validate affected runtime contracts where applicable.
+
+No doctrine should be changed in isolation when the change alters its dependency semantics.
+
+## 9. Evidence Rule
+
+Repository names, filenames, plans, or architectural intent do not by themselves establish implementation.
+
+Constitutional status must be supported by repository evidence such as:
+
+- committed documents;
+- executable code;
+- tests;
+- migrations;
+- workflows;
+- build results;
+- runtime evidence;
+- explicit commit history.
+
+The index therefore distinguishes **constitutional intent**, **document materialization**, and **executable implementation evidence**.
+
+## 10. OMNII / OMNI Relationship
 
 ```text
 OMNII
@@ -131,7 +177,7 @@ OMNI
 
 OMNI is not another technical subsystem underneath OMNII. It describes how an ecosystem can move through states, relationships, territories, values, and possibilities.
 
-## 8. ABBA Relationship
+## 11. ABBA Relationship
 
 ABBA is the ecosystem's constitutional orchestration intelligence.
 
@@ -143,37 +189,27 @@ ABBA  = orchestration intelligence
 OMNI  = omnidirectional movement state
 ```
 
-## 9. Constitutional Amendment Rule
+## 12. Constitutional Layering
 
-A proposed constitutional change must:
+The corpus can be understood as five major layers:
 
-1. identify the affected doctrine;
-2. identify dependent doctrines;
-3. identify affected invariants;
-4. reconcile terminology across the corpus;
-5. preserve the OMNII / OMNI distinction unless explicitly amended;
-6. record the change and its provenance;
-7. validate affected runtime contracts where applicable.
+### Foundation
+Architecture, Universal Ecosystem Model, Semantics.
 
-No doctrine should be changed in isolation when the change alters its dependency semantics.
+### Behavioral
+Mathematics, Economics, Intelligence, Continuity.
 
-## 10. Evidence Rule
+### Reality
+Territory, Ecology.
 
-Repository names, filenames, or plans do not by themselves establish implementation.
+### Coordination
+Relationship, Governance, Authority, Consent.
 
-Constitutional status must be supported by repository evidence such as:
+### Becoming and Civilization
+Being, Becoming, Civilization.
 
-- committed documents;
-- executable code;
-- tests;
-- migrations;
-- workflows;
-- build results;
-- runtime evidence;
-- explicit commit history.
+The layers are conceptual. Runtime components may cross layers while remaining constitutionally subordinate to their relevant doctrines.
 
-The index therefore distinguishes **constitutional intent** from **materialized repository evidence**.
-
-## 11. Final Principle
+## 13. Final Principle
 
 > **The constitutional index exists so the ecosystem can grow without forgetting what it means.**

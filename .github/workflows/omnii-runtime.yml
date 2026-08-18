@@ -35,3 +35,5 @@ jobs:
 
       - name: Constitutional runtime typecheck/build
         run: pnpm exec tsc -p packages/omnii-runtime/tsconfig.json
+
+# Constitutional CI evidence trigger: push execution must be observable before certification.

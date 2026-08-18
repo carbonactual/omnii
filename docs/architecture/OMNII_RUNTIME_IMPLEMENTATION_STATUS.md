@@ -1,6 +1,6 @@
 # OMNII Runtime Implementation Status
 
-**Scope:** Phase 1–40 runtime hardening. This pass materializes the canonical production authority boundary; it does not start Phase 41 or add constitutional kernels.
+**Scope:** Phase 1–40 runtime hardening. This pass verifies and reconciles the canonical production authority boundary; it does not start Phase 41 or add constitutional kernels.
 
 | Component | Architecture | Schema | Code | Tested | Persisted | Integrated | CI-Verified | Deployed |
 |---|---|---|---|---|---|---|---|---|
@@ -13,12 +13,12 @@
 | Workflow Runtime | YES | PARTIAL | YES | YES | YES (memory + durable schema) | YES | YES | NO |
 | Agent Runtime | YES | PARTIAL | YES | YES | YES (memory + durable schema) | YES | YES | NO |
 | ABBA Boundary | YES | PARTIAL | YES | YES | Delegation state persistence available | YES | YES | NO |
-| Authority Runtime | YES | YES | YES | **UNVERIFIED** — new authority suite not executed in available runtime environment | YES | YES | **UNVERIFIED** | NO |
+| Authority Runtime | YES | YES | YES | **UNVERIFIED** — post-hardening authority suite not executable through available tooling | YES | YES | **UNVERIFIED** | NO |
 | Audit Runtime | YES | PARTIAL | YES | YES | YES (memory + live durable audit records) | YES | YES | NO |
 | Ledger Boundary | YES | PARTIAL | YES | YES | YES (memory + live ledger/audit RPC) | YES | YES | NO |
 | Memory Persistence Adapter | YES | N/A | YES | YES | YES | YES | YES | NO |
-| Supabase Persistence Adapter | YES | YES | YES | Prior contract tested; authority RPC smoke verification PASS | PARTIAL | PARTIAL | YES (prior CI) | NO |
-| Durable PostgreSQL schema/RPCs | YES | YES | YES | **LIVE VERIFIED** — authority migration/RPC smoke tests executed | YES | PARTIAL | YES (prior CI) | NO |
+| Supabase Persistence Adapter | YES | YES | YES | Prior contract tested; live authority RPC smoke verification PASS | PARTIAL | PARTIAL | YES (prior CI) | NO |
+| Durable PostgreSQL schema/RPCs | YES | YES | YES | **LIVE VERIFIED** — authority RPC smoke tests executed | YES | PARTIAL | YES (prior CI) | NO |
 
 ## Canonical durable environment
 
@@ -26,45 +26,48 @@
 - **Project ref:** `fomkrgrsqakabftymbjn`
 - **Status:** ACTIVE and live-accessible through the connected Supabase integration.
 
-## Authority hardening evidence
+## Post-hardening reconciliation
 
-Repository implementation now contains:
+Inspection of the current authority implementation found one lifecycle enforcement defect: the shared `authorize()` guard checked revocation and expiry but did not reject an authority whose canonical lifecycle status was `suspended`. This affected any runtime path using the shared guard directly, including agent authorization/execution.
 
-- `AuthorityRuntime` exported from the canonical runtime package.
-- Authority records persisted through `PersistencePort`.
-- `MemoryPersistenceAdapter` authority lifecycle operations.
-- `SupabasePersistenceAdapter` authority collection and named PostgreSQL RPC operations.
-- `omnii_authorities` durable schema with version, lifecycle, parent authority, provenance, context/resource constraints and idempotency key.
-- Issuer containment and delegation containment checks.
-- Explicit rejection of ABBA as issuer/delegator.
-- Explicit rejection of authority-bearing agents as issuer/delegator.
-- Version-protected revocation and suspension.
-- Consequential authority event generation through the existing `EventStore`.
+Corrective changes were made:
+
+- shared authorization now rejects `status = suspended`;
+- shared authorization also rejects explicit `status = revoked` and `status = expired` in addition to the existing timestamp checks;
+- a regression test now verifies suspended authority rejection.
+
+This is a runtime correctness fix within the existing authority contract, not an architectural expansion.
 
 ## Live authority verification
 
 Canonical project: `fomkrgrsqakabftymbjn`.
 
-- Migration `0005_omnii_authority_boundary`: **PASS** — applied successfully.
-- `omnii_authorities` table: **PASS** — created with parent foreign key, lifecycle checks and indexes.
-- RLS enabled: **PASS** — `relrowsecurity=true`.
+- Migration `0005_omnii_authority_boundary`: **PASS** — live schema is present.
+- `omnii_authorities` table: **PASS** — parent foreign key, lifecycle constraints and indexes are present.
+- RLS enabled: **PASS** — PostgreSQL reports row security enabled.
 - Authority RPCs issue/revoke/suspend: **PASS** — all three exist.
 - Durable authority issuance: **PASS** — live RPC returned the requested authority.
 - Idempotent issuance: **PASS** — repeated idempotency key returned the original authority ID.
 - Durable revocation: **PASS** — live RPC changed status to `revoked` and version `1 → 2`.
 - Stale mutation rejection: **PASS** — a second revoke using stale version `1` was rejected.
+- Durable suspension: **PASS** — live RPC changed status to `suspended` and version `1 → 2`.
 - Authenticated/anonymous RLS authorization behavior: **UNVERIFIED** — no explicit OMNII policies exist and the available database tool does not expose a separate application-role session.
+- Parent-authority containment: **UNVERIFIED LIVE** — containment is enforced by `AuthorityRuntime`; the live RPC is a persistence boundary and does not itself implement constitutional delegation containment.
 
-## Prior CI evidence
+Verification rows above marked PASS are based on fresh live PostgreSQL evidence from the canonical project. No secrets are recorded.
 
-GitHub Actions run **32103355581** remains valid prior evidence for the pre-authority runtime:
+## Current execution evidence
 
-- install: PASS
-- typecheck: PASS
-- runtime tests: PASS — 23/23
-- runtime build: PASS
+The current authority-hardening commit and its corrective follow-up have no observable GitHub Actions workflow run through the available connector. The repository workflow is configured for install → typecheck → runtime tests → runtime build, but workflow dispatch is not exposed by the connected GitHub tooling.
 
-No workflow run was observable for the current authority commits through the available workflow-run query, and the connector did not expose workflow dispatch. Therefore the new authority tests, current typecheck and current build are **UNVERIFIED**, not PASS.
+Therefore:
+
+- current authority tests: **UNVERIFIED**;
+- current typecheck: **UNVERIFIED**;
+- current runtime build: **UNVERIFIED**;
+- current CI: **UNVERIFIED — ENVIRONMENT LIMITATION**.
+
+Historical run **32103355581** remains prior evidence for the pre-authority runtime only and is not used as evidence for the current authority code.
 
 ## Security boundary
 

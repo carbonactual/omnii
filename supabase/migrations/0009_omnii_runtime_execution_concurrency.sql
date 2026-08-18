@@ -55,4 +55,4 @@ end;
 $$;
 
 revoke execute on function public.omnii_atomic_execution_audit(text,text,text,jsonb,jsonb,jsonb,text,text,jsonb,jsonb,jsonb) from public, anon, authenticated;
-grant execute on function public.omnii_atomic_execution_audit(text,text,text,text,jsonb,jsonb,jsonb,text,text,jsonb,jsonb,jsonb) to service_role;
+grant execute on function public.omnii_atomic_execution_audit(text,text,text,jsonb,jsonb,jsonb,text,text,jsonb,jsonb,jsonb) to service_role;

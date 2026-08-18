@@ -80,10 +80,10 @@ begin
     'payload', payload
   ) into v_event;
 
-  select to_jsonb(s) into v_state from public.omnii_state s where s.id = p_state_id;
-  return jsonb_build_object('state', v_state, 'event', v_event, 'idempotent', false);
+  select to_jsonb(s) into v_state from public.omnii_state s where s.id=p_state_id;
+  return jsonb_build_object('state',v_state,'event',v_event,'idempotent',false);
 end;
 $$;
 
 revoke execute on function public.omnii_atomic_state_event(text,text,text,jsonb,jsonb,jsonb,text,text,text,text,text,text,jsonb,jsonb) from public, anon, authenticated;
-grant execute on function public.omnii_atomic_state_event(text,text,text,text,jsonb,jsonb,jsonb,text,text,text,text,text,text,jsonb,jsonb) to service_role;
+grant execute on function public.omnii_atomic_state_event(text,text,text,jsonb,jsonb,jsonb,text,text,text,text,text,text,jsonb,jsonb) to service_role;

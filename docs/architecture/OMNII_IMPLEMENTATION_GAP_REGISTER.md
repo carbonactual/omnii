@@ -7,8 +7,7 @@
 | P0 | Phase 27 has no repository implementation evidence. | The Phase 26→27→28 implementation chain remains intentionally incomplete. | Keep Phase 27 explicitly unimplemented. | Phase 26, governance |
 | P1 | Production authority issuance/revocation remains an injected boundary. | Authorization is executable and testable, but production governance infrastructure is not proven. | Connect to the canonical governance/authority service when available. | Authority contract |
 | P1 | Production ABBA intelligence is not implemented. | ABBA is an executable orchestration boundary, not production intelligence. | Integrate an authorized intelligence provider behind the existing boundary only when available. | ABBA + governance |
-| P2 | Live Supabase/PostgreSQL integration tests were not executed because configured database credentials/infrastructure were unavailable in the verification environment. | Durable CRUD/RPC behavior is implemented and compiled but not empirically proven against a live database. | Run the same contract suite against a controlled Supabase/PostgreSQL environment with non-secret CI configuration. | Durable adapter + database |
-| P2 | Database migration application/rollback was not executed in CI. | SQL source and TypeScript integration are validated, but live schema application is not evidenced. | Apply migrations in a controlled database environment and verify constraints/RPC behavior. | Supabase/PostgreSQL |
+| P2 | Authenticated/anonymous application-role RLS behavior has not been live-tested. | RLS is enabled on all OMNII tables, but no explicit OMNII policies currently exist. | Define and test hosting-application policies when the application identity/authority model is ready. | Authority contract + deployment |
 | P2 | Event transport remains local EventStore. | Durable event storage exists, but distributed consumer delivery is not proven. | Add transport adapter without changing event semantics when integration requires it. | Event runtime |
 | P2 | Workflow/agent production integration remains local. | Production orchestration is not proven. | Add adapters after durable runtime parity is established. | Workflow/agent runtime |
 | P3 | Distributed observability remains unimplemented. | Production telemetry is incomplete. | Add provider adapter when deployment stack requires it. | Audit/event runtime |
@@ -24,17 +23,23 @@
 - State transition + event uses the persistence atomic boundary.
 - Execution + audit uses the persistence atomic boundary.
 - Ledger + audit uses the persistence atomic boundary.
-- Idempotency and optimistic concurrency contracts are implemented.
+- Idempotency and optimistic concurrency contracts are implemented and live-verified at the database boundary.
 - Runtime contract and persistence tests execute in CI.
-- A standalone `@omnii/runtime` build target is now CI-verifiable.
+- A standalone `@omnii/runtime` build target is CI-verifiable.
 - GitHub Actions evidence exists: run 32103355581 passed install, typecheck, 23/23 runtime tests and runtime build.
+- Canonical Supabase project is now explicitly `omnii-canonical` (`fomkrgrsqakabftymbjn`).
+- Migrations 0003 and 0004 were applied successfully to the canonical project.
+- Live PostgreSQL schema/RPC smoke verification passed for object persistence, state/event atomicity, execution/audit atomicity, ledger/audit atomicity, idempotency uniqueness and optimistic concurrency.
+- RLS is enabled on all 11 OMNII runtime tables.
 
 ## Explicit non-resolutions
 
 - Phase 27 remains an implementation gap.
 - ABBA production intelligence remains unimplemented.
 - Production authority issuance/revocation remains outside this runtime materialization pass.
-- Live Supabase/PostgreSQL RPC and migration execution remain unverified because no configured live database was available.
+- Authenticated/anonymous RLS policy behavior remains unverified; the OMNII tables currently have zero explicit `pg_policies` entries.
+- Distributed event transport remains unimplemented.
+- Production workflow/agent integration remains unproven.
 - Production deployment remains unclaimed.
 
 ## Readiness rule

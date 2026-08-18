@@ -1,22 +1,15 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { AbbaRuntime } from "../src/abba-runtime";
+import { AgentRuntime } from "../src/agent-runtime";
+import { EventStore } from "../src/event-runtime";
+import { ExecutionRuntime } from "../src/execution-runtime";
 import { ObjectRuntime } from "../src/object-runtime";
 import { RelationshipRuntime } from "../src/relationship-runtime";
 import { RegistryRuntime } from "../src/registry-runtime";
 import { authorize } from "../src/event-runtime";
 
-const baseObject = () => ({
-  type: "test.object",
-  status: "active",
-  identity: { subject: "test" },
-  provenance: { source: "test" },
-  authority: { id: "auth" },
-  attributes: {},
-  relationships: [],
-  dependencies: [],
-  capabilities: [],
-  resources: [],
-});
+const baseObject = () => ({ type: "test.object", status: "active", identity: { subject: "test" }, provenance: { source: "test" }, authority: { id: "auth" }, attributes: {}, relationships: [], dependencies: [], capabilities: [], resources: [] });
 
 test("object update changes only the requested semantic fields", () => {
   const runtime = new ObjectRuntime();
@@ -54,4 +47,18 @@ test("expired authority is rejected", () => {
 test("revoked authority is rejected even when capability is present", () => {
   const revoked = { id: "auth", subject: "human-1", scope: ["execute"], capabilities: ["execute"], issued_at: new Date().toISOString(), revocable: true, revoked_at: new Date().toISOString() };
   assert.throws(() => authorize(revoked, "execute"));
+});
+
+test("ABBA receives delegated authority and does not mint it", () => {
+  const events = new EventStore();
+  const executions = new ExecutionRuntime(events);
+  const agents = new AgentRuntime(executions, events);
+  const agentAuthority = { id: "agent-auth", subject: "agent-4", scope: [], capabilities: [], issued_at: new Date().toISOString(), revocable: true };
+  const agent = agents.register({ identity: "agent-4", authority: agentAuthority, capabilities: ["execute"], tools: [], context: {}, memory: {}, policyConstraints: {}, executionBoundary: {} });
+  agents.verify(agent.identity);
+  const delegated = { id: "delegated-auth", subject: agent.identity, scope: ["execute"], capabilities: ["execute"], issued_at: new Date().toISOString(), revocable: true, provenance: { issuer: "governance" } };
+  const abba = new AbbaRuntime({ request: () => delegated }, agents, events);
+  const requested = abba.requestAuthority({ subject: agent.identity, capability: "execute", purpose: "authorized work", resourceIds: [], context: {} });
+  abba.delegate({ purpose: "authorized work", capability: "execute", targetAgent: agent.identity, input: {} }, requested);
+  assert.equal(agents.read(agent.identity)?.state, "active");
 });

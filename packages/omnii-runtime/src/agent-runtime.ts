@@ -39,22 +39,26 @@ export class AgentRuntime {
     return structuredClone(agent);
   }
 
-  authorizeAgent(identity: string, capability: string): AgentContract {
+  authorizeAgent(identity: string, capability: string, delegatedAuthority?: Authority): AgentContract {
     const agent = this.require(identity);
     if (!["verified", "active"].includes(agent.state)) throw new Error("Agent is not eligible for authorization");
-    authorize(agent.authority, capability);
+    const authority = delegatedAuthority ?? agent.authority;
+    if (delegatedAuthority && delegatedAuthority.subject !== agent.identity) throw new Error("Delegated authority subject must match the agent identity");
+    authorize(authority, capability);
     if (!agent.capabilities.includes(capability) && !agent.capabilities.includes("*")) throw new Error(`Agent capability not declared: ${capability}`);
     agent.state = "active";
     this.agents.set(identity, structuredClone(agent));
     return structuredClone(agent);
   }
 
-  execute(identity: string, capability: string, intentReference: string, input: JsonObject, handler: (input: JsonObject) => JsonObject): Execution {
+  execute(identity: string, capability: string, intentReference: string, input: JsonObject, handler: (input: JsonObject) => JsonObject, delegatedAuthority?: Authority): Execution {
     const agent = this.require(identity);
     if (agent.state !== "active") throw new Error("Agent is not active");
-    authorize(agent.authority, capability);
+    const authority = delegatedAuthority ?? agent.authority;
+    if (delegatedAuthority && delegatedAuthority.subject !== agent.identity) throw new Error("Delegated authority subject must match the agent identity");
+    authorize(authority, capability);
     if (!agent.capabilities.includes(capability) && !agent.capabilities.includes("*")) throw new Error(`Agent capability not declared: ${capability}`);
-    const execution = this.executions.create({ intentReference, actorIdentity: agent.identity, authorityContext: agent.authority, capability, resources: [], dependencies: [], input, provenance: { agent_id: agent.id } });
+    const execution = this.executions.create({ intentReference, actorIdentity: agent.identity, authorityContext: authority, capability, resources: [], dependencies: [], input, provenance: { agent_id: agent.id, delegated_authority_id: delegatedAuthority?.id ?? null } });
     this.executions.validate(execution.id);
     this.executions.authorize(execution.id);
     return this.executions.run(execution.id, handler);
@@ -70,9 +74,7 @@ export class AgentRuntime {
     this.events.append({ type: "AGENT_ESCALATED", actor: agent.identity, subject, outcome: "escalated", provenance: { agent_id: agent.id }, payload: { reason } });
   }
 
-  suspend(identity: string): AgentContract {
-    return this.setState(identity, "suspended");
-  }
+  suspend(identity: string): AgentContract { return this.setState(identity, "suspended"); }
 
   revoke(identity: string): AgentContract {
     const agent = this.require(identity);

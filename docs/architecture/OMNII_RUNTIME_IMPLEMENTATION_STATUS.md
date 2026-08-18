@@ -1,24 +1,24 @@
 # OMNII Runtime Implementation Status
 
-**Scope:** Phase 1–40 runtime hardening. This pass verifies and reconciles the canonical production authority boundary; it does not start Phase 41 or add constitutional kernels.
+**Scope:** Phase 1–40 runtime hardening and empirical verification. **Phase 41 is not started.** No new constitutional kernel or competing runtime architecture is introduced by this pass.
 
-| Component | Architecture | Schema | Code | Tested | Persisted | Integrated | CI-Verified | Deployed |
-|---|---|---|---|---|---|---|---|---|
-| Canonical Object Runtime | YES | YES | YES | YES | YES (memory + live durable smoke verification) | YES | YES | NO |
-| Relationship Runtime | YES | YES | YES | YES | YES (memory + durable schema live) | YES | YES | NO |
-| Registries | YES | PARTIAL | YES | YES | YES (memory + durable schema live) | YES | YES | NO |
-| Event/State Runtime | YES | YES | YES | YES | YES (memory + live state/event RPC) | YES | YES | NO |
-| Graph Runtime | YES | YES | YES | YES | YES through canonical object/relationship persistence | YES | YES | NO |
-| Execution Runtime | YES | PARTIAL | YES | YES | YES (memory + live execution/audit RPC) | YES | YES | NO |
-| Workflow Runtime | YES | PARTIAL | YES | YES | YES (memory + durable schema) | YES | YES | NO |
-| Agent Runtime | YES | PARTIAL | YES | YES | YES (memory + durable schema) | YES | YES | NO |
-| ABBA Boundary | YES | PARTIAL | YES | YES | Delegation state persistence available | YES | YES | NO |
-| Authority Runtime | YES | YES | YES | **UNVERIFIED** — post-hardening authority suite not executable through available tooling | YES | YES | **UNVERIFIED** | NO |
-| Audit Runtime | YES | PARTIAL | YES | YES | YES (memory + live durable audit records) | YES | YES | NO |
-| Ledger Boundary | YES | PARTIAL | YES | YES | YES (memory + live ledger/audit RPC) | YES | YES | NO |
-| Memory Persistence Adapter | YES | N/A | YES | YES | YES | YES | YES | NO |
-| Supabase Persistence Adapter | YES | YES | YES | Prior contract tested; live authority RPC smoke verification PASS | PARTIAL | PARTIAL | YES (prior CI) | NO |
-| Durable PostgreSQL schema/RPCs | YES | YES | YES | **LIVE VERIFIED** — authority RPC smoke tests executed | YES | PARTIAL | YES (prior CI) | NO |
+| Component | Architecture | Schema | Code | Tested | Persisted | Integrated | CI-Verified | Live-Verified | Deployed |
+|---|---|---|---|---|---|---|---|---|---|
+| Canonical Object Runtime | YES | YES | YES | YES | YES | YES | UNVERIFIED (current run) | YES | NO |
+| Relationship Runtime | YES | YES | YES | YES | YES | YES | UNVERIFIED (current run) | YES | NO |
+| Registries | YES | PARTIAL | YES | YES | YES | YES | UNVERIFIED (current run) | YES (schema/runtime smoke) | NO |
+| Event/State Runtime | YES | YES | YES | YES | YES | YES | UNVERIFIED (current run) | YES — atomic commit, rollback, idempotency, stale-version rejection | NO |
+| Graph Runtime | YES | YES | YES | YES | YES | YES | UNVERIFIED (current run) | YES through canonical persistence | NO |
+| Execution Runtime | YES | PARTIAL | YES | YES | YES | YES | UNVERIFIED (current run) | YES — execution/audit commit and rollback | NO |
+| Workflow Runtime | YES | PARTIAL | YES | YES | YES | YES | UNVERIFIED (current run) | PARTIAL | NO |
+| Agent Runtime | YES | PARTIAL | YES | YES | YES | YES | UNVERIFIED (current run) | PARTIAL | NO |
+| ABBA Boundary | YES | PARTIAL | YES | YES | YES | YES | UNVERIFIED (current run) | YES — authority remains external to ABBA | NO |
+| Authority Runtime | YES | YES | YES | YES (existing suite) | YES | YES | UNVERIFIED (current run) | YES — issuance/idempotency/revoke/suspend/version conflict | NO |
+| Audit Runtime | YES | PARTIAL | YES | YES | YES | YES | UNVERIFIED (current run) | YES — execution/ledger atomic boundaries | NO |
+| Ledger Boundary | YES | PARTIAL | YES | YES | YES | YES | UNVERIFIED (current run) | YES — ledger/audit commit and rollback | NO |
+| Memory Persistence Adapter | YES | N/A | YES | YES | YES | YES | UNVERIFIED (current run) | YES | NO |
+| Supabase Persistence Adapter | YES | YES | YES | YES (contract coverage) | YES | YES | UNVERIFIED (current run) | YES — canonical project RPCs and schema | NO |
+| Durable PostgreSQL schema/RPCs | YES | YES | YES | YES | YES | YES | UNVERIFIED (current run) | YES | NO |
 
 ## Canonical durable environment
 
@@ -26,50 +26,53 @@
 - **Project ref:** `fomkrgrsqakabftymbjn`
 - **Status:** ACTIVE and live-accessible through the connected Supabase integration.
 
-## Post-hardening reconciliation
+## Security hardening completed in this pass
 
-Inspection of the current authority implementation found one lifecycle enforcement defect: the shared `authorize()` guard checked revocation and expiry but did not reject an authority whose canonical lifecycle status was `suspended`. This affected any runtime path using the shared guard directly, including agent authorization/execution.
+Live inspection found mutable `search_path` configuration on the OMNII trigger and atomic/authority functions. Migration `0006_omnii_runtime_security_hardening` now sets `search_path = public, pg_temp` for those functions.
 
-Corrective changes were made:
+Live inspection also found the mutating OMNII RPCs executable by `anon`, `authenticated`, and `service_role`. Because the repository does not yet define an authoritative application-role identity/policy mapping, migration `0007_omnii_runtime_function_privileges` revokes those RPCs from `public`, `anon`, and `authenticated` and grants execution only to `service_role`. This preserves a restrictive boundary rather than inventing application authorization semantics.
 
-- shared authorization now rejects `status = suspended`;
-- shared authorization also rejects explicit `status = revoked` and `status = expired` in addition to the existing timestamp checks;
-- a regression test now verifies suspended authority rejection.
+The live security advisor now reports no OMNII `function_search_path_mutable` warnings. It continues to report RLS-enabled/no-policy informational findings because application-role policies remain intentionally unresolved.
 
-This is a runtime correctness fix within the existing authority contract, not an architectural expansion.
+## Durable state/event hardening
 
-## Live authority verification
+A live test exposed a real defect in the existing PostgreSQL state/event RPC: it could not persist an event when the event provenance did not contain an `authority` key, despite the event table requiring non-null authority. The same RPC also did not enforce the expected state version.
 
-Canonical project: `fomkrgrsqakabftymbjn`.
+Migration `0008_omnii_runtime_state_event_hardening` corrected the existing boundary without creating a new architecture:
 
-- Migration `0005_omnii_authority_boundary`: **PASS** — live schema is present.
-- `omnii_authorities` table: **PASS** — parent foreign key, lifecycle constraints and indexes are present.
-- RLS enabled: **PASS** — PostgreSQL reports row security enabled.
-- Authority RPCs issue/revoke/suspend: **PASS** — all three exist.
-- Durable authority issuance: **PASS** — live RPC returned the requested authority.
-- Idempotent issuance: **PASS** — repeated idempotency key returned the original authority ID.
-- Durable revocation: **PASS** — live RPC changed status to `revoked` and version `1 → 2`.
-- Stale mutation rejection: **PASS** — a second revoke using stale version `1` was rejected.
-- Durable suspension: **PASS** — live RPC changed status to `suspended` and version `1 → 2`.
-- Authenticated/anonymous RLS authorization behavior: **UNVERIFIED** — no explicit OMNII policies exist and the available database tool does not expose a separate application-role session.
-- Parent-authority containment: **UNVERIFIED LIVE** — containment is enforced by `AuthorityRuntime`; the live RPC is a persistence boundary and does not itself implement constitutional delegation containment.
+- state/event RPC now requires `expected_version`;
+- requested state version must advance exactly one version;
+- update is guarded by `id AND expected_version`;
+- event authority is taken from the canonical state authority input;
+- repeated event idempotency keys return the original state/event without reapplying the transition;
+- stale writes are rejected transactionally.
 
-Verification rows above marked PASS are based on fresh live PostgreSQL evidence from the canonical project. No secrets are recorded.
+Fresh live evidence:
 
-## Current execution evidence
+- atomic state + event commit: **PASS**;
+- failed event write rolled back the state insert: **PASS**;
+- repeated idempotency key produced no second state/event effect: **PASS**;
+- stale expected version was rejected: **PASS**.
 
-The current authority-hardening commit and its corrective follow-up have no observable GitHub Actions workflow run through the available connector. The repository workflow is configured for install → typecheck → runtime tests → runtime build, but workflow dispatch is not exposed by the connected GitHub tooling.
+## Durable execution/audit hardening
 
-Therefore:
+Inspection found that `ExecutionRuntime` previously changed execution state to `completed` or `failed` before calling the durable execution/audit atomic boundary. That could leave a terminal state behind if audit persistence failed.
 
-- current authority tests: **UNVERIFIED**;
-- current typecheck: **UNVERIFIED**;
-- current runtime build: **UNVERIFIED**;
-- current CI: **UNVERIFIED — ENVIRONMENT LIMITATION**.
+The runtime now routes completion/failure through the existing `executionAudit` atomic boundary first. Regression coverage was added to verify that a failed audit leaves the execution in its prior state.
 
-Historical run **32103355581** remains prior evidence for the pre-authority runtime only and is not used as evidence for the current authority code.
+Fresh live evidence:
 
-## Security boundary
+- execution + audit atomic commit: **PASS**;
+- duplicate audit failure rolled back the execution write: **PASS**.
+
+## Durable ledger/audit evidence
+
+Fresh live evidence:
+
+- ledger + audit atomic commit: **PASS**;
+- audit failure rolled back the ledger write: **PASS**.
+
+## Authority boundary
 
 The implementation preserves:
 
@@ -77,15 +80,50 @@ The implementation preserves:
 - intelligence/orchestration ≠ authority;
 - ABBA ≠ authority issuer;
 - agent ≠ governance authority issuer;
-- delegation scope/capability/resource/context/duration cannot exceed parent authority;
+- delegated scope/capability/resource/context/duration cannot exceed parent authority in `AuthorityRuntime`;
 - expired/revoked/suspended authority cannot authorize consequential action.
 
-A complete production security audit and authenticated/anonymous RLS policy verification are not claimed.
+Fresh live PostgreSQL evidence confirms:
 
-## Phase 27
+- authority issuance: **PASS**;
+- idempotent issuance: **PASS**;
+- revocation and version increment: **PASS**;
+- stale revocation rejection: **PASS**;
+- suspension/version behavior: **PASS** from prior live evidence;
+- parent-authority containment inside PostgreSQL issue RPC: **UNVERIFIED / intentionally runtime-owned**.
 
-**IMPLEMENTATION GAP.** No Phase 27 implementation was fabricated.
+## RLS and database execution boundary
 
-## Deployment
+- RLS enabled on OMNII runtime tables: **PASS**.
+- Authenticated/anonymous application-role behavior: **UNVERIFIED** — no authoritative identity-to-authority mapping exists yet, so no broad policy was introduced.
+- Mutating OMNII RPCs callable by anon/authenticated: **NO** after migration 0007.
+- Backend service-role execution: **PASS** by database privilege inspection.
 
-No production deployment is claimed. Live database evidence is infrastructure verification, not deployment evidence.
+## Current repository execution evidence
+
+The connected GitHub tooling can inspect workflow runs but does not expose workflow dispatch. At the pre-commit inspection of `c1e94fd83fda273fd09678bb4c8413e6790f27e1`, no current workflow run was observable.
+
+A new corrective commit in this pass will trigger the existing `omnii-runtime.yml` push workflow. Its result will be treated as the current CI evidence only if an actual run becomes observable.
+
+Until then:
+
+- current typecheck: **UNVERIFIED**;
+- current runtime tests: **UNVERIFIED**;
+- current build: **UNVERIFIED**;
+- current CI: **UNVERIFIED — ENVIRONMENT LIMITATION**.
+
+Historical workflow evidence is not substituted for current verification.
+
+## Phase and deployment discipline
+
+- **Phase 27:** IMPLEMENTATION GAP — intentionally preserved.
+- **Phase 41:** NOT STARTED.
+- No BUNK → OMNII dependency was introduced.
+- No second canonical object model was introduced.
+- No second canonical graph was introduced.
+- No competing authority architecture was introduced.
+- No production deployment is claimed.
+
+## Readiness rule
+
+Production readiness requires contract, implementation, empirical tests, persistence integration, current CI evidence and deployment evidence. Live database evidence alone is not deployment evidence.

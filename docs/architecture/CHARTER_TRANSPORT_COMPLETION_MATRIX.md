@@ -26,8 +26,12 @@ Charter's movement capability model remains open to:
 - walking, running and human-powered movement;
 - bicycles, tricycles, motorcycles and scooters;
 - cars, taxis, ride-hailing, carpooling and chauffeured vehicles;
+- Along/corridor participation where legally and operationally eligible;
 - buses, coaches, school transport and public transport;
+- government and institutional fleets and contracted public movement;
+- motor parks, bus terminals, loading bays and recognized pickup nodes;
 - trucks, trailers, tow trucks, recovery vehicles and heavy haulage;
+- trailer parks, truck stops, staging yards, weigh/inspection nodes and freight depots;
 - ambulances, fire and emergency vehicles;
 - agricultural, construction, mining and specialist machines where movement is the operational function;
 - trains, trams, metros and rail systems;
@@ -38,6 +42,26 @@ Charter's movement capability model remains open to:
 - spacecraft and commercial space transportation;
 - animals and animal-powered transport including horses, camels, donkeys and sled animals;
 - future and currently unknown movement modes represented through extensible capabilities and evidence.
+
+## Institutional ecosystem coverage
+
+The same movement substrate represents public, private, association, cooperative, community, institutional and autonomous participants.
+
+Relevant institutional roles include:
+
+- regulator/authority;
+- public operator;
+- private operator;
+- union/association;
+- park/terminal operator;
+- infrastructure operator;
+- emergency service;
+- government fleet;
+- logistics provider;
+- community/local knowledge participant;
+- autonomous system operator.
+
+Government/public infrastructure is not a separate movement ontology. Its authority, capabilities, restrictions, services and evidence are represented through canonical authority, organization, infrastructure, capability, event and state relationships.
 
 ## Journey lifecycle
 
@@ -72,19 +96,28 @@ Transport state may reference:
 - operator qualification;
 - infrastructure status;
 - route and waypoint state;
+- park/terminal state;
+- traffic/construction state;
+- connectivity state;
 - inspection and maintenance state;
+- permit/compliance state;
 - incident and recovery state;
 - service commitments;
 - custody/handoff state;
-- registry provenance.
+- registry provenance;
+- public-authority source/evidence.
 
 ## Fleet/HAPI separation
 
 A vehicle is an asset operationally managed by Fleet. A person operating it is a HAPI entity/agent. Charter composes both into movement and never creates a second crew or asset ontology.
 
+## Public/private/association fairness
+
+Commercial movement capabilities must respect applicable corridor, park, association, licensing and authority rules. Along is participation enablement where eligible, not a mechanism for silently bypassing an existing transport operating structure. Hitch remains a distinct social/conditional movement experience where commercial transport is not the defining purpose.
+
 ## Product extraction
 
-Products are compositions, not new primitives. A ride-hailing product, luxury Charter product, public transport product, pilgrimage transport, hitchhiking service, fleet product or Logistico product can be extracted from the same substrate.
+Products are compositions, not new primitives. A ride-hailing product, luxury Charter product, rental product, public transport product, park/terminal workflow, government movement product, pilgrimage transport, hitchhiking service, fleet product, autonomous movement product or Logistico product can be extracted from the same substrate.
 
 ## Economic boundary
 
@@ -92,4 +125,4 @@ Charter may express eligibility, obligations, reservations, ownership-program re
 
 ## Completion invariant
 
-> **Everything that moves, everything required to move it, and every movement state can be represented as a composable Charter capability or a reference to the canonical domain that owns it.**
+> **Everything that moves, everything required to move it, every place that enables movement, every institution that governs or operates it, and every movement state can be represented as a composable Charter capability or a reference to the canonical domain that owns it.**

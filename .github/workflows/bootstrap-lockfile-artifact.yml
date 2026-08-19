@@ -1,8 +1,7 @@
 name: Bootstrap Lockfile Artifact
 
 on:
-  push:
-    branches: [audit/constitutional-ci-repair]
+  pull_request:
 
 permissions:
   contents: read

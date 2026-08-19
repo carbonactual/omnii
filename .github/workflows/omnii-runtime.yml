@@ -27,6 +27,13 @@ jobs:
       - name: Install root dependencies
         run: pnpm install --no-frozen-lockfile
 
+      - name: Verify universal movement contract
+        run: |
+          test -s UNIVERSAL_MOVEMENT.md
+          grep -q "Universal Movement is the permanent abstraction" UNIVERSAL_MOVEMENT.md
+          grep -q "Charter is an orchestration product over Universal Movement" UNIVERSAL_MOVEMENT.md
+          grep -q "space stations, lunar and Mars mobility" UNIVERSAL_MOVEMENT.md
+
       - name: Typecheck repository
         run: pnpm typecheck
 

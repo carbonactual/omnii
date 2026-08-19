@@ -31,7 +31,8 @@ export class CharterMultimodalGraphRuntime {
   constructor(readonly objects: ObjectRuntime, readonly relationships: RelationshipRuntime) {}
 
   async compose(journeyId: string, nodes: MovementGraphNode[], edges: MovementGraphEdge[]): Promise<MultimodalJourneyGraph> {
-    if (!(await this.objects.read(journeyId))) throw new Error(`Journey not found: ${journeyId}`);
+    const journey = await this.objects.read(journeyId);
+    if (!journey) throw new Error(`Journey not found: ${journeyId}`);
     for (const edge of edges) {
       if (!nodes.some((node) => node.id === edge.from)) throw new Error(`Unknown graph source: ${edge.from}`);
       if (!nodes.some((node) => node.id === edge.to)) throw new Error(`Unknown graph destination: ${edge.to}`);
@@ -45,6 +46,7 @@ export class CharterMultimodalGraphRuntime {
         target: edge.capabilityId ?? edge.to,
         direction: "directed",
         status: "active",
+        authority: journey.authority,
         provenance: { source: "charter-multimodal-graph-runtime" },
         metadata: { from: edge.from, to: edge.to, mode: edge.mode, sequence: edge.sequence, edgeStatus: edge.status },
       });

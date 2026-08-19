@@ -45,7 +45,7 @@ jobs:
         run: |
           set -euo pipefail
           test -f package-lock.json
-          test "$(node -p 'require(\"./package-lock.json\").lockfileVersion')" = "3"
+          test "$(node -p "require('./package-lock.json').lockfileVersion")" = "3"
           npm --version
           node --version
 

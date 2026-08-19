@@ -31,6 +31,7 @@ jobs:
           node-version: 22.23.2
           cache: npm
 
+      # Canonical dependency verification remains lockfile-gated.
       - name: Verify repository SHA
         shell: bash
         run: |

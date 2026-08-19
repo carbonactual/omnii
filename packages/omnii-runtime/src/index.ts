@@ -22,3 +22,4 @@ export * from "./constitutional-validator";
 export * from "./charter-runtime";
 export * from "./charter-operations-runtime";
 export * from "./charter-journey-execution-runtime";
+export * from "./charter-multimodal-graph-runtime";

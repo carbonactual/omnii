@@ -19,3 +19,4 @@ export * from "./supabase-persistence";
 export * from "./constitutional";
 export * from "./constitutional-registry";
 export * from "./constitutional-validator";
+export * from "./charter-runtime";

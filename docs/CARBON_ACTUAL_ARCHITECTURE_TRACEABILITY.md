@@ -15,7 +15,7 @@
 | Mathematics | measurement/optimization foundation |
 | Value | common economic measurement/reference |
 | Pulse | observed feedback/evidence |
-| IO | movement/mobility/exchange fabric |
+| IO | interaction/mobility/exchange fabric |
 | Union | relationships/networks/composition |
 | Communication | communication fabric |
 | Continuum | lifecycle/temporal continuity |
@@ -53,7 +53,15 @@
 | Noun Student Bot | student/education branch |
 | NGIN/RITES | human continuity branch |
 | Bunk | property/shelter branch |
-| Charter | transport/mobility branch |
+| Charter | transport/mobility domain composition over canonical OMNII objects, motion, resources, capabilities, relationships, events, state, provenance and workflows |
+| Charter world model | canonical OMNII universal graph projected for movement, assets, fleets, people, organizations, infrastructure, events, media, collections and mobility workflows |
+| Charter fleet | domain composition of canonical movement assets; not a new fleet primitive |
+| Charter condition/location/capability/capacity/availability | domain attributes and relationships over canonical object/state/resource/capability semantics |
+| Charter garage/specialist | organization/person/place capability compositions; not separate identity systems |
+| Charter collections/provenance | canonical objects + relationships + lifecycle + evidence |
+| Charter media/film/TV credits | canonical event/content/relationship/provenance composition |
+| Charter accidents/incidents | canonical events + state transitions + evidence + authority/governance references |
+| Charter economic boundary | Charter references OMNII Value/Economy/IO semantics; it does not create money, pricing, payment or ledger primitives |
 | Logistico | logistics branch |
 | Sportist | sourcing/procurement branch |
 | TIP | trade/investment branch |
@@ -72,3 +80,7 @@ A concept may be renamed, merged or implemented differently without disappearing
 ## Build rule
 
 No branch may create a duplicate universal capability without recording why the capability cannot be shared.
+
+## Charter integration rule
+
+Charter is a domain composition, not a constitutional layer. It MUST reuse the canonical OMNII object envelope, universal graph, identity, authority, lifecycle, provenance, state, event, capability, resource, registry, workflow, Value/Economy and IO semantics. Domain-specific concepts are classifications, attributes, relationship types or workflows over those primitives and must not become competing universal primitives.

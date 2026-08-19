@@ -45,6 +45,7 @@ export class CharterMultimodalGraphRuntime {
         target: edge.capabilityId ?? edge.to,
         direction: "directed",
         status: "active",
+        authority: {},
         provenance: { source: "charter-multimodal-graph-runtime" },
         metadata: { from: edge.from, to: edge.to, mode: edge.mode, sequence: edge.sequence, edgeStatus: edge.status },
       });

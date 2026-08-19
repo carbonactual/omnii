@@ -3,13 +3,13 @@ name: Bootstrap Lockfiles
 on:
   push:
     branches: [main]
+  pull_request:
 
 permissions:
   contents: write
 
 jobs:
   generate:
-    if: github.event.created == true || github.event.before != '0000000000000000000000000000000000000000'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout exact revision

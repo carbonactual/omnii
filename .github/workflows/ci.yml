@@ -11,13 +11,13 @@ permissions:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   verify:
     name: Verify ${{ github.sha }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout exact revision
         uses: actions/checkout@v4
@@ -29,7 +29,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+
+      - name: Verify repository SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          echo "CI_EXPECTED_SHA=${GITHUB_SHA}"
+          echo "CI_ACTUAL_SHA=${actual}"
+          test "${actual}" = "${GITHUB_SHA}"
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
@@ -43,7 +51,10 @@ jobs:
       - name: Production build
         run: npm run build
 
-      - name: Emit SHA evidence
+      - name: Publish SHA evidence
+        shell: bash
         run: |
-          echo "CI_VERIFIED_SHA=${GITHUB_SHA}"
-          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          set -euo pipefail
+          printf 'CI_VERIFIED_SHA=%s\n' "${GITHUB_SHA}" >> "${GITHUB_STEP_SUMMARY}"
+          printf 'CI_VERIFIED_REF=%s\n' "${GITHUB_REF}" >> "${GITHUB_STEP_SUMMARY}"
+          printf 'CI_EVENT=%s\n' "${GITHUB_EVENT_NAME}" >> "${GITHUB_STEP_SUMMARY}"

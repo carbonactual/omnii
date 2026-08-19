@@ -9,7 +9,7 @@
   "packageManager": "npm@10.9.8",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build apps/web",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",

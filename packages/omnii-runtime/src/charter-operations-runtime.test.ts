@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import test from "node:test";
+import assert from "node:assert/strict";
 import { CharterOperationsRuntime } from "./charter-operations-runtime";
 import { MemoryPersistenceAdapter } from "./persistence";
 import { ObjectRuntime } from "./object-runtime";
@@ -11,38 +12,39 @@ async function object(runtime: ObjectRuntime, type: string, metadata: Record<str
   return runtime.create({ type, status: "active", identity: {}, provenance, authority, attributes: {}, relationships: [], dependencies: [], capabilities: [], resources: [], metadata });
 }
 
-describe("CharterOperationsRuntime", () => {
-  it("assigns an available capability", async () => {
-    const persistence = new MemoryPersistenceAdapter();
-    const objects = new ObjectRuntime(persistence);
-    const relationships = new RelationshipRuntime(persistence);
-    const operations = new CharterOperationsRuntime(objects, relationships);
-    const journey = await object(objects, "journey");
-    const capability = await object(objects, "movement_capability", { movement: { availability: "available", mode: "road" } });
-    const result = await operations.assign({ capabilityId: capability.id, journeyId: journey.id, personnelIds: [], status: "assigned" });
-    expect(result.value.status).toBe("assigned");
-    expect(result.eventIds).toHaveLength(1);
-  });
+test("CharterOperationsRuntime assigns an available capability", async () => {
+  const persistence = new MemoryPersistenceAdapter();
+  const objects = new ObjectRuntime(persistence);
+  const relationships = new RelationshipRuntime(persistence);
+  const operations = new CharterOperationsRuntime(objects, relationships);
+  const journey = await object(objects, "journey");
+  const capability = await object(objects, "movement_capability", { movement: { availability: "available", mode: "road" } });
+  const result = await operations.assign({ capabilityId: capability.id, journeyId: journey.id, personnelIds: [], status: "assigned" });
+  assert.equal(result.value.status, "assigned");
+  assert.equal(result.eventIds.length, 1);
+});
 
-  it("rejects unavailable capabilities", async () => {
-    const persistence = new MemoryPersistenceAdapter();
-    const objects = new ObjectRuntime(persistence);
-    const relationships = new RelationshipRuntime(persistence);
-    const operations = new CharterOperationsRuntime(objects, relationships);
-    const journey = await object(objects, "journey");
-    const capability = await object(objects, "movement_capability", { movement: { availability: "maintenance", mode: "road" } });
-    await expect(operations.assign({ capabilityId: capability.id, journeyId: journey.id, personnelIds: [], status: "assigned" })).rejects.toThrow("not assignable");
-  });
+test("CharterOperationsRuntime rejects unavailable capabilities", async () => {
+  const persistence = new MemoryPersistenceAdapter();
+  const objects = new ObjectRuntime(persistence);
+  const relationships = new RelationshipRuntime(persistence);
+  const operations = new CharterOperationsRuntime(objects, relationships);
+  const journey = await object(objects, "journey");
+  const capability = await object(objects, "movement_capability", { movement: { availability: "maintenance", mode: "road" } });
+  await assert.rejects(
+    operations.assign({ capabilityId: capability.id, journeyId: journey.id, personnelIds: [], status: "assigned" }),
+    /not assignable/,
+  );
+});
 
-  it("recomposes a failed journey with an available replacement", async () => {
-    const persistence = new MemoryPersistenceAdapter();
-    const objects = new ObjectRuntime(persistence);
-    const relationships = new RelationshipRuntime(persistence);
-    const operations = new CharterOperationsRuntime(objects, relationships);
-    const journey = await object(objects, "journey");
-    const replacement = await object(objects, "movement_capability", { movement: { availability: "available", mode: "road" } });
-    const result = await operations.recover({ journeyId: journey.id, status: "detected" }, replacement.id);
-    expect(result.status).toBe("recomposed");
-    expect(result.replacementCapabilityId).toBe(replacement.id);
-  });
+test("CharterOperationsRuntime recomposes a failed journey with an available replacement", async () => {
+  const persistence = new MemoryPersistenceAdapter();
+  const objects = new ObjectRuntime(persistence);
+  const relationships = new RelationshipRuntime(persistence);
+  const operations = new CharterOperationsRuntime(objects, relationships);
+  const journey = await object(objects, "journey");
+  const replacement = await object(objects, "movement_capability", { movement: { availability: "available", mode: "road" } });
+  const result = await operations.recover({ journeyId: journey.id, status: "detected" }, replacement.id);
+  assert.equal(result.status, "recomposed");
+  assert.equal(result.replacementCapabilityId, replacement.id);
 });

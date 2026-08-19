@@ -82,3 +82,5 @@ jobs:
             printf 'CI_NODE=%s\n' "$(node --version)"
             printf 'CI_NPM=%s\n' "$(npm --version)"
           } >> "${GITHUB_STEP_SUMMARY}"
+
+# Certification boundary: a SHA is certified only after every verification step above succeeds.

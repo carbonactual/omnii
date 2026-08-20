@@ -34,3 +34,5 @@ export * from "./causality-runtime";
 export * from "./scenario-runtime";
 export * from "./quality-runtime";
 export * from "./economic-composition-runtime";
+export * from "./naming-resolution-runtime";
+export * from "./multi-species-runtime";

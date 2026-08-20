@@ -9,7 +9,7 @@ export interface AuthorityRuntimeOptions { persistence?: PersistencePort; events
 const ISSUE = "authority:issue"; const DELEGATE = "authority:delegate"; const REVOKE = "authority:revoke"; const SUSPEND = "authority:suspend"; const WILDCARD = "*";
 function includesBounded(parent: string[], child: string[]): boolean { return child.every((value) => parent.includes(value) || parent.includes(WILDCARD)); }
 function resourcesBounded(parent: AuthorityRecord, child: AuthorityIssueRequest): boolean { const p = Array.isArray(parent.constraints?.["resourceIds"]) ? parent.constraints["resourceIds"] as unknown[] : []; const c = Array.isArray(child.constraints?.["resourceIds"]) ? child.constraints["resourceIds"] as unknown[] : []; if (p.length === 0 || p.includes(WILDCARD)) return true; return c.every((value) => p.includes(value)); }
-function contextBounded(parent: AuthorityRecord, child: AuthorityIssueRequest): boolean { const p = parent.context ?? {}; const c = child.context ?? {}; return Object.entries(p).every(([key, value]) => c[key] === value); }
+function contextBounded(parent: AuthorityRecord, child: AuthorityIssueRequest): boolean { const p = parent.context ?? {}; const c = child.context ?? {}; return Object.entries(c).every(([key, value]) => p[key] === value); }
 function durationBounded(parent: AuthorityRecord, childExpiresAt?: string): boolean { if (!parent.expires_at) return true; if (!childExpiresAt) return true; return new Date(childExpiresAt).getTime() <= new Date(parent.expires_at).getTime(); }
 function isExpired(authority: AuthorityRecord, now: Date): boolean { return !!authority.expires_at && new Date(authority.expires_at).getTime() <= now.getTime(); }
 export class AuthorityRuntime {

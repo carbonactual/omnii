@@ -1,42 +1,9 @@
-export type ResolutionStatus = "unverified" | "verified" | "stale" | "revoked" | "expired" | "conflicted" | "unresolved";
+export type ResolutionStatus = "unverified" | "verified" | "stale" | "revoked" | "expired" | "conflicted" | "unresolved" | "ambiguous";
 
-export interface NamespaceAdapter {
-  id: string;
-  name: string;
-  method: string;
-  resolver?: string;
-  trustModel?: string;
-  supportsForward: boolean;
-  supportsReverse: boolean;
-  metadata?: Record<string, unknown>;
-}
-
-export interface NameResolution {
-  namespaceId: string;
-  name: string;
-  subjectId?: string;
-  target?: Record<string, unknown>;
-  status: ResolutionStatus;
-  confidence: number;
-  provenance: Record<string, unknown>;
-  validFrom?: string;
-  validTo?: string;
-}
-
-export function validateNameResolution(input: NameResolution): void {
-  if (!input.namespaceId || !input.name) throw new Error("namespaceId and name are required");
-  if (input.confidence < 0 || input.confidence > 1) throw new Error("confidence must be between 0 and 1");
-  if (!input.provenance || Object.keys(input.provenance).length === 0) throw new Error("provenance is required");
-}
-
-export function normalizeResolution(input: NameResolution): NameResolution {
-  validateNameResolution(input);
-  return { ...input, name: input.name.normalize("NFC") };
-}
-
-export function isResolutionUsable(input: NameResolution, at = new Date()): boolean {
-  if (["revoked", "expired", "conflicted", "unresolved"].includes(input.status)) return false;
-  if (input.validFrom && new Date(input.validFrom) > at) return false;
-  if (input.validTo && new Date(input.validTo) < at) return false;
-  return true;
-}
+export interface NamespaceAdapter { id: string; name: string; method: string; resolver?: string; trustModel?: string; supportsForward: boolean; supportsReverse: boolean; metadata?: Record<string, unknown>; }
+export interface NameResolution { namespaceId: string; name: string; subjectId?: string; target?: Record<string, unknown>; status: ResolutionStatus; confidence: number; provenance: Record<string, unknown>; validFrom?: string; validTo?: string; }
+export interface NameBinding { namespaceId: string; name: string; subjectId: string; status: 'active'|'revoked'|'expired'; }
+export function validateNameResolution(input: NameResolution): void { if (!input.namespaceId || !input.name) throw new Error('namespaceId and name are required'); if (input.confidence < 0 || input.confidence > 1) throw new Error('confidence must be between 0 and 1'); if (!input.provenance || Object.keys(input.provenance).length === 0) throw new Error('provenance is required'); }
+export function normalizeResolution(input: NameResolution): NameResolution { validateNameResolution(input); return { ...input, name: input.name.normalize('NFC') }; }
+export function isResolutionUsable(input: NameResolution, at = new Date()): boolean { if (['revoked','expired','conflicted','unresolved','ambiguous'].includes(input.status)) return false; if (input.validFrom && new Date(input.validFrom) > at) return false; if (input.validTo && new Date(input.validTo) < at) return false; return true; }
+export function resolveBindings(bindings: NameBinding[], namespaceId: string, name: string): NameResolution { const matches = bindings.filter(b => b.namespaceId === namespaceId && b.name === name && b.status === 'active'); return { namespaceId, name, subjectId: matches.length === 1 ? matches[0].subjectId : undefined, status: matches.length === 0 ? 'unresolved' : matches.length === 1 ? 'verified' : 'ambiguous', confidence: matches.length === 1 ? 1 : 0, provenance: { source: 'binding-registry' } }; }

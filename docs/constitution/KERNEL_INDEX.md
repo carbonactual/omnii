@@ -23,7 +23,16 @@ The Constitutional Kernel Index defines the foundational kernels from which all 
 
 ## Cross-cutting constitutional concerns
 
-Governance, authority, security, economics, ABBA/orchestration, observability and audit operate across the kernels. They do not create competing foundational kernels.
+Governance, authority, security, economics, ABBA/orchestration, observability and audit operate across the kernels. The following are now explicit cross-cutting concerns and must not be collapsed into products or treated as optional metadata:
+
+- **EPISTEMIC** — reality vs representation; observation, claim, inference, hypothesis, simulation, provenance, confidence and verification.
+- **CAUSALITY** — typed causal/contributory/enabling/preventing/triggering/correlation relationships with evidence and confidence.
+- **SCENARIO** — actual, planned, hypothetical, simulated and counterfactual paths; branching, merging, reversal, dependency and feedback.
+- **QUALITY** — structural, evidence, logical, operational, regulatory, safety, economic and continuity completeness/fitness.
+- **RECONCILIATION** — expected vs actual state/value/resource outcomes, exceptions and recovery; the constitutional meaning of no-silent-loss.
+- **TIME** — occurrence, observation, recording, effectiveness and supersession are distinct dimensions.
+- **OPEN-WORLD EXTENSION** — unknown/unclassified entities and capabilities remain representable without forced classification.
+- **ONTOLOGY EVOLUTION** — schemas and meanings are versioned and superseded without rewriting historical reality.
 
 ## Canonical principles
 
@@ -33,6 +42,11 @@ Governance, authority, security, economics, ABBA/orchestration, observability an
 - Events record consequential occurrences; state is modeled separately.
 - Capability never implies authority.
 - Human authority remains explicit.
+- Plan, prediction, simulation, decision, execution and outcome remain distinct.
+- A record is not the reality it represents.
+- Sequence does not imply causation.
+- Unknown is a valid state of knowledge.
+- No-silent-loss is required; impossible guarantees are not claimed.
 - Integrate, compose and adapt before rebuilding.
 - Existing value is preserved through reuse, migration, compatibility or provenance.
 

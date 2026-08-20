@@ -33,3 +33,4 @@ export * from "./epistemic-runtime";
 export * from "./causality-runtime";
 export * from "./scenario-runtime";
 export * from "./quality-runtime";
+export * from "./economic-composition-runtime";

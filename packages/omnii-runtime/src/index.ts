@@ -27,4 +27,5 @@ export * from "./charter-network-runtime";
 export * from "./nab-runtime";
 export * from "./movement-constitution-runtime";
 export * from "./ecosystem-conformance-runtime";
+export * from "./ecosystem-capability-runtime";
 export * from "./assistance-resource-runtime";

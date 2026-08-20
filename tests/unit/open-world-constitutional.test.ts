@@ -3,11 +3,7 @@ import { createKnowledgeAssertion, isKnowledgeAssertionCurrent, createCausalRela
 
 describe("OMNII open-world constitutional hardening", () => {
   it("keeps observation, claim and inference distinct and tracks multiple times", () => {
-    const assertion = createKnowledgeAssertion({
-      id: "k1", kind: "observation", subject: "vehicle-1", predicate: "available", confidence: 0.8,
-      verification: "unverified", provenance: { source: "sensor-1" }, occurred_at: "2026-08-20T10:00:00Z",
-      observed_at: "2026-08-20T10:01:00Z", effective_at: "2026-08-20T10:02:00Z"
-    });
+    const assertion = createKnowledgeAssertion({ id: "k1", kind: "observation", subject: "vehicle-1", predicate: "available", confidence: 0.8, verification: "unverified", provenance: { source: "sensor-1" }, occurred_at: "2026-08-20T10:00:00Z", observed_at: "2026-08-20T10:01:00Z", effective_at: "2026-08-20T10:02:00Z" });
     expect(assertion.recorded_at).toBeTruthy();
     expect(isKnowledgeAssertionCurrent(assertion, new Date("2026-08-20T10:03:00Z"))).toBe(true);
   });
@@ -23,9 +19,9 @@ describe("OMNII open-world constitutional hardening", () => {
       { id: "b", kind: "outcome", reality: "hypothetical" as const, state: "proposed" as const },
       { id: "c", kind: "outcome", reality: "counterfactual" as const, state: "proposed" as const }
     ];
-    const edges = [{ from: "a", to: "b", relation: "branch" as const }, { from: "a", to: "c", relation: "branch" as const }];
+    const edges = [{ from: "a", to: "b", relation: "branch" as const }];
     expect(validateScenarioPath(nodes, edges)).toBe(true);
-    expect(createScenarioBranch(nodes, edges, "a").edges).toHaveLength(2);
+    expect(createScenarioBranch(nodes, edges, "a", "c").edges).toHaveLength(2);
   });
 
   it("exposes completeness gaps and requires reconciliation evidence for recovery", () => {

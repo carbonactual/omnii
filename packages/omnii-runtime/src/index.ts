@@ -25,4 +25,5 @@ export * from "./charter-journey-execution-runtime";
 export * from "./charter-multimodal-graph-runtime";
 export * from "./charter-network-runtime";
 export * from "./nab-runtime";
+export * from "./movement-constitution-runtime";
 export * from "./assistance-resource-runtime";

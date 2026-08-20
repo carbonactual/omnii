@@ -17,6 +17,23 @@ export interface CapabilityDefinition {
   metadata?: Record<string, unknown>;
 }
 
+export const CORE_CAPABILITY_SHELF: CapabilityDefinition[] = [
+  ["analysis", "Data analysis"], ["research", "Research"], ["documentation", "Documentation"],
+  ["modeling", "Modeling"], ["design", "Design"], ["planning", "Planning"],
+  ["consulting", "Consulting"], ["audit", "Audit"], ["assessment", "Assessment"],
+  ["forecasting", "Forecasting"], ["feasibility", "Feasibility study"], ["strategy", "Strategy"],
+  ["standardization", "Standardization"], ["certification", "Certification"],
+  ["compliance", "Compliance"], ["verification", "Verification"], ["workflow", "Workflow"],
+  ["delivery", "Delivery"],
+].map(([kind, name]) => ({ id: kind, name, kind: kind as CapabilityKind, outputs: [`${kind}-output`] }));
+
+export const CORE_ARTIFACT_TYPES = [
+  "report", "data-analysis", "dashboard", "document", "slide-deck", "proposal", "policy",
+  "sop", "business-case", "feasibility-study", "swot-analysis", "risk-assessment",
+  "financial-model", "implementation-plan", "standard", "specification", "audit-report",
+  "assessment", "certificate", "compliance-pack", "contract", "decision-record",
+] as const;
+
 export interface RequirementDefinition {
   id: string;
   name: string;
@@ -96,8 +113,7 @@ export class EcosystemCapabilityRuntime {
   async registerCapability(input: CapabilityDefinition): Promise<CapabilityDefinition> {
     const existing = await this.persistence.read("registries", `capability:${input.id}`);
     if (existing) throw new Error(`Capability already registered: ${input.id}`);
-    const record = { id: `capability:${input.id}`, value: input, created_at: new Date().toISOString() };
-    await this.persistence.create("registries", record);
+    await this.persistence.create("registries", { id: `capability:${input.id}`, value: input, created_at: new Date().toISOString() });
     return structuredClone(input);
   }
 
@@ -111,11 +127,36 @@ export class EcosystemCapabilityRuntime {
   async registerWorkflowRecipe(input: WorkflowRecipe): Promise<WorkflowRecipe> {
     const existing = await this.persistence.read("workflows", input.id);
     if (existing) throw new Error(`Workflow recipe already registered: ${input.id}`);
+    const missing = [];
+    for (const id of input.capabilityIds) if (!(await this.persistence.read("registries", `capability:${id}`))) missing.push(id);
+    if (missing.length) throw new Error(`Unknown capabilities in workflow recipe: ${missing.join(", ")}`);
     await this.persistence.create("workflows", { id: input.id, version: "1", state: "registered", value: input, created_at: new Date().toISOString() });
     return structuredClone(input);
   }
 
+  async composeWorkflow(name: string, capabilityIds: string[], inputs: string[] = [], outputs: string[] = []): Promise<WorkflowRecipe> {
+    if (!name.trim()) throw new Error("Workflow name is required");
+    if (!capabilityIds.length) throw new Error("Workflow requires at least one capability");
+    const missing = [];
+    const capabilities: CapabilityDefinition[] = [];
+    for (const id of capabilityIds) {
+      const record = await this.persistence.read("registries", `capability:${id}`);
+      if (!record) { missing.push(id); continue; }
+      capabilities.push(record.value as CapabilityDefinition);
+    }
+    if (missing.length) throw new Error(`Unknown capabilities in workflow composition: ${missing.join(", ")}`);
+    const recipe: WorkflowRecipe = {
+      id: randomUUID(), name, capabilityIds: [...capabilityIds], inputs: [...inputs],
+      outputs: outputs.length ? [...outputs] : [...new Set(capabilities.flatMap((capability) => capability.outputs))],
+      validationRules: [...new Set(capabilities.flatMap((capability) => capability.evidenceRequired ? ["evidence-required"] : []))],
+    };
+    return this.registerWorkflowRecipe(recipe);
+  }
+
   async registerArtifact(input: ArtifactRecord): Promise<ArtifactRecord> {
+    if (!CORE_ARTIFACT_TYPES.includes(input.type as (typeof CORE_ARTIFACT_TYPES)[number]) && !input.metadata?.["customType"]) {
+      throw new Error(`Unknown artifact type: ${input.type}`);
+    }
     const existing = await this.persistence.read("objects", input.id);
     if (existing) throw new Error(`Artifact already registered: ${input.id}`);
     await this.persistence.create("objects", { id: input.id, version: input.version, type: "ecosystem:artifact", status: input.status, value: input, created_at: new Date().toISOString() });
@@ -129,11 +170,7 @@ export class EcosystemCapabilityRuntime {
     return structuredClone(input);
   }
 
-  async assessCompleteness(
-    subject: string,
-    requirementId: string,
-    present: { capabilities?: string[]; artifacts?: string[]; evidence?: string[]; standards?: string[] },
-  ): Promise<CompletenessAssessment> {
+  async assessCompleteness(subject: string, requirementId: string, present: { capabilities?: string[]; artifacts?: string[]; evidence?: string[]; standards?: string[] }): Promise<CompletenessAssessment> {
     const requirementRecord = await this.persistence.read("registries", `requirement:${requirementId}`);
     if (!requirementRecord) throw new Error(`Requirement not found: ${requirementId}`);
     const requirement = requirementRecord.value as RequirementDefinition;
@@ -149,10 +186,8 @@ export class EcosystemCapabilityRuntime {
     const missing = missingCapabilities.length + missingArtifacts.length + missingEvidence.length + missingStandards.length;
     const assessment: CompletenessAssessment = {
       id: randomUUID(), subject, requirementId, presentCapabilities, presentArtifacts, presentEvidence, presentStandards,
-      missingCapabilities, missingArtifacts, missingEvidence, missingStandards,
-      complete: missing === 0,
-      score: total === 0 ? 1 : Number(((total - missing) / total).toFixed(4)),
-      createdAt: new Date().toISOString(),
+      missingCapabilities, missingArtifacts, missingEvidence, missingStandards, complete: missing === 0,
+      score: total === 0 ? 1 : Number(((total - missing) / total).toFixed(4)), createdAt: new Date().toISOString(),
     };
     await this.persistence.create("audit", { id: assessment.id, type: "completeness-assessment", value: assessment, created_at: assessment.createdAt });
     return assessment;
@@ -169,10 +204,8 @@ export class EcosystemCapabilityRuntime {
     const totals = { valueCreated: 0, valuePreserved: 0, valueDestroyed: 0, valueTransferred: 0, moneyAmount: 0 };
     for (const record of records) {
       const value = record["value"] as Partial<PulseRecord>;
-      totals.valueCreated += Number(value.valueCreated ?? 0);
-      totals.valuePreserved += Number(value.valuePreserved ?? 0);
-      totals.valueDestroyed += Number(value.valueDestroyed ?? 0);
-      totals.valueTransferred += Number(value.valueTransferred ?? 0);
+      totals.valueCreated += Number(value.valueCreated ?? 0); totals.valuePreserved += Number(value.valuePreserved ?? 0);
+      totals.valueDestroyed += Number(value.valueDestroyed ?? 0); totals.valueTransferred += Number(value.valueTransferred ?? 0);
       totals.moneyAmount += Number(value.moneyAmount ?? 0);
     }
     return { subject, totals, pulseCount: records.length };

@@ -4,6 +4,7 @@ export * from "./object-runtime";
 export * from "./relationship-runtime";
 export * from "./registry";
 export * from "./registry-runtime";
+export * from "./registry-conformance";
 export * from "./event-runtime";
 export * from "./transition-runtime";
 export * from "./graph-runtime";

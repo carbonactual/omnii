@@ -4,38 +4,71 @@
 
 The registry layer is the memory and addressability fabric beneath products. Registries are logical contracts and may be implemented across databases, indexes, ledgers and distributed systems.
 
-## Canonical registries
+## Constitutional implementation catalog — 28
 
-1. Entity Registry — all recognized entities.
-2. HASH Registry — ecosystem identities and continuity.
-3. Authority/SEAL Registry — approvals, attestations, delegation and revocation.
-4. Intelligence Registry — models, agents and intelligence instances.
-5. Capability Registry — reusable capability contracts.
-6. Swarm Registry — capability fields and their members.
-7. Team Registry — composed teams and roles.
-8. Relationship/Union Registry — relationships and memberships.
-9. Communication Registry — channels, endpoints and communication permissions.
-10. Provenance Registry — source and lineage.
-11. Credential Registry — skills, certifications and qualifications.
-12. Event/Pulse Registry — observed activity and feedback.
-13. Value Registry — multidimensional value measurements.
-14. Asset/Liability Registry — economic positions and responsibilities.
-15. Ownership/Rights Registry — ownership, access, licenses and rights.
-16. Contract Registry — agreements, commitments and obligations.
-17. Workflow Registry — reusable execution patterns.
-18. Integration Registry — adapters and external providers.
-19. Resource Registry — human, physical, digital, financial and material resources.
-20. Product Branch Registry — composed systems and deployments.
-21. Location/Context Registry — places, environments and operating contexts.
-22. Maintenance/Spare Registry — lifecycle, maintenance, replacement and availability.
-23. Ledger Registry — logical ledgers and their implementations.
-24. Settlement Registry — payments, exchanges and settlement states.
-25. Security Registry — risks, incidents, policies, quarantine and recovery.
-26. Governance Registry — rules, decisions, policies and audit evidence.
-27. KPI/Observability Registry — measurements, targets and ecosystem health.
-28. Becoming/Opportunity Registry — curated opportunities, progression and next actions.
-29. Ash Registry — residuals, unknowns, waste and security-context records.
-30. Phoenix Registry — authorized security/recovery workflows and outcomes.
+The executable OMNII constitutional registry catalog contains 28 universal registries. These are the canonical semantic domains backed by `public.omnii_registries`:
+
+1. Identity Registry
+2. Territory Registry
+3. Population Registry
+4. Authority Registry
+5. Institution Registry
+6. Enterprise Registry
+7. Person Registry
+8. Asset Registry
+9. Liability Registry
+10. Value Registry
+11. Pulse Registry
+12. Relationship Registry
+13. Knowledge Registry
+14. Health Registry
+15. Education Registry
+16. Justice Registry
+17. Environment Registry
+18. Infrastructure Registry
+19. Transport Registry
+20. Culture Registry
+21. Continuity Registry
+22. Token Registry
+23. Mint Registry
+24. Settlement Registry
+25. Governance Registry
+26. AI Entity Registry
+27. Provenance Registry
+28. Communication Registry
+
+The 28-registry catalog is the implementation baseline. New universal registries require a genuinely new class of canonical state and must declare their constitutional relationship to the existing catalog.
+
+## Broader logical registry map
+
+The ecosystem may expose additional logical registry views without creating additional constitutional primitives. These are projections, compositions or domain-specialized registries that should resolve to the 28 universal registry domains where applicable:
+
+- Entity Registry — generalized object/entity view over identity and related domains.
+- HASH Registry — identity/provenance continuity view.
+- Authority/SEAL Registry — authority, consent, approval and delegation view.
+- Intelligence Registry — intelligence/agent view over AI Entity and Capability semantics.
+- Capability Registry — reusable capability contracts.
+- Swarm Registry — capability-field membership view.
+- Team Registry — composed teams and roles.
+- Relationship/Union Registry — relationship and membership projection.
+- Credential Registry — qualification and evidence projection.
+- Event/Pulse Registry — event and feedback projection.
+- Ownership/Rights Registry — ownership, access, licenses and rights projection.
+- Contract Registry — agreements, commitments and obligations projection.
+- Workflow Registry — reusable execution patterns.
+- Integration Registry — adapters and external providers.
+- Resource Registry — human, physical, digital, financial and material resource projection.
+- Product Branch Registry — composed systems and deployments.
+- Location/Context Registry — place and operating-context projection over Territory.
+- Maintenance/Spare Registry — lifecycle and maintenance projection over Resource, Infrastructure and Continuity.
+- Ledger Registry — logical ledger projection.
+- Security Registry — risk, incident, policy, quarantine and recovery projection over Governance, Authority, Continuity and relevant domain registries.
+- KPI/Observability Registry — measurement and ecosystem-health projection over Pulse, Value and evidence.
+- Becoming/Opportunity Registry — curated progression and opportunity projection over Becoming, Value, Capability and Relationship.
+- Ash Registry — residual, unknown, waste and unresolved-state projection.
+- Phoenix Registry — authorized recovery and resilience workflow projection.
+
+These extended views must not duplicate authoritative data or silently become alternate sources of truth.
 
 ## Registry rule
 

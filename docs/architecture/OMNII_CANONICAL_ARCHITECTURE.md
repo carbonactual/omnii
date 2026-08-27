@@ -161,7 +161,7 @@ Provider selection is replaceable. No paid/proprietary service is a constitution
 
 Products are manifestations of OMNII. They compose universal objects and capabilities and MUST NOT redefine constitutional primitives.
 
-**Emirati** is therefore a product/ecosystem composition that consumes OMNII universal composition capabilities. Sallah Gani, Eid, weddings, funerals, trade fairs, family visits, emergencies, horse/rider commerce, hospitality and other activities are configurations/deployments of the same substrate, not separate constitutional architectures.
+**EMIRATE** is therefore a product/ecosystem composition that consumes OMNII universal composition capabilities. Local emirates and comparable governed cultural-territorial institutions are configurations/deployments of the same substrate, not separate constitutional architectures.
 
 ## 20. Phase Architecture
 
@@ -169,7 +169,41 @@ Phase 21–40 remain layered above the constitutional/runtime substrate. Later p
 
 Phase 41 is not currently defined by this repository.
 
-## 21. Conformance Principle
+## 21. Reusable Institutional Composition
+
+OMNII capabilities are intentionally designed for reuse across organisations, institutions, territories, domains and products. A real-world engagement should normally be implemented by composing existing universal capabilities and domain modules rather than creating a bespoke architecture from scratch.
+
+The preferred pattern is:
+
+`BUILD ONCE → STRENGTHEN ONCE → COMPOSE MANY TIMES → CONFIGURE LOCALLY → DEPLOY/HAND OFF CLEANLY`
+
+An institutional deployment is composed from:
+
+`OMNII Core + Shared Capabilities + Domain Modules + Institutional Configuration + Data + Policy/Rules + Integrations + Presentation`
+
+Institution-specific requirements MUST NOT be promoted into constitutional primitives merely because one deployment needs them. Registries, forms, workflows, licensing, inspection, certification, approvals, booking/reservation, procurement, payment/value exchange, evidence, inventory/assets, communication, reporting, compliance, traceability, intelligence, search, integration and continuity capabilities should be implemented as reusable contracts/modules wherever their semantics recur.
+
+A new requirement is evaluated as:
+
+`reuse existing capability → configure → compose modules → extend domain contract → create genuinely new shared capability → constitutional amendment only if foundational semantics are missing`
+
+A deployment should remain separable into:
+
+`core version + module versions + configuration + institutional data + policies/rules + integrations + branding/presentation + deployment controls`
+
+This permits clean handoff, migration, independent operation and future upgrades without undocumented bespoke logic or vendor lock-in.
+
+A major implementation may serve as a reference deployment that strengthens the shared substrate whenever it reveals a genuinely reusable capability. Thus an institution-specific solution can simultaneously be a functioning product and a proving ground for reusable OMNII infrastructure.
+
+Every significant new feature should identify its architectural class:
+
+`constitutional/core | reusable capability | domain module | institutional configuration | integration adapter | presentation/UI`
+
+No item should enter the universal core merely for implementation convenience.
+
+The detailed doctrine is defined in `OMNII_REUSABLE_INSTITUTIONAL_COMPOSITION.md`.
+
+## 22. Conformance Principle
 
 A new real-world requirement is handled in this order:
 

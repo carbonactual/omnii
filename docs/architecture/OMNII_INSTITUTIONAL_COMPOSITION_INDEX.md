@@ -33,7 +33,11 @@ This index binds the reusable institutional architecture into one navigable buil
 - `OMNII_INSTITUTIONAL_OPPORTUNITY_WORKFORCE_ATLAS.md` — opportunities, recruitment, promotion, posting, deployment, training and capability.
 - `OMNII_INSTITUTIONAL_DIGITAL_INTEGRITY_ATLAS.md` — domains, websites, applications, APIs, deployments, privileged access, monitoring, incidents and recovery.
 - `OMNII_INSTITUTIONAL_CONFORMANCE_ATLAS.md` — missing-link, loophole, orphan, duplicate, authority and operational-completeness detection.
-- `OMNII_INSTITUTIONAL_COMPOSITION_INDEX.md` — this canonical navigation/control index.
+
+## Hardening and control plane
+
+- `OMNII_INSTITUTIONAL_SYSTEM_HARDENING.md` — canonical hardening profile and integrity rules.
+- `OMNII_INSTITUTIONAL_CONTROL_PLANE.md` — institutional bindings, execution controls, deployment packages and control findings.
 
 ## Institutional market and deployment intelligence
 

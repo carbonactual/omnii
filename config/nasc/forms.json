@@ -1,0 +1,17 @@
+{
+  "version":"1.0.0",
+  "forms":[
+    {"id":"nasc:actor-registration","category":"registration","name":"Actor Registration","workflow":"nasc:operator-lifecycle","subject":"actor","requiredEvidence":["identity","authorization"]},
+    {"id":"nasc:organization-registration","category":"registration","name":"Seed Organization Registration","workflow":"nasc:operator-lifecycle","subject":"organization","requiredEvidence":["identity","organization_authority"]},
+    {"id":"nasc:licence-application","category":"licensing","name":"Licence Application","workflow":"nasc:licence-lifecycle","subject":"licence","requiredEvidence":["organization","facility","competence"]},
+    {"id":"nasc:licence-renewal","category":"licensing","name":"Licence Renewal","workflow":"nasc:licence-lifecycle","subject":"licence","requiredEvidence":["current_licence","compliance_status"]},
+    {"id":"nasc:variety-submission","category":"seed-variety","name":"Seed Variety Submission","workflow":"nasc:variety-certification","subject":"variety","requiredEvidence":["technical_dossier","applicant_authority"]},
+    {"id":"nasc:inspection-request","category":"inspection","name":"Inspection Request","workflow":"nasc:inspection","subject":"inspection","requiredEvidence":["site_or_lot_reference"]},
+    {"id":"nasc:laboratory-submission","category":"testing","name":"Laboratory / Test Submission","workflow":"nasc:testing-certification","subject":"test_evidence","requiredEvidence":["sample_chain_of_custody","laboratory_scope"]},
+    {"id":"nasc:certification-request","category":"certification","name":"Certification Request","workflow":"nasc:testing-certification","subject":"certificate","requiredEvidence":["inspection_result","test_result"]},
+    {"id":"nasc:complaint-query","category":"service","name":"Complaint / Query","workflow":"nasc:complaint-enforcement","subject":"complaint","requiredEvidence":["submission_context"]},
+    {"id":"nasc:incident-enforcement","category":"compliance","name":"Incident / Enforcement Report","workflow":"nasc:complaint-enforcement","subject":"incident","requiredEvidence":["incident_evidence"]},
+    {"id":"nasc:appeal-review","category":"review","name":"Appeal / Review","workflow":"nasc:review","subject":"case","requiredEvidence":["decision_reference","grounds"]},
+    {"id":"nasc:public-verification","category":"public","name":"Public Verification Query","workflow":"nasc:public-verification","subject":"verification","requiredEvidence":[]}
+  ]
+}

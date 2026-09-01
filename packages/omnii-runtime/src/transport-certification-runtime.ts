@@ -29,15 +29,12 @@ export interface TransportCertificationRecord {
   sourceRefs: string[];
 }
 
-/**
- * Registry over the existing OMNII persistence boundary.
- * It certifies implementation state; it does not create transport semantics.
- */
 export class TransportCertificationRuntime {
   constructor(private readonly persistence: PersistencePort) {}
 
   async registerSurface(input: TransportSurfaceInput): Promise<TransportSurfaceRecord> {
-    const existing = await this.persistence.read("registries", `transport-certification:${input.id}`);
+    const key = `transport-certification:${input.id}`;
+    const existing = await this.persistence.read("registries", key);
     if (existing) throw new Error(`Transport surface ${input.id} already registered`);
 
     const record: TransportSurfaceRecord = {
@@ -45,14 +42,13 @@ export class TransportCertificationRuntime {
       recordId: randomUUID(),
       createdAt: new Date().toISOString(),
     };
-    await this.persistence.create("registries", { id: `transport-certification:${input.id}`, ...record });
+    await this.persistence.create("registries", { id: key, ...record });
     return record;
   }
 
   async getSurface(id: string): Promise<TransportSurfaceRecord | null> {
     const record = await this.persistence.read("registries", `transport-certification:${id}`);
-    if (!record) return null;
-    return record as unknown as TransportSurfaceRecord;
+    return record ? (record as unknown as TransportSurfaceRecord) : null;
   }
 
   async certify(ids: string[]): Promise<TransportCertificationRecord[]> {

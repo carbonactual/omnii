@@ -3,6 +3,67 @@ import { PersistencePort } from "./persistence";
 
 export type CertificationPresence = "present" | "partial" | "planned" | "unknown";
 
+export type CertificationVerificationMethod =
+  | "registry-check"
+  | "digital-signature"
+  | "verifiable-credential"
+  | "decentralized-identifier"
+  | "evidence-hash"
+  | "telemetry-attestation"
+  | "sensor-observation"
+  | "inspection"
+  | "human-review"
+  | "authority-attestation"
+  | "automated-test"
+  | "safety-case";
+
+export interface VerificationProfile {
+  status: "verified" | "partial" | "unverified" | "disputed" | "revoked" | "pending";
+  methods: CertificationVerificationMethod[];
+  standards: string[];
+  issuer: string;
+  jurisdiction: string;
+  evidenceRefs: string[];
+  issuedAt?: string;
+  expiresAt?: string;
+  verificationPolicy?: string;
+}
+
+export type TokenizationState =
+  | "not-applicable"
+  | "research"
+  | "designed"
+  | "token-ready"
+  | "issuer-pending"
+  | "issued"
+  | "suspended"
+  | "revoked";
+
+export interface TokenizationProfile {
+  state: TokenizationState;
+  instrumentType: string;
+  issuer: string;
+  jurisdiction: string;
+  regulatedActivity: boolean;
+  custody: string;
+  settlement: string;
+  legalEffect: string;
+  tokenStandard?: string;
+  contractReference?: string;
+  assetOrRightReference?: string;
+  fractionalization?: "not-supported" | "supported" | "lawful-when-authorized";
+}
+
+export interface FutureCertificationProfile {
+  maturity: "operational" | "pilot" | "ready" | "emerging" | "research" | "vision";
+  autonomyLevel?: 0 | 1 | 2 | 3 | 4 | 5;
+  humanOversight?: "onboard" | "remote-operator" | "remote-operator-required" | "supervisory" | "none";
+  safetyCase?: "not-required" | "required" | "submitted" | "approved";
+  cybersecurity?: "not-applicable" | "required" | "assessed" | "approved";
+  softwareUpdateState?: "not-applicable" | "tracked" | "controlled" | "verified";
+  operationalDesignDomain?: string;
+}
+
 export interface TransportSurfaceInput {
   id: string;
   name: string;
@@ -12,6 +73,9 @@ export interface TransportSurfaceInput {
   product: CertificationPresence;
   integration: string;
   sourceRefs: string[];
+  verification?: VerificationProfile;
+  tokenization?: TokenizationProfile;
+  future?: FutureCertificationProfile;
 }
 
 export interface TransportSurfaceRecord extends TransportSurfaceInput {
@@ -27,6 +91,9 @@ export interface TransportCertificationRecord {
   product: CertificationPresence;
   integration: string;
   sourceRefs: string[];
+  verification?: VerificationProfile;
+  tokenization?: TokenizationProfile;
+  future?: FutureCertificationProfile;
 }
 
 export class TransportCertificationRuntime {
@@ -75,6 +142,9 @@ export class TransportCertificationRuntime {
         product: surface.product,
         integration: surface.integration,
         sourceRefs: [...surface.sourceRefs],
+        verification: surface.verification,
+        tokenization: surface.tokenization,
+        future: surface.future,
       });
     }
     return result;

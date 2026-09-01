@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { MemoryPersistenceAdapter } from "../src/persistence";
-import { TransportCertificationRuntime } from "../src/transport-certification-runtime";
+import { TransportProofRuntime } from "../src/transport-proof-runtime";
 
 test("transport evidence can be bound to a subject with issuer, integrity, confidence and lifecycle", async () => {
-  const runtime = new TransportCertificationRuntime(new MemoryPersistenceAdapter());
+  const runtime = new TransportProofRuntime(new MemoryPersistenceAdapter());
   const record = await runtime.registerEvidence({
     evidenceId: "evidence-vehicle-inspection-001",
     subjectId: "vehicle-001",
@@ -27,7 +27,7 @@ test("transport evidence can be bound to a subject with issuer, integrity, confi
 });
 
 test("tokenization cannot be marked issued without issuer, custody, settlement and legal-effect evidence", async () => {
-  const runtime = new TransportCertificationRuntime(new MemoryPersistenceAdapter());
+  const runtime = new TransportProofRuntime(new MemoryPersistenceAdapter());
 
   await assert.rejects(
     () => runtime.registerTokenization({
@@ -47,7 +47,7 @@ test("tokenization cannot be marked issued without issuer, custody, settlement a
 });
 
 test("tokenization supports fractionalization while keeping legal effect explicit", async () => {
-  const runtime = new TransportCertificationRuntime(new MemoryPersistenceAdapter());
+  const runtime = new TransportProofRuntime(new MemoryPersistenceAdapter());
   const record = await runtime.registerTokenization({
     tokenizationId: "tokenization-002",
     assetOrRightReference: "fleet-capacity-001",

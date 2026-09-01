@@ -38,3 +38,4 @@ export * from "./economic-composition-runtime";
 export * from "./naming-resolution-runtime";
 export * from "./multi-species-runtime";
 export * from "./transport-certification-runtime";
+export * from "./transport-certification-catalog";

@@ -40,3 +40,4 @@ export * from "./multi-species-runtime";
 export * from "./transport-certification-runtime";
 export * from "./transport-certification-catalog";
 export * from "./transport-certification-profiles";
+export * from "./transport-proof-runtime";

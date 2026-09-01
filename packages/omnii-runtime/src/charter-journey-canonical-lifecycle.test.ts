@@ -31,7 +31,8 @@ test("Charter journey runtime follows the canonical lifecycle", async () => {
 });
 
 test("Charter rejects an invalid journey transition", async () => {
-  const runtime = new CharterJourneyExecutionRuntime(new ObjectRuntime(new MemoryPersistenceAdapter()), new RelationshipRuntime(new MemoryPersistenceAdapter()));
+  const persistence = new MemoryPersistenceAdapter();
+  const runtime = new CharterJourneyExecutionRuntime(new ObjectRuntime(persistence), new RelationshipRuntime(persistence));
   const execution = runtime.create("missing-or-unpersisted-journey");
-  assert.throws(() => runtime.transition(execution, "active"), /Invalid journey transition|Journey not found/);
+  await assert.rejects(runtime.transition(execution, "active"), /Invalid journey transition|Journey not found/);
 });

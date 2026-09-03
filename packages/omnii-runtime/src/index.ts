@@ -44,3 +44,5 @@ export * from "./transport-certification-profiles";
 export * from "./transport-proof-runtime";
 export * from "./operating-context-runtime";
 export * from "./operating-context-links";
+export * from "./runtime-signal";
+export * from "./runtime-activation";

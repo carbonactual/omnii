@@ -8,7 +8,7 @@ import { ProcessProgressionRuntime } from "../src/process-progression-runtime";
 test("completed task advances process, creates next task, and respects approval gate", async () => {
   const persistence = new MemoryPersistenceAdapter();
   const events = new EventStore(persistence);
-  const queue = new TaskQueueRuntime(persistence, events);
+  const queue = new TaskQueueRuntime({ persistence, events });
 
   await persistence.create("process_instances", {
     id: "process-1",

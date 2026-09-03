@@ -1,10 +1,9 @@
-import { Authority } from "./types";
-import { EventStore, OmniiEvent } from "./event-runtime";
+import { Authority, JsonObject } from "./types";
+import { EventStore } from "./event-runtime";
 import { Execution, ExecutionRuntime } from "./execution-runtime";
 import { AuthorityRecord, AuthorityRuntime } from "./authority-runtime";
 import { OperatingContext } from "./operating-context-runtime";
 import { RuntimeSignal } from "./runtime-signal";
-import { JsonObject } from "./types";
 
 export type DispatchStatus = "accepted" | "blocked";
 
@@ -71,9 +70,9 @@ export class RuntimeActivation {
   private readonly events: EventStore;
 
   constructor(private readonly deps: RuntimeActivationDependencies) {
-    this.authorities = deps.authorityRuntime ?? new AuthorityRuntime();
-    this.executions = deps.executionRuntime ?? new ExecutionRuntime(deps.events ?? new EventStore());
     this.events = deps.events ?? new EventStore();
+    this.authorities = deps.authorityRuntime ?? new AuthorityRuntime({ events: this.events });
+    this.executions = deps.executionRuntime ?? new ExecutionRuntime(this.events);
   }
 
   async activate(signal: RuntimeSignal): Promise<RuntimeActivationResult> {
@@ -109,7 +108,6 @@ export class RuntimeActivation {
 
     const route = await this.deps.routeResolver(signal, context, authority);
     if (!route) return this.blocked(signal, "route_unresolved", eventIds);
-
     if (route.requiresApproval) return this.blocked(signal, "approval_required", eventIds);
 
     try {

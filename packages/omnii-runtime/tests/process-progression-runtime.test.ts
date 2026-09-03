@@ -17,6 +17,8 @@ test("completed task advances process, creates next task, and respects approval 
     current_stage: "submitted",
     context: { applicant_id: "app-1" },
     state: {},
+    workflow_id: "licence-workflow",
+    workflow_version: "1.0.0",
     authority: {},
     evidence: {},
     version: "1",
@@ -42,8 +44,8 @@ test("completed task advances process, creates next task, and respects approval 
   });
 
   const runtime = new ProcessProgressionRuntime(persistence, events, queue);
-  const claimed = await queue.claim(initialTask.id, "worker-1");
-  assert.equal(claimed.status, "in_progress");
+  const claimed = await queue.claim({ workerId: "worker-1" });
+  assert.equal(claimed?.status, "in_progress");
 
   await queue.complete({ taskId: initialTask.id, workerId: "worker-1", outcome: { event: "validate" } });
 

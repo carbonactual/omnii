@@ -5,25 +5,75 @@ import { PersistencePort, MemoryPersistenceAdapter, PersistenceRecord } from "./
 
 export type ProcessTaskStatus = "pending" | "ready" | "in_progress" | "blocked" | "completed" | "rejected" | "skipped";
 export type TaskTerminalStatus = "completed" | "rejected" | "skipped";
-export interface ProcessTask extends PersistenceRecord { process_id: string; stage: string; task_type: string; assignee_id?: string | null; status: ProcessTaskStatus; due_at?: string | null; payload: JsonObject; requirements: JsonObject; outcome: JsonObject; evidence: JsonObject[]; created_at: string; updated_at: string; }
+
+export interface ProcessTask extends PersistenceRecord {
+  process_id: string;
+  stage: string;
+  task_type: string;
+  assignee_id?: string | null;
+  status: ProcessTaskStatus;
+  due_at?: string | null;
+  payload: JsonObject;
+  requirements: JsonObject;
+  outcome: JsonObject;
+  evidence: JsonObject[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TaskEnqueueInput {
+  process_id: string;
+  stage: string;
+  task_type: string;
+  assignee_id?: string | null;
+  due_at?: string | null;
+  payload?: JsonObject;
+  requirements?: JsonObject;
+  id?: string;
+  status?: ProcessTaskStatus;
+  outcome?: JsonObject;
+  evidence?: JsonObject[];
+}
 export interface TaskQueuePolicy { maxAttempts: number; leaseSeconds: number; escalationAfterSeconds?: number; approvalRequired?: boolean; requiredEvidence?: string[]; }
 export interface TaskQueueClaim { workerId: string; leaseSeconds?: number; }
 export interface TaskCompletionInput { taskId: string; workerId: string; outcome?: JsonObject; evidence?: JsonObject[]; status?: TaskTerminalStatus; }
 export interface TaskFailureInput { taskId: string; workerId: string; error: string; }
-export interface TaskQueueAtomicPersistence extends PersistencePort { claimProcessTask?(workerId: string, leaseSeconds: number): Promise<ProcessTask | undefined>; }
+
+export interface TaskQueueAtomicPersistence extends PersistencePort {
+  claimProcessTask?(workerId: string, leaseSeconds: number): Promise<ProcessTask | undefined>;
+}
 export interface TaskQueueDependencies { persistence?: TaskQueueAtomicPersistence; events?: EventStore; }
+
 const TASK_COLLECTION = "process_tasks" as const;
+
 export class TaskQueueRuntime {
   private readonly persistence: TaskQueueAtomicPersistence;
   private readonly events: EventStore;
   constructor(deps: TaskQueueDependencies = {}) { this.persistence = deps.persistence ?? new MemoryPersistenceAdapter(); this.events = deps.events ?? new EventStore(this.persistence); }
-  async enqueue(input: Omit<ProcessTask, "id" | "version" | "created_at" | "updated_at" | "status" | "outcome" | "evidence"> & { id?: string; status?: ProcessTaskStatus; outcome?: JsonObject; evidence?: JsonObject[] }): Promise<ProcessTask> {
+
+  async enqueue(input: TaskEnqueueInput): Promise<ProcessTask> {
     const now = new Date().toISOString();
-    const task: ProcessTask = { id: input.id ?? randomUUID(), version: "1", process_id: input.process_id, stage: input.stage, task_type: input.task_type, assignee_id: input.assignee_id ?? null, status: input.status ?? "ready", due_at: input.due_at ?? null, payload: input.payload ?? {}, requirements: input.requirements ?? {}, outcome: input.outcome ?? {}, evidence: input.evidence ?? [], created_at: now, updated_at: now };
+    const task: ProcessTask = {
+      id: input.id ?? randomUUID(),
+      version: "1",
+      process_id: input.process_id,
+      stage: input.stage,
+      task_type: input.task_type,
+      assignee_id: input.assignee_id ?? null,
+      status: input.status ?? "ready",
+      due_at: input.due_at ?? null,
+      payload: input.payload ?? {},
+      requirements: input.requirements ?? {},
+      outcome: input.outcome ?? {},
+      evidence: input.evidence ?? [],
+      created_at: now,
+      updated_at: now,
+    };
     const created = await this.persistence.create(TASK_COLLECTION, task);
     await this.events.append({ type: "PROCESS_TASK_ENQUEUED", actor: task.assignee_id ?? "runtime", subject: task.id, outcome: task.status, provenance: { process_id: task.process_id, stage: task.stage }, payload: { task_type: task.task_type, due_at: task.due_at ?? null }, idempotency_key: `process-task:enqueue:${task.id}` });
     return structuredClone(created as unknown as ProcessTask);
   }
+
   async read(taskId: string): Promise<ProcessTask | undefined> { const task = await this.persistence.read(TASK_COLLECTION, taskId); return task ? structuredClone(task as unknown as ProcessTask) : undefined; }
   async listReady(at = new Date().toISOString()): Promise<ProcessTask[]> { const tasks = await this.persistence.query(TASK_COLLECTION, (record) => { const status = record["status"]; const dueAt = typeof record["due_at"] === "string" ? record["due_at"] : undefined; const nextAttempt = typeof record["next_attempt_at"] === "string" ? record["next_attempt_at"] : undefined; return (status === "ready" || status === "pending") && (!dueAt || dueAt <= at) && (!nextAttempt || nextAttempt <= at); }); return tasks.map((task) => structuredClone(task as unknown as ProcessTask)); }
   async claim(input: TaskQueueClaim): Promise<ProcessTask | undefined> { const leaseSeconds = Math.max(1, input.leaseSeconds ?? 300); if (this.persistence.claimProcessTask) return this.persistence.claimProcessTask(input.workerId, leaseSeconds); const ready = await this.listReady(); const task = ready.find((candidate) => !candidate.assignee_id || candidate.assignee_id === input.workerId); if (!task) return undefined; const now = new Date(); const updated = await this.persistence.updateIfVersion(TASK_COLLECTION, task.id, String(task.version ?? "1"), { status: "in_progress", assignee_id: input.workerId, claimed_by: input.workerId, claimed_at: now.toISOString(), lease_expires_at: new Date(now.getTime() + leaseSeconds * 1000).toISOString(), attempt_count: Number(task.attempt_count ?? 0) + 1 }); await this.events.append({ type: "PROCESS_TASK_CLAIMED", actor: input.workerId, subject: task.id, outcome: "in_progress", provenance: { process_id: task.process_id, stage: task.stage }, payload: { lease_expires_at: updated["lease_expires_at"] ?? null }, idempotency_key: `process-task:claim:${task.id}:${updated.version}` }); return structuredClone(updated as unknown as ProcessTask); }

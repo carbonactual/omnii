@@ -1,6 +1,6 @@
 import { JsonObject } from "./types";
 import { ProcessProgressionResult, ProcessProgressionRuntime } from "./process-progression-runtime";
-import { ProcessTask, ProcessTaskStatus, TaskQueuePolicy, TaskQueueRuntime, TaskTerminalStatus } from "./task-queue-runtime";
+import { ProcessTask, TaskQueuePolicy, TaskQueueRuntime, TaskTerminalStatus } from "./task-queue-runtime";
 
 export interface ProcessTaskHandlerResult {
   outcome?: JsonObject;
@@ -58,29 +58,35 @@ export class ProcessWorkerRuntime {
       return { status: "blocked", task: blocked, error: "No eligible task handler" };
     }
 
+    let completion: ProcessTask;
     try {
       const result = await handler.execute(task, { workerId, signal });
-      const completion = await this.queue.complete({
+      completion = await this.queue.complete({
         taskId: task.id,
         workerId,
         outcome: result.outcome ?? {},
         evidence: result.evidence ?? [],
         status: result.status ?? "completed",
       });
-
-      if (completion.status !== "completed") {
-        return { status: completion.status as "rejected" | "skipped", task: completion };
-      }
-
-      const progression = this.progression
-        ? await this.progression.progress(task.process_id, task.id, workerId)
-        : undefined;
-      return { status: "completed", task: completion, progression };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       const failed = await this.queue.fail({ taskId: task.id, workerId, error: message }, this.policy);
       const status: ProcessWorkerRunStatus = failed.status === "blocked" ? "blocked" : "failed";
       return { status, task: failed, error: message };
+    }
+
+    if (completion.status !== "completed") {
+      return { status: completion.status as "rejected" | "skipped", task: completion };
+    }
+
+    if (!this.progression) return { status: "completed", task: completion };
+
+    try {
+      const progression = await this.progression.progress(task.process_id, task.id, workerId);
+      return { status: "completed", task: completion, progression };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      return { status: "completed", task: completion, error: `Task completed; progression pending: ${message}` };
     }
   }
 

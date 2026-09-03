@@ -29,10 +29,10 @@ export class ProcessProgressionRuntime {
     const eventName = this.transitionEvent(task);
     const transition = this.resolveTransitions(workflow, process.current_stage, eventName);
     const nextStage = transition.length === 1 ? transition[0].to : process.current_stage;
-    const nextTasks = this.buildNextStageTasks(process, task, workflow, nextStage, eventName);
+    const nextTasks = this.buildNextStageTasks(process, task, workflow, nextStage);
     const isTerminal = transition.length > 0 && transition.every((candidate) => candidate.terminal === true);
     const waitingApproval = nextTasks.some((candidate) => candidate.status === "blocked");
-    const nextStatus = isTerminal ? "completed" : waitingApproval ? "blocked" : nextTasks.length ? "active" : "active";
+    const nextStatus = isTerminal ? "completed" : waitingApproval ? "blocked" : "active";
     const expectedVersion = String(process.version ?? "1");
 
     const processPatch: JsonObject = {
@@ -79,21 +79,21 @@ export class ProcessProgressionRuntime {
     });
   }
 
-  private buildNextStageTasks(process: ProcessInstance, completedTask: ProcessTask, workflow: WorkflowRecord, stage: string, eventName: string): ProcessTask[] {
+  private buildNextStageTasks(process: ProcessInstance, completedTask: ProcessTask, workflow: WorkflowRecord, stage: string): ProcessTask[] {
     const outgoing = workflow.transitions?.[stage] ?? [];
     return outgoing
       .filter((candidate): candidate is WorkflowTransitionDefinition => typeof candidate !== "string")
-      .map((candidate, index) => this.buildNextTask(process, completedTask, candidate, eventName, index));
+      .map((candidate, index) => this.buildNextTask(process, completedTask, candidate, stage, index));
   }
 
-  private buildNextTask(process: ProcessInstance, completedTask: ProcessTask, transition: WorkflowTransitionDefinition, eventName: string, index: number): ProcessTask {
+  private buildNextTask(process: ProcessInstance, completedTask: ProcessTask, transition: WorkflowTransitionDefinition, stage: string, index: number): ProcessTask {
     const now = new Date().toISOString();
     const approvalRequired = transition.approval_required === true;
     return {
-      id: `${process.id}:${transition.to}:${transition.event}:${index}`,
+      id: `${process.id}:${stage}:${transition.event}:${index}`,
       version: "1",
       process_id: process.id,
-      stage: process.current_stage === transition.to ? process.current_stage : (transition.to === process.current_stage ? process.current_stage : transition.to),
+      stage,
       task_type: transition.task_type,
       assignee_id: transition.assignee_id ?? null,
       status: approvalRequired ? "blocked" : "ready",
@@ -117,12 +117,7 @@ export class ProcessProgressionRuntime {
     return matches;
   }
 
-  private transitionEvent(task: ProcessTask): string {
-    const event = task.outcome?.["event"];
-    if (typeof event !== "string" || !event.trim()) throw new Error("Completed task must provide outcome.event for progression");
-    return event;
-  }
-
+  private transitionEvent(task: ProcessTask): string { const event = task.outcome?.["event"]; if (typeof event !== "string" || !event.trim()) throw new Error("Completed task must provide outcome.event for progression"); return event; }
   private async requireProcess(id: string): Promise<ProcessInstance> { const record = await this.persistence.read(PROCESS_COLLECTION, id); if (!record) throw new Error(`Process instance not found: ${id}`); return record as unknown as ProcessInstance; }
   private async requireWorkflow(id: string, version: string): Promise<WorkflowRecord> { const resolved = await this.persistence.resolveWorkflow?.(id, version); const record = resolved ?? await this.persistence.read(WORKFLOW_COLLECTION, id); if (!record) throw new Error(`Workflow definition not found: ${id}`); if (String(record.version) !== version) throw new Error(`Workflow version mismatch: expected ${version}, found ${record.version}`); return record as WorkflowRecord; }
   private workflowId(process: ProcessInstance): string { const id = process.workflow_id ?? process.state?.["workflow_id"]; if (typeof id !== "string" || !id) throw new Error("Process instance has no workflow_id"); return id; }

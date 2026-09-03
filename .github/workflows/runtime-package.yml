@@ -1,6 +1,11 @@
 name: OMNII Runtime Package
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/omnii-runtime/**'
+      - '.github/workflows/runtime-package.yml'
   pull_request:
     branches: [main]
     paths:

@@ -31,3 +31,6 @@ jobs:
 
       - name: Runtime package build
         run: npx tsc -p packages/omnii-runtime/tsconfig.json
+
+      - name: Process progression behavior test
+        run: node --import tsx --test packages/omnii-runtime/tests/process-progression-runtime.test.ts

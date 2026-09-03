@@ -53,3 +53,4 @@ export * from "./feedback-runtime";
 export * from "./runtime-activation";
 export * from "./task-queue-runtime";
 export * from "./process-progression-runtime";
+export * from "./process-worker-runtime";

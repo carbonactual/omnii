@@ -1,0 +1,59 @@
+name: OMNII Runtime Package
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/omnii-runtime/src/process-progression-runtime.ts'
+      - 'packages/omnii-runtime/src/task-queue-runtime.ts'
+      - 'packages/omnii-runtime/src/persistence.ts'
+      - 'packages/omnii-runtime/src/event-runtime.ts'
+      - 'packages/omnii-runtime/src/types.ts'
+      - 'packages/omnii-runtime/tests/process-progression-runtime.test.ts'
+      - '.github/workflows/runtime-package.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/omnii-runtime/src/process-progression-runtime.ts'
+      - 'packages/omnii-runtime/src/task-queue-runtime.ts'
+      - 'packages/omnii-runtime/src/persistence.ts'
+      - 'packages/omnii-runtime/src/event-runtime.ts'
+      - 'packages/omnii-runtime/src/types.ts'
+      - 'packages/omnii-runtime/tests/process-progression-runtime.test.ts'
+      - '.github/workflows/runtime-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-process-progression:
+    name: Verify process progression runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.23.2
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Targeted progression typecheck
+        run: >-
+          npx tsc --ignoreConfig --noEmit --strict --skipLibCheck
+          --target ES2022 --module ESNext --moduleResolution Bundler
+          --types node --lib ES2022,DOM
+          packages/omnii-runtime/src/types.ts
+          packages/omnii-runtime/src/persistence.ts
+          packages/omnii-runtime/src/event-runtime.ts
+          packages/omnii-runtime/src/task-queue-runtime.ts
+          packages/omnii-runtime/src/process-progression-runtime.ts
+
+      - name: Process progression behavior test
+        run: node --import tsx --test packages/omnii-runtime/tests/process-progression-runtime.test.ts

@@ -13,7 +13,7 @@ test("completed task advances process, creates next task, and respects approval 
   await persistence.create("process_instances", {
     id: "process-1",
     process_type: "licence",
-    status: "running",
+    status: "active",
     current_stage: "submitted",
     context: { applicant_id: "app-1" },
     state: {},
@@ -36,9 +36,9 @@ test("completed task advances process, creates next task, and respects approval 
   });
 
   const initialTask = await queue.enqueue({
-    processId: "process-1",
+    process_id: "process-1",
     stage: "submitted",
-    taskType: "validation",
+    task_type: "validation",
     payload: { applicant_id: "app-1" },
     requirements: {},
   });
@@ -50,7 +50,8 @@ test("completed task advances process, creates next task, and respects approval 
   await queue.complete({ taskId: initialTask.id, workerId: "worker-1", outcome: { event: "validate" } });
 
   const result = await runtime.progress("process-1", initialTask.id, "worker-1");
-  assert.equal(result.process.status, "waiting_approval");
+  assert.equal(result.process.status, "blocked");
+  assert.equal(result.process.state.waiting_approval, true);
   assert.equal(result.process.current_stage, "validated");
   assert.equal(result.nextTasks.length, 1);
   assert.equal(result.nextTasks[0].status, "blocked");

@@ -42,7 +42,11 @@ export interface WorkflowRecord extends PersistenceRecord {
   exception_rules?: string[];
 }
 
-export interface ProcessProgressionAtomicPersistence extends PersistencePort {
+export interface ProcessProgressionWorkflowResolver {
+  resolveWorkflow?(id: string, version: string): Promise<WorkflowRecord | undefined>;
+}
+
+export interface ProcessProgressionAtomicPersistence extends PersistencePort, ProcessProgressionWorkflowResolver {
   progressProcess?(input: {
     processId: string;
     expectedVersion: string;
@@ -180,10 +184,11 @@ export class ProcessProgressionRuntime {
   }
 
   private async requireWorkflow(id: string, version: string): Promise<WorkflowRecord> {
-    const record = await this.persistence.read(WORKFLOW_COLLECTION, id);
+    const resolved = await this.persistence.resolveWorkflow?.(id, version);
+    const record = resolved ?? await this.persistence.read(WORKFLOW_COLLECTION, id);
     if (!record) throw new Error(`Workflow definition not found: ${id}`);
     if (String(record.version) !== version) throw new Error(`Workflow version mismatch: expected ${version}, found ${record.version}`);
-    return record as unknown as WorkflowRecord;
+    return record as WorkflowRecord;
   }
 
   private workflowId(process: ProcessInstance): string {

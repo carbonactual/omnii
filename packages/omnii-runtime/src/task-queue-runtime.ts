@@ -1,0 +1,78 @@
+import { randomUUID } from "node:crypto";
+import { EventStore } from "./event-runtime";
+import { JsonObject } from "./types";
+import { PersistencePort, MemoryPersistenceAdapter, PersistenceRecord } from "./persistence";
+
+export type ProcessTaskStatus = "pending" | "ready" | "in_progress" | "blocked" | "completed" | "rejected" | "skipped";
+export type TaskTerminalStatus = "completed" | "rejected" | "skipped";
+
+export interface ProcessTask extends PersistenceRecord {
+  process_id: string;
+  stage: string;
+  task_type: string;
+  assignee_id?: string | null;
+  status: ProcessTaskStatus;
+  due_at?: string | null;
+  payload: JsonObject;
+  requirements: JsonObject;
+  outcome: JsonObject;
+  evidence: JsonObject[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TaskQueuePolicy { maxAttempts: number; leaseSeconds: number; escalationAfterSeconds?: number; approvalRequired?: boolean; requiredEvidence?: string[]; }
+export interface TaskQueueClaim { workerId: string; leaseSeconds?: number; }
+export interface TaskCompletionInput { taskId: string; workerId: string; outcome?: JsonObject; evidence?: JsonObject[]; status?: TaskTerminalStatus; }
+export interface TaskFailureInput { taskId: string; workerId: string; error: string; }
+
+export interface TaskQueueAtomicPersistence extends PersistencePort {
+  claimProcessTask?(workerId: string, leaseSeconds: number): Promise<ProcessTask | undefined>;
+}
+export interface TaskQueueDependencies { persistence?: TaskQueueAtomicPersistence; events?: EventStore; }
+
+const TASK_COLLECTION = "process_tasks" as const;
+
+export class TaskQueueRuntime {
+  private readonly persistence: TaskQueueAtomicPersistence;
+  private readonly events: EventStore;
+  constructor(deps: TaskQueueDependencies = {}) { this.persistence = deps.persistence ?? new MemoryPersistenceAdapter(); this.events = deps.events ?? new EventStore(this.persistence); }
+
+  async enqueue(input: Omit<ProcessTask, "id" | "version" | "created_at" | "updated_at" | "status" | "outcome" | "evidence"> & { id?: string; status?: ProcessTaskStatus; outcome?: JsonObject; evidence?: JsonObject[] }): Promise<ProcessTask> {
+    const now = new Date().toISOString();
+    const task: ProcessTask = { ...input, id: input.id ?? randomUUID(), version: "1", status: input.status ?? "ready", outcome: input.outcome ?? {}, evidence: input.evidence ?? [], created_at: now, updated_at: now };
+    const created = await this.persistence.create(TASK_COLLECTION, task);
+    await this.events.append({ type: "PROCESS_TASK_ENQUEUED", actor: task.assignee_id ?? "runtime", subject: task.id, outcome: task.status, provenance: { process_id: task.process_id, stage: task.stage }, payload: { task_type: task.task_type, due_at: task.due_at ?? null }, idempotency_key: `process-task:enqueue:${task.id}` });
+    return structuredClone(created as unknown as ProcessTask);
+  }
+
+  async read(taskId: string): Promise<ProcessTask | undefined> { const task = await this.persistence.read(TASK_COLLECTION, taskId); return task ? structuredClone(task as unknown as ProcessTask) : undefined; }
+  async listReady(at = new Date().toISOString()): Promise<ProcessTask[]> { const tasks = await this.persistence.query(TASK_COLLECTION, (record) => { const status = record["status"]; const dueAt = typeof record["due_at"] === "string" ? record["due_at"] : undefined; const nextAttempt = typeof record["next_attempt_at"] === "string" ? record["next_attempt_at"] : undefined; return (status === "ready" || status === "pending") && (!dueAt || dueAt <= at) && (!nextAttempt || nextAttempt <= at); }); return tasks.map((task) => structuredClone(task as unknown as ProcessTask)); }
+
+  async claim(input: TaskQueueClaim): Promise<ProcessTask | undefined> {
+    const leaseSeconds = Math.max(1, input.leaseSeconds ?? 300);
+    if (this.persistence.claimProcessTask) return this.persistence.claimProcessTask(input.workerId, leaseSeconds);
+    const ready = await this.listReady();
+    const task = ready.find((candidate) => !candidate.assignee_id || candidate.assignee_id === input.workerId);
+    if (!task) return undefined;
+    const now = new Date();
+    const leaseExpiresAt = new Date(now.getTime() + leaseSeconds * 1000).toISOString();
+    const currentVersion = String(task.version ?? "1");
+    const updated = await this.persistence.updateIfVersion(TASK_COLLECTION, task.id, currentVersion, { status: "in_progress", assignee_id: input.workerId, claimed_by: input.workerId, claimed_at: now.toISOString(), lease_expires_at: leaseExpiresAt, attempt_count: Number(task.attempt_count ?? 0) + 1, version: String(Number(currentVersion) + 1) });
+    await this.events.append({ type: "PROCESS_TASK_CLAIMED", actor: input.workerId, subject: task.id, outcome: "in_progress", provenance: { process_id: task.process_id, stage: task.stage }, payload: { lease_expires_at: leaseExpiresAt }, idempotency_key: `process-task:claim:${task.id}:${updated.version}` });
+    return structuredClone(updated as unknown as ProcessTask);
+  }
+
+  async heartbeat(taskId: string, workerId: string, leaseSeconds = 300): Promise<ProcessTask> { const task = await this.require(taskId); this.assertOwner(task, workerId); if (task.status !== "in_progress") throw new Error("Only in-progress tasks can heartbeat"); const updated = await this.persistence.updateIfVersion(TASK_COLLECTION, task.id, String(task.version ?? "1"), { lease_expires_at: new Date(Date.now() + Math.max(1, leaseSeconds) * 1000).toISOString(), version: String(Number(task.version ?? "1") + 1) }); await this.events.append({ type: "PROCESS_TASK_HEARTBEAT", actor: workerId, subject: task.id, outcome: "renewed", payload: {}, idempotency_key: `process-task:heartbeat:${task.id}:${updated.version}` }); return structuredClone(updated as unknown as ProcessTask); }
+  async approve(taskId: string, approverId: string, evidence: JsonObject[] = []): Promise<ProcessTask> { const task = await this.require(taskId); if (task.status !== "blocked") throw new Error("Only blocked tasks can be approved"); const updated = await this.persistence.updateIfVersion(TASK_COLLECTION, task.id, String(task.version ?? "1"), { status: "ready", outcome: { ...task.outcome, approval: { approved: true, approverId, at: new Date().toISOString() } }, evidence: [...task.evidence, ...evidence], version: String(Number(task.version ?? "1") + 1) }); await this.events.append({ type: "PROCESS_TASK_APPROVED", actor: approverId, subject: task.id, outcome: "ready", payload: { evidence_count: evidence.length }, idempotency_key: `process-task:approve:${task.id}:${approverId}` }); return structuredClone(updated as unknown as ProcessTask); }
+  async reject(taskId: string, actorId: string, reason: string, evidence: JsonObject[] = []): Promise<ProcessTask> { const task = await this.require(taskId); if (["completed","rejected","skipped"].includes(task.status)) throw new Error("Terminal task cannot be rejected"); const updated = await this.persistence.updateIfVersion(TASK_COLLECTION, task.id, String(task.version ?? "1"), { status: "rejected", outcome: { ...task.outcome, rejection: { reason, actorId, at: new Date().toISOString() } }, evidence: [...task.evidence, ...evidence], completed_at: new Date().toISOString(), version: String(Number(task.version ?? "1") + 1) }); await this.events.append({ type: "PROCESS_TASK_REJECTED", actor: actorId, subject: task.id, outcome: "rejected", payload: { reason }, idempotency_key: `process-task:reject:${task.id}` }); return structuredClone(updated as unknown as ProcessTask); }
+  async complete(input: TaskCompletionInput): Promise<ProcessTask> { const task = await this.require(input.taskId); this.assertOwner(task, input.workerId); if (task.status !== "in_progress") throw new Error("Only in-progress tasks can complete"); const evidence = input.evidence ?? []; this.assertEvidence(this.requiredEvidence(task), evidence, task); const status = input.status ?? "completed"; const updated = await this.persistence.updateIfVersion(TASK_COLLECTION, task.id, String(task.version ?? "1"), { status, outcome: input.outcome ?? {}, evidence: [...task.evidence, ...evidence], completed_at: new Date().toISOString(), lease_expires_at: null, version: String(Number(task.version ?? "1") + 1) }); await this.events.append({ type: "PROCESS_TASK_COMPLETED", actor: input.workerId, subject: task.id, outcome: status, payload: { evidence_count: evidence.length }, idempotency_key: `process-task:complete:${task.id}` }); return structuredClone(updated as unknown as ProcessTask); }
+  async fail(input: TaskFailureInput, policy: TaskQueuePolicy): Promise<ProcessTask> { const task = await this.require(input.taskId); this.assertOwner(task, input.workerId); if (task.status !== "in_progress") throw new Error("Only in-progress tasks can fail"); const attempt = Number(task.attempt_count ?? 1); const exhausted = attempt >= Math.max(1, policy.maxAttempts); const nextStatus: ProcessTaskStatus = exhausted ? "blocked" : "ready"; const nextAttemptAt = exhausted ? null : new Date(Date.now() + this.backoffMs(attempt)).toISOString(); const updated = await this.persistence.updateIfVersion(TASK_COLLECTION, task.id, String(task.version ?? "1"), { status: nextStatus, attempt_count: attempt, max_attempts: policy.maxAttempts, last_error: input.error, next_attempt_at: nextAttemptAt, lease_expires_at: null, claimed_by: null, version: String(Number(task.version ?? "1") + 1) }); await this.events.append({ type: exhausted ? "PROCESS_TASK_RETRY_EXHAUSTED" : "PROCESS_TASK_RETRY_SCHEDULED", actor: input.workerId, subject: task.id, outcome: nextStatus, payload: { attempt, next_attempt_at: nextAttemptAt, error: input.error }, idempotency_key: `process-task:failure:${task.id}:${attempt}` }); return structuredClone(updated as unknown as ProcessTask); }
+  async escalate(taskId: string, actorId: string, reason: string, targetAssigneeId?: string): Promise<ProcessTask> { const task = await this.require(taskId); if (["completed","rejected","skipped"].includes(task.status)) throw new Error("Terminal task cannot escalate"); const level = Number(task.escalation_level ?? 0) + 1; const updated = await this.persistence.updateIfVersion(TASK_COLLECTION, task.id, String(task.version ?? "1"), { status: "blocked", assignee_id: targetAssigneeId ?? task.assignee_id ?? null, escalation_level: level, escalation_reason: reason, escalation_at: new Date().toISOString(), claimed_by: null, lease_expires_at: null, version: String(Number(task.version ?? "1") + 1) }); await this.events.append({ type: "PROCESS_TASK_ESCALATED", actor: actorId, subject: task.id, outcome: "blocked", payload: { level, targetAssigneeId: targetAssigneeId ?? null, reason }, idempotency_key: `process-task:escalate:${task.id}:${level}` }); return structuredClone(updated as unknown as ProcessTask); }
+  async monitor(at = new Date().toISOString(), policy: TaskQueuePolicy = { maxAttempts: 3, leaseSeconds: 300 }): Promise<ProcessTask[]> { const tasks = await this.persistence.query(TASK_COLLECTION, (record) => ["ready","pending","in_progress"].includes(String(record["status"]))); const acted: ProcessTask[] = []; for (const raw of tasks) { const task = raw as unknown as ProcessTask & Record<string, unknown>; const lease = typeof task.lease_expires_at === "string" ? task.lease_expires_at : undefined; const due = typeof task.due_at === "string" ? task.due_at : undefined; const leaseExpired = Boolean(lease && lease <= at); const overdue = Boolean(due && due < at); if (leaseExpired) acted.push(await this.escalate(task.id, "runtime-scheduler", "worker lease expired")); else if (overdue) acted.push(await this.escalate(task.id, "runtime-scheduler", "task SLA overdue")); else if (task.status === "in_progress" && policy.escalationAfterSeconds && task.claimed_at && new Date(at).getTime() - new Date(String(task.claimed_at)).getTime() >= policy.escalationAfterSeconds * 1000) acted.push(await this.escalate(task.id, "runtime-scheduler", "task exceeded escalation threshold")); } return acted; }
+  private requiredEvidence(task: ProcessTask): string[] { const value = task.requirements?.["requiredEvidence"]; return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []; }
+  private assertEvidence(required: string[], evidence: JsonObject[], task: ProcessTask): void { if (!required.length) return; const supplied = new Set(evidence.map((item) => typeof item["type"] === "string" ? String(item["type"]) : typeof item["kind"] === "string" ? String(item["kind"]) : "")); const missing = required.filter((item) => !supplied.has(item) && !task.evidence.some((existing) => existing["type"] === item || existing["kind"] === item)); if (missing.length) throw new Error(`Required evidence missing: ${missing.join(", ")}`); }
+  private assertOwner(task: ProcessTask, workerId: string): void { if (task.assignee_id && task.assignee_id !== workerId) throw new Error("Task is assigned to another actor"); if (task.claimed_by && task.claimed_by !== workerId) throw new Error("Task lease belongs to another worker"); }
+  private async require(taskId: string): Promise<ProcessTask> { const task = await this.read(taskId); if (!task) throw new Error(`Process task not found: ${taskId}`); return task; }
+  private backoffMs(attempt: number): number { return Math.min(24 * 60 * 60 * 1000, Math.max(1000, 2 ** Math.max(0, attempt - 1) * 1000)); }
+}

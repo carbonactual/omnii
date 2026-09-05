@@ -2,8 +2,9 @@ import { HAPI_WORLD_LIFECYCLE, POST_HUMAN_STATES, canTransition, transition, ent
 import { HAPI_WORLD_CAPABILITIES, listHapiWorldCapabilities, findHapiWorldCapability } from './capabilities.mjs';
 import { createWorldMemory, memoryMayBeShared } from './memory.mjs';
 import { createWorldExchange, recordEarning } from './economy.mjs';
+import { createWorldState, recordWorldActivity, recordSkillEvidence, recordKnowledge } from './world-state.mjs';
 
-const VERSION = '1.2.0';
+const VERSION = '1.3.0';
 
 function required(value, name) {
   if (value === undefined || value === null || value === '') throw new Error(`${name} is required`);
@@ -61,5 +62,9 @@ export {
   createWorldMemory,
   memoryMayBeShared,
   createWorldExchange,
-  recordEarning
+  recordEarning,
+  createWorldState,
+  recordWorldActivity,
+  recordSkillEvidence,
+  recordKnowledge
 };

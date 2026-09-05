@@ -1,6 +1,9 @@
 import { HAPI_WORLD_LIFECYCLE, POST_HUMAN_STATES, canTransition, transition, enterPostHumanContinuity, retireAgent } from './lifecycle.mjs';
+import { HAPI_WORLD_CAPABILITIES, listHapiWorldCapabilities, findHapiWorldCapability } from './capabilities.mjs';
+import { createWorldMemory, memoryMayBeShared } from './memory.mjs';
+import { createWorldExchange, recordEarning } from './economy.mjs';
 
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 
 function required(value, name) {
   if (value === undefined || value === null || value === '') throw new Error(`${name} is required`);
@@ -51,5 +54,12 @@ export {
   canTransition,
   transition,
   enterPostHumanContinuity,
-  retireAgent
+  retireAgent,
+  HAPI_WORLD_CAPABILITIES,
+  listHapiWorldCapabilities,
+  findHapiWorldCapability,
+  createWorldMemory,
+  memoryMayBeShared,
+  createWorldExchange,
+  recordEarning
 };

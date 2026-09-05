@@ -23,22 +23,22 @@ export const validateBunkCompositionRequest = (request: BunkCompositionRequest):
 
   if (!request.propertyId?.trim()) errors.push("propertyId is required");
   if (request.lifecycle) {
-    if (request.lifecycle.evidenceIds.length === 0) {
-      errors.push(...validateSafely(() => assertBunkPropertyLifecycleTransition(request.lifecycle)));
-    } else {
-      errors.push(...validateSafely(() => assertBunkPropertyLifecycleTransition(request.lifecycle)));
-    }
+    errors.push(...validateSafely(() => assertBunkPropertyLifecycleTransition(request.lifecycle)));
   } else {
     errors.push("lifecycle is required");
   }
 
   if (request.economic) {
-    if (request.economic.propertyId !== request.propertyId) errors.push("economic propertyId must match composition propertyId");
-    errors.push(...validateSafely(() => assertBunkTipEconomicRequest(request.economic)));
+    if (request.economic.propertyId !== request.propertyId) {
+      errors.push("economic propertyId must match composition propertyId");
+    }
+    errors.push(...validateSafely(() => assertBunkTipEconomicRequest(request.economic!)));
   }
 
   if (request.intelligence) {
-    if (request.intelligence.propertyId !== request.propertyId) errors.push("intelligence propertyId must match composition propertyId");
+    if (request.intelligence.propertyId !== request.propertyId) {
+      errors.push("intelligence propertyId must match composition propertyId");
+    }
     errors.push(...validateSafely(() => assertBunkPropertyIntelligenceObservation(request.intelligence!)));
   }
 

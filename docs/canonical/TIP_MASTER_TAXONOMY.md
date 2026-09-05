@@ -4,7 +4,7 @@
 **Product:** TIP — Trade, Investment & Value Markets  
 **Status:** CANONICAL MASTER TAXONOMY — approved  
 **Authority:** TIP classification and relationship layer; implementation must remain subordinate to Carbon Actual constitutional authority.  
-**Version:** 1.0
+**Version:** 1.1
 
 ---
 
@@ -12,9 +12,9 @@
 
 The TIP Master Taxonomy is the canonical classification, identity, relationship and eligibility vocabulary for the TIP ecosystem.
 
-It exists so that the ecosystem does not create a new application, schema or product every time a new form of trade, investment, financing, capability, right, infrastructure, service or future economic activity is discovered.
+It exists so that the ecosystem does not create a new application, schema or product every time a new form of trade, investment, financing, capability, right, infrastructure, service, market, marketplace or future economic activity is discovered.
 
-The taxonomy classifies **what an economic object is**, **what it can do**, **how it may participate in markets**, **what relationships surround it**, and **what controls apply**.
+The taxonomy classifies **what an economic object is**, **what it can do**, **how it may participate in markets**, **what relationships surround it**, **what form the market takes**, and **what controls apply**.
 
 It does not by itself declare an object lawful, tradable, investable, financeable, collateralizable or tokenizable.
 
@@ -22,7 +22,7 @@ It does not by itself declare an object lawful, tradable, investable, financeabl
 
 ## 2. Constitutional Principle
 
-> **TIP should be able to represent every legitimate economic object, capability, right, claim, contract, flow, opportunity and outcome without confusing the underlying object with the market mechanism, legal relationship, position, financing arrangement or interface through which it is used.**
+> **TIP should be able to represent every legitimate economic object, capability, right, claim, contract, flow, opportunity and outcome, together with every legitimate market form through which those things may be allocated, exchanged, financed, accessed, used or settled, without confusing the underlying object with the market mechanism, legal relationship, position, financing arrangement or interface through which it is used.**
 
 The taxonomy is designed to be open-ended. New domains should normally be added by taxonomy registration rather than foundational redesign.
 
@@ -39,6 +39,8 @@ The Master Taxonomy governs classification across the existing canonical extensi
 - `TIP_TRADING_TAXONOMY.md`
 - `TIP_INVESTMENT_ARCHITECTURE.md`
 - `TIP_INVESTMENT_COMPLETENESS_EXTENSIONS.md`
+- `TIP_MARKETS_AND_MARKETPLACES_MASTER.md`
+- `TIP_UNCONVENTIONAL_STRUCTURED_TEMPORAL_MARKETS.md`
 
 These documents provide domain detail; the Master Taxonomy supplies their common identifiers, facets, relations and lifecycle vocabulary.
 
@@ -125,6 +127,68 @@ Draft, discovered, registered, verified, certified, licensed, cleared, eligible,
 ### 20 — Lifecycle
 
 Discover, register, represent, verify, value, offer, match, contract, finance, reserve, allocate, trade, invest, use, deliver, settle, monitor, measure, revalue, refinance, transfer, reuse, repair, recover, retire and pulse.
+
+### 21 — Market Forms
+
+Market-form facets classify **how a market operates**, independently from what is traded.
+
+Core market forms include:
+
+- spot/immediate
+- intraday/real-time
+- day-ahead / scheduled
+- forward
+- futures
+- optional/contingent
+- event-driven
+- prediction/forecasting where lawful
+- temporal/time-sliced
+- recurring/rolling
+- streaming/continuous
+- reservation/booking
+- capacity
+- usage/metered
+- allocation
+- auction
+- sealed-bid
+- ascending / descending / Dutch
+- reverse auction
+- negotiated/OTC
+- bilateral
+- multilateral
+- P2P
+- peer-to-pool
+- pool-to-peer
+- order-book
+- RFQ/RFP
+- tender/procurement
+- matching
+- subscription
+- outcome-based
+- milestone-based
+- formula-priced
+- index-linked
+- dynamic/surge-priced
+- bundled/package
+- combinatorial
+- multi-leg
+- synthetic/replicated exposure
+- structured
+- secondary
+- distressed
+- recovery/salvage
+- internal/enterprise allocation
+- public/social allocation
+- information/forecast
+- rights/access
+- environmental/compliance
+- agentic
+- machine-native
+- federated
+- decentralized
+- hybrid
+
+A market may carry multiple market-form facets simultaneously.
 
 ---
 
@@ -215,6 +279,10 @@ CAPACITY
 CERTIFICATE
 STATUS
 LOCATION
+MARKET
+MARKETPLACE
+VENUE
+MECHANISM
 ```
 
 Definitions:
@@ -237,6 +305,10 @@ Definitions:
 - **Certificate:** evidence of a verified status, credential, property, quality, origin or entitlement.
 - **Status:** current classification or state.
 - **Location:** place or spatial reference to which an object/right/activity is associated.
+- **Market:** organized or emergent economic arena/rule system.
+- **Marketplace:** participant- or machine-facing environment for discovery, matching, negotiation, transaction, access, fulfillment or related market activity.
+- **Venue:** specific place/system in which market activity or matching occurs.
+- **Mechanism:** rule/system used to price, match, allocate or form transactions.
 
 ---
 
@@ -261,6 +333,10 @@ TIP:CAPABILITY:AI_REASONING:1
 TIP:ACCESS:GRAVE_RIGHT:1
 TIP:INFRASTRUCTURE:DATA_CENTER:1
 TIP:ENVIRONMENT:CARBON_CREDIT:1
+TIP:MARKET_FORM:COMBINATORIAL:1
+TIP:MARKET_FORM:TEMPORAL:1
+TIP:MARKET_FORM:OUTCOME_BASED:1
+TIP:MARKET_FORM:AGENTIC:1
 ```
 
 Taxonomy identifiers must remain stable even if display names, descriptions or implementations evolve.
@@ -286,6 +362,7 @@ trade_roles: []
 investment_roles: []
 financing_roles: []
 capability_roles: []
+market_form_roles: []
 rights: []
 claims: []
 contracts: []
@@ -358,6 +435,12 @@ EXPIRES_AS
 RENEWS_AS
 RETIRES_AS
 RECOVERED_AS
+MARKETED_THROUGH
+LISTED_ON
+MATCHED_BY
+ALLOCATED_BY
+PRICED_BY
+SETTLES_ON
 ```
 
 Relations must include direction, provenance and effective dates where the relationship can change.
@@ -488,6 +571,7 @@ JURISDICTION
 CURRENCY
 ENVIRONMENTAL ATTRIBUTES
 EXIT / MATURITY
+MARKET FORM
 ```
 
 This permits the same underlying object to support different investment vehicles and strategies without duplicating the object itself.
@@ -501,6 +585,7 @@ Trading records should classify:
 ```text
 UNDERLYING OBJECT
 TRADE TYPE
+MARKET FORM
 MARKET MECHANISM
 POSITION
 ORDER TYPE
@@ -512,6 +597,7 @@ MARGIN
 SETTLEMENT
 COSTS
 RISK
+TIME WINDOW
 ```
 
 ---
@@ -536,6 +622,7 @@ RISK
 COVENANTS
 DEFAULT STATE
 RECOVERY
+MARKET FORM
 ```
 
 Nano financing uses the same schema at lower value scales and potentially higher transaction volumes.
@@ -563,6 +650,7 @@ VERSION
 JURISDICTION
 CARBON ATTRIBUTES
 PERFORMANCE
+MARKET FORM
 ```
 
 Examples include:
@@ -609,6 +697,7 @@ proof / certificate
 status
 maintenance obligations
 related contracts
+market form
 ```
 
 Examples include access, clearance, licenses, certificates, occupancy, reservations, professional credentials and burial/grave entitlements.
@@ -617,157 +706,108 @@ Examples include access, clearance, licenses, certificates, occupancy, reservati
 
 ## 19. Environment / Carbon Facets
 
-Environmental attributes may attach to a Market Object without becoming the object itself.
+Environmental attributes may attach to a Market Object, Capability, Contract, Position, Opportunity or Outcome.
 
-Supported facets include:
-
-```text
-carbon_footprint
-scope_1_emissions
-scope_2_emissions
-scope_3_emissions
-carbon_intensity
-reduction
-avoidance
-removal
-carbon_credit
-renewable_attribute
-biodiversity_attribute
-nature_attribute
-restoration_outcome
-climate_risk
-resilience_attribute
-```
-
-Each environmental assertion should preserve methodology, evidence, issuer/authority, vintage or period where relevant, verification state and provenance.
-
----
-
-## 20. Circular Economy / Residual Facets
-
-Any object may acquire residual/recovery relationships:
+They may include:
 
 ```text
-primary_output
-used_state
-residual
-by_product
-scrap
-reusable
-repairable
-refurbishable
-recyclable
-recoverable
-secondary_raw_material
-idle_capacity
-surplus_inventory
+carbon footprint
+Scope 1
+Scope 2
+Scope 3
+carbon intensity
+emissions
+avoided emissions
+carbon removal
+carbon credit
+renewable attribute
+biodiversity attribute
+nature outcome
+restoration outcome
+climate resilience
 ```
 
-TIP should use the taxonomy to discover a next economic state rather than destroying or duplicating an object record.
+Environmental assertions require evidence, methodology, verification and jurisdictional eligibility where applicable.
 
 ---
 
-## 21. Interfaces as Access Facets
+## 20. Market-Form Composition
 
-Technical interfaces must be represented as access/capability facets, not separate economic universes.
+A market form is composable.
+
+Examples:
 
 ```text
-GUI
-PROMPT
-API
-SDK
-WEBHOOK
-CLI
-MCP
-AGENT TOOL
-WORKFLOW
-SCHEDULE
-AI AGENT
-AI CREW
-MACHINE INTERFACE
+GPU CAPACITY
++ CAPACITY MARKET
++ MARKETPLACE
++ DAY-AHEAD TEMPORAL FORM
++ AUCTION
++ USAGE SETTLEMENT
++ AI-AGENT PARTICIPANT
 ```
-
-All interfaces ultimately address the same underlying TIP objects and policies.
-
----
-
-## 22. Future-Proof Extension Rules
-
-A new market or economic form can be added when it can be expressed using existing primitives and relations.
-
-New foundational classes should be rare and require architectural review.
-
-Future examples may include:
-
-- machine-to-machine markets
-- agent-to-agent commerce
-- autonomous procurement
-- compute markets
-- data-license markets
-- AI capability markets
-- satellite capacity
-- space services
-- programmable assets
-- advanced nature markets
-- new environmental instruments
-
-The taxonomy can represent a future concept without asserting that the market is currently mature, lawful or commercially available.
-
----
-
-## 23. Governance
-
-The Master Taxonomy cannot override Carbon Actual constitutional authority.
-
-Taxonomy changes require:
 
 ```text
-PROPOSAL
- ↓
-CLASSIFICATION REVIEW
- ↓
-DUPLICATION CHECK
- ↓
-RELATIONSHIP CHECK
- ↓
-LEGAL / REGULATORY REVIEW WHERE RELEVANT
- ↓
-SECURITY / RISK REVIEW WHERE RELEVANT
- ↓
-VERSION
- ↓
-EFFECTIVE DATE
- ↓
-REGISTRY PUBLICATION
+CARBON OUTCOME
++ ENVIRONMENTAL MARKET
++ VERIFIED MARKETPLACE
++ MILESTONE CONTRACT
++ OUTCOME PRICING
++ REGISTRY EVIDENCE
++ RETIREMENT SETTLEMENT
 ```
 
-Deprecated terms remain resolvable through lineage rather than being silently deleted.
+```text
+WAREHOUSE INVENTORY
++ COMMODITY MARKET
++ COLLATERAL MARKET
++ AUCTION
++ TRADE FINANCE
++ RECEIVABLE / DELIVERY CONTRACT
+```
+
+The taxonomy must permit multiple market-form facets without multiplying the underlying object.
 
 ---
 
-## 24. Non-Goals
+## 21. Governance / Change Control
 
-The Master Taxonomy does not by itself:
+The Master Taxonomy is a classification authority, not an independent constitutional authority.
 
-- grant trading permission;
-- grant investment advice authority;
-- make an object a security;
-- create a financial instrument;
-- replace regulators or law;
-- replace accounting standards;
-- replace market operators;
-- guarantee valuations or returns;
-- make speculative future markets real;
-- convert every object into a token.
+Changes require:
+
+- stable identifier policy
+- provenance
+- versioning
+- effective dates
+- deprecation/supersession rules
+- compatibility mapping
+- jurisdiction-aware annotations
+- review of dependent schemas and products.
+
+New economic phenomena should first be modeled as taxonomy candidates and only become implemented product capabilities after validation, security, legal and operational review.
 
 ---
 
-## 25. Canonical Rule
+## 22. Canonical Boundary
 
-> **One economic object, many possible relationships. One taxonomy, many markets. One identity graph, many interfaces.**
+The Master Taxonomy MUST NOT:
 
-TIP should therefore maintain one canonical Market Object identity while allowing the object to participate simultaneously in trade, investment, financing, access, service, subscription, collateral, risk, environmental measurement and lifecycle relationships.
+- create legal rights merely by classification
+- convert a capability into ownership
+- convert an event contract into a universally permitted financial product
+- treat prediction/gambling distinctions as interchangeable
+- expose private personal information merely for market discoverability
+- permit an AI agent to bypass human/legal authority
+- assume a marketplace operator owns the underlying market
+- assume a listed object is eligible for execution
+
+---
+
+## 23. Canonical Rule
+
+> **The TIP Master Taxonomy is the common denominator beneath markets, marketplaces, venues, mechanisms, trading, investment, financing, capabilities, rights, infrastructure and future economic forms.**
 
 The goal is not to predict every future product name.
 
-The goal is to make the architecture capable of representing the economic reality from which future products will emerge.
+The goal is to make the architecture capable of representing the economic reality from which future products and markets emerge.

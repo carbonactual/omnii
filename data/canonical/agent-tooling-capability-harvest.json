@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "purpose": "Map reusable agent and tooling capabilities from Carbon Actual source repositories into provider-independent OMNII capabilities.",
+  "capabilities": {
+    "planning": { "target": "packages/omnii-agents", "sources": ["agent-skills", "ABBA", "Caveman"], "disposition": "ABSORB" },
+    "coordination": { "target": "packages/omnii-agents", "sources": ["ABBA-MAS", "Eve", "agent-skills"], "disposition": "ABSORB" },
+    "evaluation": { "target": "packages/omnii-agents", "sources": ["agent-skills", "ABBA"], "disposition": "ABSORB" },
+    "lifecycle": { "target": "packages/omnii-agents", "sources": ["Eve", "RITES", "HAPI World"], "disposition": "COMPOSE" },
+    "durable_agent_identity": { "target": "OMNII identity/HAPI", "sources": ["Eve", "HAPI World", "ABBA-MAS"], "disposition": "ABSORB" },
+    "typed_tools": { "target": "provider-independent agent adapters", "sources": ["Eve", "agent-skills", "Caveman"], "disposition": "ADAPT" },
+    "skills": { "target": "OMNII capability and skill registry", "sources": ["agent-skills", "Eve", "ABBA-MAS"], "disposition": "ABSORB" },
+    "browser_execution": { "target": "integration adapters", "sources": ["OMNI", "Shadow"], "disposition": "ADAPT" },
+    "filesystem_first_context": { "target": "agent context layer", "sources": ["Eve"], "disposition": "ABSORB" },
+    "session_and_context_management": { "target": "agent context layer", "sources": ["Caveman", "Eve"], "disposition": "ABSORB" },
+    "human_in_loop": { "target": "authority/SEAL boundary", "sources": ["Eve", "agent-skills", "ABBA"], "disposition": "COMPOSE" },
+    "scheduling": { "target": "workflow automation", "sources": ["Eve", "NASC", "workflow"], "disposition": "COMPOSE" },
+    "subagents": { "target": "OMNII agent coordination", "sources": ["agent-skills", "Eve", "ABBA-MAS"], "disposition": "ABSORB" },
+    "source_driven_development": { "target": "OMNII build process", "sources": ["agent-skills"], "disposition": "ABSORB" },
+    "tdd": { "target": "OMNII verification capability", "sources": ["agent-skills", "superpowers"], "disposition": "REFERENCE" },
+    "code_review": { "target": "OMNII verification capability", "sources": ["agent-skills", "superpowers"], "disposition": "REFERENCE" },
+    "security_review": { "target": "OMNII security capability", "sources": ["agent-skills", "direct-bank-app"], "disposition": "COMPOSE" },
+    "observability": { "target": "OMNII audit/observability", "sources": ["agent-skills", "NASC", "Direct Bank"], "disposition": "COMPOSE" }
+  },
+  "provider_rule": "OpenClaw, CrewAI, PraisonAI, Botpress, MCP implementations and model providers remain replaceable adapters or references; they do not define OMNII semantics.",
+  "authority_rule": "No harvested agent capability may create or expand authority. Consequential actions route through canonical authority and SEAL controls.",
+  "provenance_required": true
+}

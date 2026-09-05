@@ -1,5 +1,5 @@
 import { Authority } from "./types";
-import { RuntimeRoute } from "./runtime-resolver";
+import type { RuntimeRoute } from "./runtime-resolver";
 
 export interface RuntimePolicyContext {
   capability?: string;
@@ -17,12 +17,6 @@ export type RuntimePolicy = (context: RuntimePolicyContext) => Promise<RuntimePo
 
 export const defaultRuntimePolicy: RuntimePolicy = ({ route, authority }) => {
   const requiresAuthority = route.requiresAuthority !== false;
-  if (requiresAuthority && !authority) {
-    return { requiresAuthority, allowed: false, reason: "authority-required" };
-  }
-  return {
-    requiresAuthority,
-    allowed: true,
-    reason: requiresAuthority ? "authority-supplied" : undefined,
-  };
+  if (requiresAuthority && !authority) return { requiresAuthority, allowed: false, reason: "authority-required" };
+  return { requiresAuthority, allowed: true, reason: requiresAuthority ? "authority-supplied" : undefined };
 };

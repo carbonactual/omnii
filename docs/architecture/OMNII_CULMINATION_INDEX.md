@@ -21,7 +21,9 @@
 - `AUDUBON_CONTINUUM_ECOLOGICAL_DESIGN_DOCTRINE.md` — being + habitat + Plate/Book ecology.
 - `ECOLOGICAL_BUILD_METHOD.md` — product/architecture/UX build method using bird, habitat and Plate references.
 - `ECOSYSTEM_RELATIONSHIP_MODEL.md` — Identity → Root → Actual → Becoming → Atlas with relationship/interaction across the continuum.
-- `REPOSITORY_CONTENT_CONSOLIDATION_AUDIT.md` — all visible GitHub repositories, harvest rules and conformance decisions.
+- `HAPI_WORLD_COMMON_DENOMINATOR.md` — HAPI World as the common human/AI participation environment.
+- `OMNII_REPOSITORY_SOURCE_ESTATE_MANIFEST.md` — repository-wide artifact disposition and provenance map.
+- `REPOSITORY_CONTENT_CONSOLIDATION_AUDIT.md` — repository harvest rules and conformance decisions.
 
 ## Canonical runtime and Common Layer
 
@@ -32,6 +34,12 @@ Common Layer v1.0 currently defines 31 reusable semantic primitives. The runtime
 The broader operating fabric is:
 
 `Entity → Relationship → Intent ↔ Capability → Discovery/Matching → Context/Availability → Authority/Authorization → Workflow → Execution → Evidence → Outcome → Settlement/Ledger → Pulse/Learning`
+
+### HAPI World common denominator
+
+HAPI World is the shared participation/environment layer through which humans and AI entities can enter governed experiences, form relationships, learn, work, interact, progress, discover capabilities, exchange value, and present themselves in context. Products are bounded contexts inside the ecosystem; they do not create duplicate human identity semantics.
+
+HAPI World does not replace constitutional authority, legal authority, OMNII canonical state, institutional governance, or settlement ledgers. It is an interoperable environment built on them.
 
 Audubon overlays the representation/build dimension without changing constitutional semantics:
 
@@ -45,7 +53,7 @@ Canonical semantics, reusable capabilities, durable schemas, architecture doctri
 
 ### Compose
 
-Product functionality that belongs in a downstream branch but uses OMNII common contracts.
+Product functionality that belongs in a downstream branch but uses OMNII common contracts and HAPI World participation.
 
 ### Adapt
 
@@ -69,7 +77,7 @@ The OMNII database includes `omnii_source_artifacts` so repository-derived knowl
 
 Products are not mini-constitutions. They are compositions of:
 
-`OMNII Core + Shared Capabilities + Domain Modules + Institutional Configuration + Data + Policy/Rules + Integrations + Presentation`
+`OMNII Core + Shared Capabilities + HAPI World + Domain Modules + Institutional Configuration + Data + Policy/Rules + Integrations + Presentation`
 
 The canonical product registry remains authoritative for current implementation status. Historical product names discovered in legacy repositories are retained as source evidence and are not automatically marked as built.
 

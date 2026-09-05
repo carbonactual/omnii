@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "purpose": "Machine-readable record of product runtime bindings into OMNII without flattening domain implementations.",
   "canonical_runtime": "OMNII",
   "bindings": {
@@ -72,6 +72,10 @@
       "role": "participation_environment",
       "binding": "native autonomous agent world",
       "authority_gate": "governed_crossing",
+      "autonomy": "native activity autonomous by default",
+      "human_crossing": "governed and authority-bound",
+      "authority_transfer_on_human_death": false,
+      "ownership_transfer_on_human_death": false,
       "status": "BOUNDARY_READY",
       "lineage": ["omnii-hapi-world-boundary.json"]
     },
@@ -97,6 +101,7 @@
     "Provider and framework code remains replaceable adapter infrastructure.",
     "Boundary-ready does not mean production deployment verified.",
     "Authority is never inferred from capability, evidence, matching, tokenization, or product membership.",
+    "HAPI World native activity may be autonomous, but human-world crossings remain governed.",
     "HAPI World autonomy does not transfer legal authority or ownership.",
     "Atlas remains governed representation rather than operational truth."
   ],

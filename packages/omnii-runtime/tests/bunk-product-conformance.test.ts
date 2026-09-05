@@ -4,6 +4,11 @@ import { BUNK_PROPERTY_CATEGORIES, validateBunkPropertyClassification } from "..
 import { BUNK_PROPERTY_LIFECYCLE_STAGES } from "../src/bunk-property-lifecycle";
 import { BUNK_TIP_ECONOMIC_INTENTS, validateBunkTipEconomicRequest } from "../src/bunk-economic-boundary";
 import { BUNK_PROPERTY_INTELLIGENCE_DIMENSIONS, validateBunkPropertyIntelligenceObservation } from "../src/bunk-property-intelligence";
+import {
+  assertBunkProductConformance,
+  validateBunkProductManifest,
+  type BunkProductManifest,
+} from "../src/bunk-product-manifest";
 
 test("BUNK is a universal property product composition, not a foundation", () => {
   assert.equal(BUNK_PROPERTY_CATEGORIES.includes("LAND"), true);
@@ -64,4 +69,86 @@ test("property intelligence cannot omit evidence provenance", () => {
     confidence: 0.7,
   });
   assert.ok(errors.includes("sourceReference is required"));
+});
+
+const validManifest: BunkProductManifest = {
+  productId: "BUNK",
+  ecosystemId: "OMNII",
+  economicFoundationId: "TIP",
+  status: "CANONICAL",
+  capabilities: ["discovery", "listing", "matching", "property-operations"],
+  requiredOmniiCapabilities: [
+    "identity",
+    "authority",
+    "graph",
+    "relationships",
+    "evidence",
+    "persistence",
+    "events",
+    "agents",
+    "workflows",
+  ],
+  delegatedTipCapabilities: [
+    "trade",
+    "investment",
+    "financing",
+    "collateral",
+    "settlement",
+    "tokenization",
+  ],
+  ownedDomainCapabilities: [
+    "property-discovery",
+    "property-listings",
+    "property-matching",
+    "property-operations",
+    "maintenance",
+    "property-intelligence",
+  ],
+  prohibitedDuplicates: [
+    "universal-identity",
+    "universal-authority",
+    "universal-graph",
+    "universal-registry-ontology",
+    "universal-persistence",
+    "canonical-ledger",
+    "canonical-economic-ontology",
+  ],
+};
+
+test("valid BUNK manifest conforms to OMNII and TIP dependency direction", () => {
+  assert.deepEqual(validateBunkProductManifest(validManifest), []);
+  assert.deepEqual(assertBunkProductConformance(validManifest), validManifest);
+});
+
+test("rejects a BUNK manifest that declares a duplicate universal identity or economic ontology", () => {
+  const invalid = {
+    ...validManifest,
+    capabilities: [...validManifest.capabilities, "universal-identity"],
+  };
+
+  assert.ok(
+    validateBunkProductManifest(invalid).some((error) =>
+      error.includes("must not duplicate universal capability"),
+    ),
+  );
+});
+
+test("rejects BUNK when TIP is absent from the economic boundary", () => {
+  const invalid = { ...validManifest, economicFoundationId: "BUNK" };
+  assert.ok(
+    validateBunkProductManifest(invalid).some((error) =>
+      error.includes("economicFoundationId must be TIP"),
+    ),
+  );
+});
+
+test("rejects BUNK when required OMNII dependencies are missing", () => {
+  const invalid = {
+    ...validManifest,
+    requiredOmniiCapabilities: ["identity", "graph"],
+  };
+  const errors = validateBunkProductManifest(invalid);
+  assert.ok(errors.some((error) => error.includes("missing required OMNII capability: authority")));
+  assert.ok(errors.some((error) => error.includes("missing required OMNII capability: evidence")));
+  assert.ok(errors.some((error) => error.includes("missing required OMNII capability: persistence")));
 });

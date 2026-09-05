@@ -1,0 +1,40 @@
+{
+  "registry": "omnii_repository_data_absorption_map",
+  "version": "1.0.0",
+  "purpose": "Map product-specific records, schemas and runtime data into canonical OMNII families without deleting source lineage.",
+  "families": {
+    "identity": ["RITES identity/person records","NOUN students","NASC person/institution registries","HAPI # identity","OMNI identity profiles"],
+    "relationships": ["RITES people/family/continuity relations","NASC membership and institutional relations","HAPI World social relations","Cultural Atlas entity/place/cultural relations"],
+    "intent_and_requests": ["NASC request intake","NOUN help requests","ABBA commands and intents","OMNI execution requests"],
+    "capabilities_and_skills": ["HAPI World skills","NOUN academic support capabilities","agent-skills competency patterns","ABBA/MAS agent capabilities"],
+    "knowledge": ["NOUN course content","Cultural Atlas cultural knowledge","ABBA knowledge/index structures","HAPI World learned knowledge"],
+    "memory_and_continuity": ["RITES Continuum","Carbon Actual continuum memories","HAPI World memory anchors","SPARE ownership memory"],
+    "authority_and_consent": ["RITES authority kernel","SEAL authority levels","NASC institutional authority","NOUN human escalation/consent","OMNII authority runtime"],
+    "workflows_and_execution": ["NASC workflows/tasks/workers/Zaps","NOUN onboarding/state machine/outbound queue","RITES continuity workflows","ABBA planning/execution"],
+    "economic_value": ["ABBA MAS token classification","IO/token/ledger foundations","HAPI Bank/AI Wallet patterns","Direct Bank transactions","product exchange/settlement"],
+    "evidence_and_provenance": ["NOUN message/audit/idempotency events","RITES agent evidence","Cultural Atlas source provenance","token/economic proof refs"],
+    "atlas_and_presentation": ["Cultural Atlas","HAPI World Nexus","RITES contextual Continuum","Audubon Plate/Book genealogy","BKLIT UI patterns"],
+    "integration_adapters": ["WhatsApp/Zapier","Slack","Gmail/Resend","GitHub","Vercel","MCP","workflow providers","model providers"]
+  },
+  "disposition_rules": {
+    "source_data": "retain with provenance; normalize into canonical family when structurally compatible",
+    "duplicate_schema": "replace consumer dependence with canonical schema and preserve source mapping",
+    "product_specific_behavior": "compose under product/domain module; do not promote to constitution unless universal",
+    "provider_data": "adapt behind provider boundary",
+    "legacy_conflict": "preserve historical artifact; supersede active semantics with canonical OMNII formulation"
+  },
+  "priority_sequence": [
+    "identity",
+    "relationships",
+    "intent_and_requests",
+    "capabilities_and_skills",
+    "knowledge",
+    "memory_and_continuity",
+    "authority_and_consent",
+    "workflows_and_execution",
+    "economic_value",
+    "evidence_and_provenance",
+    "atlas_and_presentation",
+    "integration_adapters"
+  ]
+}

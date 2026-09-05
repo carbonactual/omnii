@@ -63,10 +63,14 @@ Historical/customary, emerging, futuristic and extraterrestrial cases are repres
 - Material lifecycle state changes retain authority and evidence references.
 - Product implementations must classify new capabilities before adding them and reject prohibited duplication.
 
+## Runtime conformance
+
+The machine-checkable BUNK boundary is materialized in `packages/omnii-runtime/src/bunk-product-manifest.ts`, exported from `packages/omnii-runtime/src/index.ts`, and covered by `packages/omnii-runtime/tests/bunk-product-conformance.test.ts`. The runtime manifest enforces the OMNII dependency set, TIP as the economic foundation, and explicit rejection rules for universal capability duplication.
+
 ## Provenance
 
 Existing BUNK materialization remains canonical by provenance: `supabase/migrations/0001_bunk_marketplace_core.sql`, `supabase/migrations/0002_bunk_auth_roles_permissions.sql`, `packages/shared/src/domain.ts`, `packages/permissions/src/*`, `packages/auth/src/*`, BUNK-facing web routes and `builds/BUNK/*`. Runtime contracts are additive and exported from `packages/omnii-runtime/src/index.ts`.
 
 ## Evidence status
 
-The BUNK product architecture, composition contract and pure runtime contracts are materialized in this repository. Production deployment, live Supabase/RLS behavior, external land/title integrations, regulated financial activation and end-to-end production ABBA/event integration remain environment evidence questions and are not certified by documentation alone.
+The BUNK product architecture, composition contract, product manifest and pure runtime contracts are materialized in this repository. Production deployment, live Supabase/RLS behavior, external land/title integrations, regulated financial activation and end-to-end production ABBA/event integration remain environment evidence questions and are not certified by documentation alone.

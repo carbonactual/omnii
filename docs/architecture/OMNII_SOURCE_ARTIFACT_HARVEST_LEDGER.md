@@ -5,6 +5,24 @@
 
 This ledger records concrete source artifacts discovered during the repository sweep. It is deliberately more granular than the repository manifest: a repository can contain several different dispositions.
 
+## Canonical source artifact envelope
+
+Every absorbed, composed or adapted artifact must remain traceable by:
+
+`source_repository + source_ref/commit + source_path + artifact_kind + semantic_area + target_layer + disposition + provenance_note + content_hash + captured_at + reviewer_outcome`
+
+A transformation does not erase lineage. A canonical implementation may replace or strengthen source behavior, but the originating repository/path/revision remains discoverable in the source ledger and, where persisted, in `omnii_source_artifacts` / `omnii_design_genealogies`.
+
+## Allowed dispositions
+
+- `ABSORB` — semantics or implementation pattern moves into canonical OMNII capability/data/runtime.
+- `COMPOSE` — functionality remains product/domain-local but binds to OMNII contracts.
+- `ADAPT` — provider/framework implementation is retained behind a replaceable adapter.
+- `REFERENCE` — useful source evidence retained without canonical adoption yet.
+- `REJECT_SUPERSEDE` — conflicting, unsafe or weaker semantics are retained only as historical evidence and must not define runtime behavior.
+
+## Artifact ledger
+
 | Source | Artifact | What is valuable | Canonical target | Disposition |
 |---|---|---|---|---|
 | Carbon-Actual- | `api/agent.js` | ABBA request routing, authorization response shape, account/target/seal context | agent gateway/authority adapter | ABSORB + ADAPT |
@@ -52,17 +70,17 @@ This ledger records concrete source artifacts discovered during the repository s
 | Cultural Atlas | `app/page.tsx` | Atlas entry/presentation | HAPI World/Atlas | COMPOSE |
 | Product Registry | legacy product registry docs | all product branches and domain specifications | canonical product estate | ABSORB + RECONCILE |
 
-## Important reconciliation already identified
+## Reconciliation controls
 
-1. **Product registries are duplicated.** ABBA command-center registry, Carbon Actual product registry, OMNII product registry and OMNI ecosystem registry should become projections/inputs to one canonical product estate, with source lineage retained.
-2. **HAPI identity/world concepts are repeated.** HAPI World, ABBA, ABBA MAS, OMNI and BUNK references should converge on the HAPI World common participation contract and shared identity semantics.
-3. **Memory is repeated.** Continuum memory, HAPI World Memory Anchor, OMNI memory and SPARE ownership memory become one governed knowledge/memory capability with context-specific namespaces and consent/authority controls.
-4. **Authority is repeated.** RITES authority kernel, ABBA SEAL levels and OMNII authority runtime converge on the existing OMNII authority/authorization boundary.
-5. **Workflow/automation is repeated.** NASC, ABBA automation, workflow and execution-rail patterns converge into `packages/omnii-workflow` plus replaceable adapters.
-6. **Token/value formulas are repeated.** ABBA MAS economic laws converge with the existing OMNII economic tables/runtime; weaker variants are retained as provenance/reference.
-7. **Registry is a capability, not a product.** Domain/product/integration/agent/source registries become a reusable registry fabric.
-8. **Provider implementation is not architecture.** ECC, OpenClaw, CrewAI, PraisonAI, Botpress, Baserow, model APIs and MCP implementations remain adapters or references.
+1. Product registries converge to one canonical estate with projections back to product repositories.
+2. HAPI identity/world concepts converge on the HAPI World participation contract and shared identity semantics.
+3. Continuum memory, HAPI Memory Anchor, OMNI memory and ownership-memory patterns converge on governed knowledge/memory capabilities with context-specific namespaces.
+4. RITES authority concepts, ABBA SEAL levels and OMNII authority runtime converge on the canonical authority/authorization boundary.
+5. NASC, ABBA automation, workflow engines and execution-rail patterns converge into `packages/omnii-workflow` plus replaceable adapters.
+6. Token/value formulas converge with the existing OMNII economic tables/runtime; weaker variants remain provenance/reference.
+7. Domain/product/integration/agent/source registries become reusable registry capabilities rather than duplicate constitutions.
+8. ECC, OpenClaw, CrewAI, PraisonAI, Botpress, Baserow, model APIs and MCP implementations remain adapters or references.
 
 ## Data preservation requirement
 
-A source file containing data, configuration, prompt content, registry records, design metadata or implementation-specific constants must either be imported, transformed into a canonical representation with provenance, or explicitly classified as reference/rejected. It must never disappear merely because its surrounding application is consolidated.
+A source artifact containing code, data, configuration, prompt content, registry records, design metadata, implementation-specific constants or tests must either be imported, transformed into a canonical representation with provenance, or explicitly classified as reference/rejected. It must never disappear merely because its surrounding application is consolidated.

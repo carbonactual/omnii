@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "purpose": "Canonical machine-readable boundary declarations for Carbon Actual products and ecosystem surfaces.",
+  "rules": {
+    "products_cannot_define_constitution": true,
+    "products_cannot_issue_authority": true,
+    "capability_does_not_imply_authority": true,
+    "evidence_does_not_imply_authority": true,
+    "match_does_not_imply_authorization": true,
+    "plan_does_not_imply_execution": true,
+    "tokenization_does_not_imply_ownership": true,
+    "atlas_is_not_operational_truth": true
+  },
+  "products": {
+    "OMNI": { "class": "product", "runtime": "canonical OMNII projection", "consequential_gate": "authorityRef" },
+    "ABBA": { "class": "intelligence", "runtime": "canonical ABBA gateway", "consequential_gate": "authorityRef_and_guard" },
+    "NASC": { "class": "institutional_product", "runtime": "OMNII institutional adapter", "consequential_gate": "authority_and_workflow" },
+    "RITES": { "class": "domain_product", "runtime": "continuity composition", "consequential_gate": "authority_and_consent_evidence" },
+    "NOUN_STUDENT_BOT": { "class": "education_service", "runtime": "communication_and_knowledge_projection", "consequential_gate": "authority_and_human_review" },
+    "NIGERIAN_CULTURAL_ATLAS": { "class": "atlas_surface", "runtime": "governed representation", "consequential_gate": "verification_and_publication_authority" },
+    "DIRECT_BANK_APP": { "class": "financial_product", "runtime": "transaction_and_settlement_projection", "consequential_gate": "authority_and_maker_checker" },
+    "OPEN_BALLOT": { "class": "simulation_product", "runtime": "civic_process_simulation", "consequential_gate": "simulator_boundary_and_authority" },
+    "HAPI_WORLD_NEXUS": { "class": "presentation_surface", "runtime": "HAPI World client", "consequential_gate": "canonical_runtime" },
+    "BKLIT_UI": { "class": "presentation_surface", "runtime": "canonical OMNII projection", "consequential_gate": "canonical_runtime_and_authority" },
+    "HAPI_WORLD": { "class": "participation_environment", "runtime": "native autonomous agent world", "consequential_gate": "governed_crossing" }
+  },
+  "provenance": {
+    "source": "2026-09-05 runtime-binding wave",
+    "disposition": "COMPOSE"
+  }
+}

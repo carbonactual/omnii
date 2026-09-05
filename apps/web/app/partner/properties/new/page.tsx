@@ -33,6 +33,7 @@ export default function NewPropertyPage() {
     const description = String(form.get("description") ?? "").trim();
     const publicReference = `BUNK-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
     const slug = `${slugify(name)}-${crypto.randomUUID().slice(0, 6)}`;
+    const formSubmissionId = crypto.randomUUID();
 
     const { data: property, error: propertyError } = await supabase
       .from("properties")
@@ -58,7 +59,7 @@ export default function NewPropertyPage() {
     }
 
     const { error: formError } = await supabase.from("omnii_form_submissions").insert({
-      id: crypto.randomUUID(),
+      id: formSubmissionId,
       template_id: "BUNK:PROPERTY_INTAKE",
       subject_id: property.id,
       requester_id: user.id,
@@ -76,6 +77,28 @@ export default function NewPropertyPage() {
       return;
     }
 
+    const { error: queueError } = await supabase.from("bunk_review_queue").insert({
+      property_id: property.id,
+      form_submission_id: formSubmissionId,
+      action_type: "PROPERTY_INTAKE",
+      status: "pending",
+      priority: "normal",
+      requester_id: user.id,
+      evidence_refs: [],
+      provenance: {
+        root: "OMNII",
+        product: "BUNK",
+        form: "BUNK:PROPERTY_INTAKE",
+        source: "partner/properties/new"
+      }
+    });
+
+    if (queueError) {
+      setError(`The property and intake submission were recorded, but the governed review queue could not be created: ${queueError.message}`);
+      setSaving(false);
+      return;
+    }
+
     setReference(publicReference);
     setSaving(false);
   }
@@ -87,7 +110,7 @@ export default function NewPropertyPage() {
           <section className="hero compact">
             <div className="eyebrow">BUNK · Intake submitted</div>
             <h1>Property received.</h1>
-            <p>Your property record is private and awaiting the evidence, verification and human-authority steps required before public publication.</p>
+            <p>Your property record is private and has entered the governed review queue. Evidence, verification and human authority remain separate steps before public publication.</p>
             <div className="card">
               <div className="eyebrow">Reference</div>
               <h2>{reference}</h2>

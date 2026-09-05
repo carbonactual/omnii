@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "purpose": "Canonical machine-readable boundary declarations for Carbon Actual products and ecosystem surfaces.",
   "rules": {
     "products_cannot_define_constitution": true,
@@ -11,6 +11,25 @@
     "tokenization_does_not_imply_ownership": true,
     "atlas_is_not_operational_truth": true
   },
+  "consequential_capabilities": [
+    "authority.issue",
+    "authority.approve",
+    "authority.override",
+    "execution.commit",
+    "execution.deploy",
+    "execution.send",
+    "execution.transfer",
+    "execution.settle",
+    "execution.mint",
+    "execution.delete",
+    "product.publish",
+    "institution.submit",
+    "official.communicate",
+    "continuity.transition",
+    "continuity.recover",
+    "legal.handoff",
+    "official.submit"
+  ],
   "products": {
     "OMNI": { "class": "product", "runtime": "canonical OMNII projection", "consequential_gate": "authorityRef" },
     "ABBA": { "class": "intelligence", "runtime": "canonical ABBA gateway", "consequential_gate": "authorityRef_and_guard" },

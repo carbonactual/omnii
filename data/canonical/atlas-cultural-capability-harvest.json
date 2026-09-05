@@ -1,0 +1,22 @@
+{
+  "registry": "omnii_atlas_cultural_capability_harvest",
+  "version": "1.0.0",
+  "source": "carbonactual/nigerian-cultural-atlas:components/cultural-atlas.tsx",
+  "absorbed_families": ["atlas_and_presentation", "knowledge", "provenance", "relationships", "workflow_and_execution"],
+  "patterns": [
+    "cultural entities linked to place, community and heritage status",
+    "explicit source organization, source URL, last-updated timestamp and verification status",
+    "confidence, rights and geography metadata",
+    "data status distinguishing demonstration data from verified production data",
+    "atlas layers as contextual navigation rather than a generic dashboard",
+    "workflow states draft→submitted→review→approval→scheduled→active"
+  ],
+  "canonical_mapping": {
+    "CulturalEntity": "OMNII entity + relationship + place + knowledge assertion + provenance",
+    "HeritageStatus": "domain lifecycle/state attribute",
+    "Provenance": "canonical evidence/provenance envelope",
+    "AtlasLayer": "Atlas presentation/navigation composition",
+    "WorkflowState": "shared workflow lifecycle"
+  },
+  "rule": "Cultural Atlas presentation and domain semantics are preserved; demonstration data remains explicitly marked as demonstration data and is never promoted to verified fact without evidence."
+}

@@ -36,6 +36,7 @@ export function assertMatchNotAuthorization(value) {
   return value;
 }
 
+export { validateEstateBoundary } from './estate-gate.mjs';
 export { identityRef } from './identity.mjs';
 export { relationshipRef } from './relationship.mjs';
 export { intentRecord, capabilityDescriptor } from './intent.mjs';

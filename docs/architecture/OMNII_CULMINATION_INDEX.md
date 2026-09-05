@@ -27,6 +27,7 @@
 - `OMNII_REPOSITORY_DATA_ABSORPTION_MAP.md` — canonical mapping of source records into shared data families.
 - `REPOSITORY_CONTENT_CONSOLIDATION_AUDIT.md` — repository harvest rules and conformance decisions.
 - `data/canonical/product-runtime-binding-registry.json` — live estate-level mapping of product runtime crossings into OMNII.
+- `data/canonical/product-boundary-registry.json` — canonical product boundary rules and consequential capability vocabulary.
 
 ## Canonical runtime and Common Layer
 
@@ -37,6 +38,12 @@ Common Layer v1.0 currently defines 31 reusable semantic primitives. The runtime
 The broader operating fabric is:
 
 `Entity → Relationship → Intent ↔ Capability → Discovery/Matching → Context/Availability → Authority/Authorization → Workflow → Execution → Evidence → Outcome → Settlement/Ledger → Pulse/Learning`
+
+### Canonical authority and autonomy boundary
+
+Consequential capabilities are centrally recognized by `packages/omnii-common/src/authority.mjs` and published in the boundary registry. The shared gate requires authority for consequential action and explicitly prevents the gate from changing authority or ownership.
+
+At runtime, authority-required routing remains the default. A route may execute without an authority record only when the route explicitly declares `requiresAuthority: false`. This makes autonomy an explicit runtime contract rather than an accidental side effect of missing authority data. Autonomous execution is therefore bounded by context, route selection, capability policy and the route's declared autonomy boundary; it does not acquire constitutional authority.
 
 ### HAPI World common denominator
 

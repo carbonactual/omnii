@@ -1,0 +1,7 @@
+{
+  "name": "@carbonactual/omnii-economics",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Provider-independent canonical value, Pulse, tokenization, market, settlement and investment contracts for Carbon Actual OMNII."
+}

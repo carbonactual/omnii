@@ -13,6 +13,7 @@ export interface RuntimeRoute {
   workflowVersion?: string;
   capability?: string;
   actorIdentity?: string;
+  requiresAuthority?: boolean;
   metadata?: JsonObject;
 }
 
@@ -35,7 +36,7 @@ export interface RuntimeResolution {
 export interface RuntimeResolverDependencies {
   resolveContext: (signal: RuntimeSignal) => Promise<OperatingContext | null | undefined>;
   resolveAuthority: (signal: RuntimeSignal, context: OperatingContext) => Promise<Authority | null | undefined>;
-  matchRoute: (signal: RuntimeSignal, context: OperatingContext, authority: Authority) => Promise<RuntimeRoute | null | undefined>;
+  matchRoute: (signal: RuntimeSignal, context: OperatingContext, authority: Authority | null) => Promise<RuntimeRoute | null | undefined>;
   authorizeRoute?: (route: RuntimeRoute, authority: Authority, signal: RuntimeSignal) => Promise<boolean>;
 }
 
@@ -58,19 +59,6 @@ export async function resolveRuntimeSignal(
   }
 
   const authority = (await dependencies.resolveAuthority(signal, context)) ?? null;
-  if (!authority) {
-    return {
-      context,
-      authority: null,
-      route: null,
-      dispatch: {
-        allowed: false,
-        reason: "authority_unresolved",
-        correlationId: signal.correlationId,
-      },
-    };
-  }
-
   const route = (await dependencies.matchRoute(signal, context, authority)) ?? null;
   if (!route) {
     return {
@@ -85,7 +73,24 @@ export async function resolveRuntimeSignal(
     };
   }
 
-  if (dependencies.authorizeRoute && !(await dependencies.authorizeRoute(route, authority, signal))) {
+  const requiresAuthority = route.requiresAuthority !== false;
+  if (requiresAuthority && !authority) {
+    return {
+      context,
+      authority: null,
+      route,
+      dispatch: {
+        allowed: false,
+        reason: "authority_unresolved",
+        routeId: route.routeId,
+        workflowReference: route.workflowReference,
+        workflowVersion: route.workflowVersion,
+        correlationId: signal.correlationId,
+      },
+    };
+  }
+
+  if (requiresAuthority && authority && dependencies.authorizeRoute && !(await dependencies.authorizeRoute(route, authority, signal))) {
     return {
       context,
       authority,

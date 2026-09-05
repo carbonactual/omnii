@@ -31,7 +31,18 @@ test("frontier classification does not grant economic eligibility", () => {
 });
 
 test("TIP routing is mandatory for BUNK economic actions", () => {
-  const errors = validateBunkTipEconomicRequest({
+  const valid = validateBunkTipEconomicRequest({
+    propertyId: "property-1",
+    intent: "PROPERTY_INVESTMENT",
+    tipCapability: "TIP:INVESTMENT",
+    authorityId: "authority-1",
+    jurisdiction: "NG",
+    policyReference: "policy-1",
+    provenanceReference: "root-1",
+  });
+  assert.deepEqual(valid, []);
+
+  const invalid = validateBunkTipEconomicRequest({
     propertyId: "property-1",
     intent: "PROPERTY_INVESTMENT",
     tipCapability: "BUNK:INVESTMENT",
@@ -40,7 +51,7 @@ test("TIP routing is mandatory for BUNK economic actions", () => {
     policyReference: "policy-1",
     provenanceReference: "root-1",
   });
-  assert.ok(errors.some((error) => /TIP/.test(error)));
+  assert.ok(invalid.some((error) => /TIP/.test(error)));
 });
 
 test("property intelligence cannot omit evidence provenance", () => {

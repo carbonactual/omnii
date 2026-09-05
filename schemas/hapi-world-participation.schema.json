@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "omnii://schemas/hapi-world-participation/v1",
+  "title": "HAPI World Participation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["participant", "identity", "context", "provenance"],
+  "properties": {
+    "participant": { "type": "string", "minLength": 1 },
+    "identity": { "type": "object", "additionalProperties": true },
+    "subject_class": { "type": "string" },
+    "context": { "type": "object", "additionalProperties": true },
+    "relationships": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "intent": { "type": "object", "additionalProperties": true },
+    "capabilities": { "type": "array", "items": { "type": "string" } },
+    "availability": { "type": "object", "additionalProperties": true },
+    "authority_context": { "type": "object", "additionalProperties": true },
+    "authorization_context": { "type": "object", "additionalProperties": true },
+    "interaction": { "type": "object", "additionalProperties": true },
+    "workflow_ref": { "type": ["string", "null"] },
+    "evidence_refs": { "type": "array", "items": { "type": "string" } },
+    "outcomes": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "progression": { "type": "object", "additionalProperties": true },
+    "value_refs": { "type": "array", "items": { "type": "string" } },
+    "visibility": { "type": "string" },
+    "provenance": { "type": "object", "additionalProperties": true },
+    "actual_state": { "type": "object", "additionalProperties": true },
+    "becoming_state": { "type": "object", "additionalProperties": true }
+  }
+}

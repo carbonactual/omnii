@@ -44,7 +44,7 @@ export { intentRecord, capabilityDescriptor } from './intent.mjs';
 export { discover } from './discovery.mjs';
 export { match } from './matching.mjs';
 export { contextRecord, availabilityRecord } from './context.mjs';
-export { authorityContext, authorizationDecision } from './authority.mjs';
+export { authorityContext, authorizationDecision, isConsequentialCapability, canonicalActionGate } from './authority.mjs';
 export { evidenceRecord, assertEvidenceIsNotAuthority } from './evidence.mjs';
 export { valueReference, pulseObservation } from './value.mjs';
 export { workflowRecord, executionRecord } from './workflow.mjs';

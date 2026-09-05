@@ -27,11 +27,10 @@
 - `OMNII_REPOSITORY_DATA_ABSORPTION_MAP.md` — canonical mapping of source records into shared data families.
 - `REPOSITORY_CONTENT_CONSOLIDATION_AUDIT.md` — repository harvest rules and conformance decisions.
 - `data/canonical/product-runtime-binding-registry.json` — live estate-level mapping of product runtime crossings into OMNII.
-- `data/canonical/product-boundary-registry.json` — canonical product boundary rules and consequential capability vocabulary.
 
 ## Canonical runtime and Common Layer
 
-Common Layer v1.0 currently defines 31 reusable semantic primitives. The runtime chain remains:
+Common Layer v1.0 currently defines reusable semantic primitives. The runtime chain remains:
 
 `identity → authority → policy → capability → resource → dependency → execution → state transition → event → audit`
 
@@ -39,11 +38,9 @@ The broader operating fabric is:
 
 `Entity → Relationship → Intent ↔ Capability → Discovery/Matching → Context/Availability → Authority/Authorization → Workflow → Execution → Evidence → Outcome → Settlement/Ledger → Pulse/Learning`
 
-### Canonical authority and autonomy boundary
+Runtime policy is deliberately injectable rather than embedded in product code. The default policy preserves authority-gated consequential execution and explicit autonomous routes; institutions, products and deployments may supply stricter or context-specific policies for consent, jurisdiction, human review, time bounds, resource scope, risk, or other applicable controls.
 
-Consequential capabilities are centrally recognized by `packages/omnii-common/src/authority.mjs` and published in the boundary registry. The shared gate requires authority for consequential action and explicitly prevents the gate from changing authority or ownership.
-
-At runtime, authority-required routing remains the default. A route may execute without an authority record only when the route explicitly declares `requiresAuthority: false`. This makes autonomy an explicit runtime contract rather than an accidental side effect of missing authority data. Autonomous execution is therefore bounded by context, route selection, capability policy and the route's declared autonomy boundary; it does not acquire constitutional authority.
+No injected policy may create constitutional authority, transfer ownership implicitly, or turn evidence, capability, matching, tokenization, or intelligence into authority.
 
 ### HAPI World common denominator
 
@@ -107,6 +104,8 @@ Products are not mini-constitutions. They are compositions of:
 
 `OMNII Core + Shared Capabilities + HAPI World + Domain Modules + Institutional Configuration + Data + Policy/Rules + Integrations + Presentation`
 
+Products should consume canonical contracts and injected policy rather than fork authority semantics locally. A product-specific rule belongs in configuration or an adapter unless the underlying meaning is truly constitutional.
+
 The canonical product registry remains authoritative for current implementation status. Historical product names discovered in legacy repositories are retained as source evidence and are not automatically marked as built.
 
 ## Provider independence
@@ -129,4 +128,4 @@ When a capability or concept exists in another repository and is absent or weake
 6. wire products to the canonical implementation;
 7. leave the original repository as a branch/reference unless retirement is separately justified.
 
-**The goal is not one giant repository containing every line of code. The goal is one canonical ecosystem intelligence and architecture containing every valuable idea, capability and relationship, with every implementation properly situated.**
+**The goal is not one giant repository containing every line of code. The goal is one canonical ecosystem intelligence and architecture containing every valuable idea, capability and relationship, with every implementation properly situated and replaceable.**

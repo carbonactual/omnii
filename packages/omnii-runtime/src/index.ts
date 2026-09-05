@@ -45,6 +45,7 @@ export * from "./transport-proof-runtime";
 export * from "./operating-context-runtime";
 export * from "./operating-context-links";
 export * from "./runtime-signal";
+export * from "./runtime-policy";
 export * from "./runtime-resolver";
 export * from "./execution-controller";
 export * from "./evidence-projector";

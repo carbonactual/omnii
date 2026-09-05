@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 function slugify(value: string) {
@@ -9,10 +8,10 @@ function slugify(value: string) {
 }
 
 export default function NewPropertyPage() {
-  const router = useRouter();
   const supabase = createSupabaseBrowserClient();
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [reference, setReference] = useState<string | null>(null);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -49,7 +48,7 @@ export default function NewPropertyPage() {
         updated_by: user.id,
         public_visibility: false
       })
-      .select("id,slug")
+      .select("id")
       .single();
 
     if (propertyError || !property) {
@@ -72,12 +71,36 @@ export default function NewPropertyPage() {
     });
 
     if (formError) {
-      setError(`Property created, but the intake submission could not be recorded: ${formError.message}`);
+      setError(`The property record was created, but the governed intake submission could not be recorded: ${formError.message}`);
       setSaving(false);
       return;
     }
 
-    router.push(`/properties/${property.slug}`);
+    setReference(publicReference);
+    setSaving(false);
+  }
+
+  if (reference) {
+    return (
+      <main>
+        <div className="shell">
+          <section className="hero compact">
+            <div className="eyebrow">BUNK · Intake submitted</div>
+            <h1>Property received.</h1>
+            <p>Your property record is private and awaiting the evidence, verification and human-authority steps required before public publication.</p>
+            <div className="card">
+              <div className="eyebrow">Reference</div>
+              <h2>{reference}</h2>
+              <p>Keep this reference for the verification and review journey.</p>
+              <div className="actions">
+                <a className="button primary" href="/discover">Back to discovery</a>
+                <a className="button" href="/onboarding/role">Review operating role</a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    );
   }
 
   return (

@@ -1,6 +1,7 @@
 import { Authority, JsonObject } from "./types";
 import { OperatingContext } from "./operating-context-runtime";
 import { RuntimeSignal } from "./runtime-signal";
+import { defaultRuntimePolicy, RuntimePolicy } from "./runtime-policy";
 
 export interface AuthorityResolution {
   authority: Authority | null;
@@ -19,7 +20,7 @@ export interface RuntimeRoute {
 
 export interface DispatchDecision {
   allowed: boolean;
-  reason?: "context_unresolved" | "authority_unresolved" | "authority_invalid" | "route_unresolved" | "approval_required" | "capability_denied";
+  reason?: "context_unresolved" | "authority_unresolved" | "authority_invalid" | "route_unresolved" | "approval_required" | "capability_denied" | "policy_denied";
   routeId?: string;
   workflowReference?: string;
   workflowVersion?: string;
@@ -38,6 +39,7 @@ export interface RuntimeResolverDependencies {
   resolveAuthority: (signal: RuntimeSignal, context: OperatingContext) => Promise<Authority | null | undefined>;
   matchRoute: (signal: RuntimeSignal, context: OperatingContext, authority: Authority | null) => Promise<RuntimeRoute | null | undefined>;
   authorizeRoute?: (route: RuntimeRoute, authority: Authority, signal: RuntimeSignal) => Promise<boolean>;
+  policy?: RuntimePolicy;
 }
 
 export async function resolveRuntimeSignal(
@@ -50,11 +52,7 @@ export async function resolveRuntimeSignal(
       context: null,
       authority: null,
       route: null,
-      dispatch: {
-        allowed: false,
-        reason: "context_unresolved",
-        correlationId: signal.correlationId,
-      },
+      dispatch: { allowed: false, reason: "context_unresolved", correlationId: signal.correlationId },
     };
   }
 
@@ -65,23 +63,20 @@ export async function resolveRuntimeSignal(
       context,
       authority,
       route: null,
-      dispatch: {
-        allowed: false,
-        reason: "route_unresolved",
-        correlationId: signal.correlationId,
-      },
+      dispatch: { allowed: false, reason: "route_unresolved", correlationId: signal.correlationId },
     };
   }
 
-  const requiresAuthority = route.requiresAuthority !== false;
-  if (requiresAuthority && !authority) {
+  const policy = dependencies.policy ?? defaultRuntimePolicy;
+  const decision = await policy({ capability: route.capability, route, authority });
+  if (!decision.allowed) {
     return {
       context,
-      authority: null,
+      authority,
       route,
       dispatch: {
         allowed: false,
-        reason: "authority_unresolved",
+        reason: decision.reason === "authority-required" ? "authority_unresolved" : "policy_denied",
         routeId: route.routeId,
         workflowReference: route.workflowReference,
         workflowVersion: route.workflowVersion,
@@ -90,7 +85,7 @@ export async function resolveRuntimeSignal(
     };
   }
 
-  if (requiresAuthority && authority && dependencies.authorizeRoute && !(await dependencies.authorizeRoute(route, authority, signal))) {
+  if (decision.requiresAuthority && authority && dependencies.authorizeRoute && !(await dependencies.authorizeRoute(route, authority, signal))) {
     return {
       context,
       authority,

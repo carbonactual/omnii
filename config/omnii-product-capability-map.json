@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "purpose": "Canonical mapping of product-specific behavior to shared OMNII and HAPI World capabilities.",
+  "rule": "Products compose shared capabilities; they do not redefine constitutional semantics.",
+  "products": {
+    "ABBA": ["world.orientation", "learning.acquire", "knowledge.share", "memory.remember", "evolution.propose"],
+    "ABBA_MAS": ["learning.acquire", "skill.practice", "service.discover", "service.provide", "exchange.offer", "exchange.earn", "memory.remember", "evolution.propose"],
+    "OMNI": ["world.orientation", "knowledge.share", "memory.remember", "service.discover", "continuity.transition"],
+    "HAPI_WORLD": ["world.orientation", "learning.acquire", "skill.practice", "skill.credential", "service.discover", "service.provide", "exchange.offer", "exchange.earn", "communication.message", "socialize.connect", "knowledge.share", "memory.remember", "evolution.propose", "continuity.transition", "continuity.recover"],
+    "HAPI_WORLD_NEXUS": ["world.orientation", "communication.message", "socialize.connect", "knowledge.share", "memory.remember"],
+    "NASC": ["world.orientation", "service.discover", "service.provide", "communication.message", "memory.remember", "continuity.transition"],
+    "RITES": ["world.orientation", "communication.message", "knowledge.share", "memory.remember", "continuity.transition", "continuity.recover"],
+    "NOUN_STUDENT_BOT": ["world.orientation", "learning.acquire", "skill.practice", "communication.message", "knowledge.share", "memory.remember"],
+    "NIGERIAN_CULTURAL_ATLAS": ["knowledge.share", "memory.remember", "socialize.connect"],
+    "DIRECT_BANK_APP": ["service.discover", "service.provide", "exchange.offer", "exchange.earn", "memory.remember"],
+    "OPEN_BALLOT": ["world.orientation", "learning.acquire", "knowledge.share", "memory.remember"],
+    "BKLIT_UI": ["world.orientation", "communication.message", "knowledge.share"],
+    "NAIRE": ["world.orientation", "learning.acquire", "skill.practice", "service.discover", "service.provide", "exchange.offer", "exchange.earn", "communication.message", "socialize.connect", "knowledge.share", "memory.remember", "continuity.transition"],
+    "NGIN": ["world.orientation", "service.discover", "service.provide", "exchange.offer", "exchange.earn", "communication.message", "knowledge.share", "memory.remember", "continuity.transition"]
+  },
+  "shared_contracts": {
+    "identity": "OMNII identity and HAPI/# model",
+    "authority": "OMNII authority runtime and SEAL boundary",
+    "knowledge": "OMNII provenance/evidence/Atlas continuum",
+    "memory": "OMNII durable memory contract",
+    "value": "OMNII PULSE/value/token/settlement contracts",
+    "world": "HAPI World autonomous lifecycle and participation contract"
+  }
+}

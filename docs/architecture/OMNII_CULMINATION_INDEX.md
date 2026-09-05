@@ -26,6 +26,7 @@
 - `OMNII_SOURCE_ARTIFACT_HARVEST_LEDGER.md` — source artifact lineage and absorption status.
 - `OMNII_REPOSITORY_DATA_ABSORPTION_MAP.md` — canonical mapping of source records into shared data families.
 - `REPOSITORY_CONTENT_CONSOLIDATION_AUDIT.md` — repository harvest rules and conformance decisions.
+- `data/canonical/product-runtime-binding-registry.json` — live estate-level mapping of product runtime crossings into OMNII.
 
 ## Canonical runtime and Common Layer
 
@@ -78,6 +79,14 @@ Anything that creates alternate constitutional authority, hidden provider lock-i
 Source artifacts are not reduced to documentation summaries. Code, functions, modules, schemas, registries, exports, configuration, prompts, UI patterns, workflows, tests, integration definitions and data models are each classified separately so their useful semantics can be absorbed into the correct canonical layer.
 
 The canonical source-to-data mapping groups repository-derived material into identity, relationships, intent/requests, capabilities/skills, knowledge, memory/continuity, authority/consent, workflows/execution, economic value, evidence/provenance, Atlas/presentation and integration adapters.
+
+## Runtime binding wave
+
+The current runtime-binding wave converts the conformance doctrine into product-local contracts while preserving product specialization and source lineage.
+
+The first bound surfaces are ABBA, NASC, RITES, NOUN Student Bot, OMNI, Direct Bank App, Open Ballot, Nigerian Cultural Atlas, HAPI World, HAPI World Nexus and BKLIT UI. Each has a declared crossing, consequential-action gate and provenance path in `product-runtime-binding-registry.json`.
+
+These bindings are **boundary-ready**, not a claim that every remote deployment or external integration has been end-to-end certified. Repository CI execution, Supabase execution and third-party provider connectivity remain separately verifiable conditions.
 
 ## Design genealogy
 

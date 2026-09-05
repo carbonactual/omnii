@@ -1,0 +1,7 @@
+{
+  "name": "@carbonactual/omnii-knowledge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Provider-independent canonical memory, knowledge, evidence, Atlas and ecological design genealogy contracts for Carbon Actual OMNII."
+}

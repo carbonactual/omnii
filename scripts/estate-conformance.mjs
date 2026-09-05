@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { isConsequentialCapability } from '../packages/omnii-common/src/authority.mjs';
 
 const FORBIDDEN = ['identity-authority','capability-authority','match-authorization','evidence-authority','token-ownership','plan-execution','product-constitution','provider-constitution'];
 
@@ -52,6 +53,15 @@ export function validateEstateMap() {
     if (boundaryRegistry.rules?.[rule] !== true) errors.push(`boundary rule disabled: ${rule}`);
   }
 
+  const consequentialCapabilities = boundaryRegistry.consequential_capabilities ?? [];
+  if (!Array.isArray(consequentialCapabilities) || consequentialCapabilities.length === 0) {
+    errors.push('consequential capability vocabulary is empty');
+  } else {
+    for (const capability of consequentialCapabilities) {
+      if (!isConsequentialCapability(capability)) errors.push(`runtime gate missing capability: ${capability}`);
+    }
+  }
+
   for (const [name, item] of Object.entries(capabilityHarvest.capabilities ?? {})) {
     if (!item.target) errors.push(`${name}: target is required`);
     if (!item.disposition) errors.push(`${name}: disposition is required`);
@@ -86,6 +96,7 @@ export function validateEstateMap() {
     bindingCount: boundProductNames.size,
     sharedCapabilityCount: sharedCapabilities.size,
     capabilityHarvestCount: Object.keys(capabilityHarvest.capabilities ?? {}).length,
+    consequentialCapabilityCount: consequentialCapabilities.length,
     tradeClassCount: tradeInventory.trade?.length ?? 0,
     investmentClassCount: tradeInventory.investment?.length ?? 0,
     eligibilityBoundaryCount: tradeInventory.eligibility_boundary?.length ?? 0,

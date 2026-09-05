@@ -14,7 +14,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\"",
-    "test:runtime": "node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\""
+    "test:runtime": "node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\"",
+    "conformance": "node scripts/estate-conformance.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.4",

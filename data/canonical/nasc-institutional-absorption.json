@@ -1,0 +1,26 @@
+{
+  "registry": "omnii_nasc_institutional_absorption",
+  "version": "1.0.0",
+  "source_repository": "carbonactual/abba-automation-ecosystem",
+  "source_paths": ["lib/nasc/seed.ts", "lib/nasc/types.ts"],
+  "registries": [
+    {"slug":"institution","canonical_type":"institution"},
+    {"slug":"person","canonical_type":"human"},
+    {"slug":"membership","canonical_type":"relationship"},
+    {"slug":"property","canonical_type":"property"},
+    {"slug":"vehicle","canonical_type":"vehicle"},
+    {"slug":"event","canonical_type":"event"},
+    {"slug":"document","canonical_type":"document"},
+    {"slug":"evidence","canonical_type":"evidence"}
+  ],
+  "workflow": ["intake","validation","authority_review","decision","action","closed"],
+  "actors": ["human","agent","system"],
+  "canonical_record_mapping": {
+    "NascRegistry":"OMNII registry",
+    "NascRecord":"OMNII object + provenance",
+    "NascRequest":"OMNII intent/request + workflow instance",
+    "NascWorkflowEvent":"OMNII event + state transition + actor",
+    "NascEvidence":"OMNII evidence/provenance record"
+  },
+  "rule": "NASC remains an institutional composition; its registry and workflow machinery is reusable across NGIN and other institutions through OMNII common contracts."
+}

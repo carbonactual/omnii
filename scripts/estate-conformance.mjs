@@ -37,33 +37,46 @@ export function validateEstateMap() {
     if (!boundary.consequential_gate) errors.push(`${product}: consequential_gate is required`);
   }
 
-  if (boundaryRegistry.rules?.products_cannot_define_constitution !== true) errors.push('constitutional definition boundary is not enabled');
-  if (boundaryRegistry.rules?.products_cannot_issue_authority !== true) errors.push('authority issuance boundary is not enabled');
-  if (boundaryRegistry.rules?.capability_does_not_imply_authority !== true) errors.push('capability/authority boundary is not enabled');
-  if (boundaryRegistry.rules?.evidence_does_not_imply_authority !== true) errors.push('evidence/authority boundary is not enabled');
-  if (boundaryRegistry.rules?.match_does_not_imply_authorization !== true) errors.push('match/authorization boundary is not enabled');
-  if (boundaryRegistry.rules?.plan_does_not_imply_execution !== true) errors.push('plan/execution boundary is not enabled');
-  if (boundaryRegistry.rules?.tokenization_does_not_imply_ownership !== true) errors.push('tokenization/ownership boundary is not enabled');
-  if (boundaryRegistry.rules?.atlas_is_not_operational_truth !== true) errors.push('Atlas truth boundary is not enabled');
+  const requiredRules = [
+    'products_cannot_define_constitution',
+    'products_cannot_issue_authority',
+    'capability_does_not_imply_authority',
+    'evidence_does_not_imply_authority',
+    'match_does_not_imply_authorization',
+    'plan_does_not_imply_execution',
+    'tokenization_does_not_imply_ownership',
+    'atlas_is_not_operational_truth'
+  ];
+  for (const rule of requiredRules) {
+    if (boundaryRegistry.rules?.[rule] !== true) errors.push(`boundary rule disabled: ${rule}`);
+  }
 
-  for (const item of capabilityHarvest.capability_harvest ?? []) {
-    if (!item.capability) errors.push('capability harvest entry missing capability');
-    if (!item.disposition) errors.push(`${item.capability}: disposition is required`);
-    if (!item.target_package) errors.push(`${item.capability}: target_package is required`);
+  for (const [name, item] of Object.entries(capabilityHarvest.capabilities ?? {})) {
+    if (!item.target) errors.push(`${name}: target is required`);
+    if (!item.disposition) errors.push(`${name}: disposition is required`);
+  }
+  if (capabilityHarvest.provenance_required !== true) errors.push('agent capability harvest provenance requirement is disabled');
+  if (!/No harvested agent capability may create or expand authority/i.test(capabilityHarvest.authority_rule || '')) {
+    errors.push('agent capability harvest authority rule is missing');
   }
 
   if (!Array.isArray(tradeInventory.trade) || tradeInventory.trade.length === 0) errors.push('trade inventory is empty');
   if (!Array.isArray(tradeInventory.investment) || tradeInventory.investment.length === 0) errors.push('investment inventory is empty');
+  if (!Array.isArray(tradeInventory.eligibility_boundary) || tradeInventory.eligibility_boundary.length === 0) errors.push('eligibility boundary inventory is empty');
+
+  const uniqueProducts = new Set(Object.keys(boundaryProducts));
+  if (uniqueProducts.size !== Object.keys(boundaryProducts).length) errors.push('duplicate product boundary detected');
 
   return {
     valid: errors.length === 0,
     errors,
     productCount: Object.keys(map.products).length,
-    boundaryCount: Object.keys(boundaryProducts).length,
+    boundaryCount: uniqueProducts.size,
     sharedCapabilityCount: sharedCapabilities.size,
-    capabilityHarvestCount: capabilityHarvest.capability_harvest?.length ?? 0,
+    capabilityHarvestCount: Object.keys(capabilityHarvest.capabilities ?? {}).length,
     tradeClassCount: tradeInventory.trade?.length ?? 0,
     investmentClassCount: tradeInventory.investment?.length ?? 0,
+    eligibilityBoundaryCount: tradeInventory.eligibility_boundary?.length ?? 0,
     forbiddenSemantics: [...FORBIDDEN]
   };
 }

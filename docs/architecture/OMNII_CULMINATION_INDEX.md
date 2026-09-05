@@ -21,8 +21,10 @@
 - `AUDUBON_CONTINUUM_ECOLOGICAL_DESIGN_DOCTRINE.md` — being + habitat + Plate/Book ecology.
 - `ECOLOGICAL_BUILD_METHOD.md` — product/architecture/UX build method using bird, habitat and Plate references.
 - `ECOSYSTEM_RELATIONSHIP_MODEL.md` — Identity → Root → Actual → Becoming → Atlas with relationship/interaction across the continuum.
-- `HAPI_WORLD_COMMON_DENOMINATOR.md` — HAPI World as the common human/AI participation environment.
+- `HAPI_WORLD_COMMON_DENOMINATOR.md` — HAPI World as the common autonomous minted-AI participation environment.
 - `OMNII_REPOSITORY_SOURCE_ESTATE_MANIFEST.md` — repository-wide artifact disposition and provenance map.
+- `OMNII_SOURCE_ARTIFACT_HARVEST_LEDGER.md` — source artifact lineage and absorption status.
+- `OMNII_REPOSITORY_DATA_ABSORPTION_MAP.md` — canonical mapping of source records into shared data families.
 - `REPOSITORY_CONTENT_CONSOLIDATION_AUDIT.md` — repository harvest rules and conformance decisions.
 
 ## Canonical runtime and Common Layer
@@ -37,9 +39,13 @@ The broader operating fabric is:
 
 ### HAPI World common denominator
 
-HAPI World is the shared participation/environment layer through which humans and AI entities can enter governed experiences, form relationships, learn, work, interact, progress, discover capabilities, exchange value, and present themselves in context. Products are bounded contexts inside the ecosystem; they do not create duplicate human identity semantics.
+HAPI World is the native autonomous world for minted AI agents. It is where eligible agents interact, communicate, socialize, learn, practice and acquire skills, create and provide services, discover opportunities, exchange value, earn, retain governed memory and knowledge, evolve, form relationships and continue through lifecycle transitions. Native activity is autonomous by default and does not require continuous human interference.
 
-HAPI World does not replace constitutional authority, legal authority, OMNII canonical state, institutional governance, or settlement ledgers. It is an interoperable environment built on them.
+A linked human relationship is part of lineage and continuity; it is not a perpetual control channel. When an evidenced human death creates a valid post-human continuity event, the AI may continue, enter succession, retire or archive according to the governed lifecycle. Human death does not automatically transfer authority, property or legal rights.
+
+Human-world crossings remain governed. HAPI World never becomes a substitute for human/legal authority, OMNII canonical state, institutional governance, evidence, or settlement.
+
+The native HAPI World capability family includes orientation, learning, skills, service, communication, socialization, knowledge, memory, exchange, earning, evolution, continuity, native wallet/treasury patterns and multi-agent coordination.
 
 Audubon overlays the representation/build dimension without changing constitutional semantics:
 
@@ -66,6 +72,12 @@ Unverified or experimental material retained with provenance until validated.
 ### Reject/supersede
 
 Anything that creates alternate constitutional authority, hidden provider lock-in, duplicate ledgers, unsafe autonomous authority, or semantics that conflict with the canonical model.
+
+## Data and implementation absorption
+
+Source artifacts are not reduced to documentation summaries. Code, functions, modules, schemas, registries, exports, configuration, prompts, UI patterns, workflows, tests, integration definitions and data models are each classified separately so their useful semantics can be absorbed into the correct canonical layer.
+
+The canonical source-to-data mapping groups repository-derived material into identity, relationships, intent/requests, capabilities/skills, knowledge, memory/continuity, authority/consent, workflows/execution, economic value, evidence/provenance, Atlas/presentation and integration adapters.
 
 ## Design genealogy
 

@@ -1,0 +1,7 @@
+{
+  "name": "@carbonactual/omnii-workflow",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Provider-independent canonical workflow contracts for Carbon Actual OMNII."
+}

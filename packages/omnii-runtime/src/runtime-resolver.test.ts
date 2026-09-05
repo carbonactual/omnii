@@ -12,20 +12,34 @@ describe("runtime resolver", () => {
     idempotencyKey: "idem-1",
   };
 
-  it("blocks when authority is unresolved", async () => {
+  const context = { id: "ctx-1", subjectId: "s1", mode: "test", capacity: "operator", jurisdiction: "NG", validFrom: signal.receivedAt };
+  const authority = { id: "auth-1", subject: "operator-1", scope: ["service.execute"], capabilities: ["service.execute"], issued_at: signal.receivedAt, revocable: true };
+
+  it("blocks authority-required routes when authority is unresolved", async () => {
     const result = await resolveRuntimeSignal(signal, {
-      resolveContext: async () => ({ id: "ctx-1", subjectId: "s1", mode: "test", capacity: "operator", jurisdiction: "NG", validFrom: signal.receivedAt }),
+      resolveContext: async () => context,
       resolveAuthority: async () => null,
-      matchRoute: async () => null,
+      matchRoute: async () => ({ routeId: "route-1", capability: "service.execute" }),
     });
     expect(result.dispatch.allowed).toBe(false);
     expect(result.dispatch.reason).toBe("authority_unresolved");
   });
 
-  it("resolves a route and preserves correlation", async () => {
+  it("permits explicitly autonomous routes without authority", async () => {
     const result = await resolveRuntimeSignal(signal, {
-      resolveContext: async () => ({ id: "ctx-1", subjectId: "s1", mode: "test", capacity: "operator", jurisdiction: "NG", validFrom: signal.receivedAt }),
-      resolveAuthority: async () => ({ id: "auth-1", subject: "operator-1", scope: ["service.execute"], capabilities: ["service.execute"], issued_at: signal.receivedAt, revocable: true }),
+      resolveContext: async () => context,
+      resolveAuthority: async () => null,
+      matchRoute: async () => ({ routeId: "route-autonomous", capability: "world.learn", requiresAuthority: false }),
+    });
+    expect(result.dispatch.allowed).toBe(true);
+    expect(result.authority).toBeNull();
+    expect(result.dispatch.routeId).toBe("route-autonomous");
+  });
+
+  it("resolves an authority-required route and preserves correlation", async () => {
+    const result = await resolveRuntimeSignal(signal, {
+      resolveContext: async () => context,
+      resolveAuthority: async () => authority,
       matchRoute: async () => ({ routeId: "route-1", workflowReference: "workflow-1", workflowVersion: "1", capability: "service.execute" }),
       authorizeRoute: async () => true,
     });

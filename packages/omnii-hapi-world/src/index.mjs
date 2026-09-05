@@ -1,4 +1,6 @@
-const VERSION = '1.0.0';
+import { HAPI_WORLD_LIFECYCLE, POST_HUMAN_STATES, canTransition, transition, enterPostHumanContinuity, retireAgent } from './lifecycle.mjs';
+
+const VERSION = '1.1.0';
 
 function required(value, name) {
   if (value === undefined || value === null || value === '') throw new Error(`${name} is required`);
@@ -15,6 +17,8 @@ export function createParticipation(input) {
     participant: input.participant,
     identity: input.identity,
     context: input.context,
+    world: 'HAPI_WORLD',
+    autonomous: true,
     relationships: input.relationships ?? [],
     capabilities: input.capabilities ?? [],
     evidence_refs: input.evidence_refs ?? [],
@@ -32,10 +36,20 @@ export function crossProduct(participant, product, context = {}) {
     product,
     context,
     relationship: 'hapi-world-crossing',
-    authorized: false
+    authorized: false,
+    identity_continuity: true
   };
 }
 
 export function hapiWorldVersion() {
   return VERSION;
 }
+
+export {
+  HAPI_WORLD_LIFECYCLE,
+  POST_HUMAN_STATES,
+  canTransition,
+  transition,
+  enterPostHumanContinuity,
+  retireAgent
+};

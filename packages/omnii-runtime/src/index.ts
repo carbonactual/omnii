@@ -58,3 +58,4 @@ export * from "./bunk-property-ontology";
 export * from "./bunk-property-lifecycle";
 export * from "./bunk-economic-boundary";
 export * from "./bunk-property-intelligence";
+export * from "./bunk-composition-runtime";

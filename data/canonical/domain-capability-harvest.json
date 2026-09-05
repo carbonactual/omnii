@@ -1,0 +1,37 @@
+{
+  "registry": "omnii_domain_capability_harvest",
+  "version": "1.0.0",
+  "sources": {
+    "direct-bank-app": {
+      "canonical_families": ["economic_value", "workflow_and_execution", "evidence_and_provenance", "integration_adapters"],
+      "patterns": [
+        "receiving account and incoming payment lifecycle",
+        "transfer request with beneficiary bank/account/name and customer debit reference",
+        "transaction retrieval by id or reference",
+        "payment webhook payload contracts",
+        "weekly settlement and month-end flush",
+        "tiered billing and dedicated settlement/control architecture"
+      ],
+      "source_paths": [
+        "src/server2.js",
+        "PRODUCT_FOUNDATION/WEBHOOK_PAYLOAD_EXAMPLES.json",
+        "docs/direct-bank-commercial-operating-model.md",
+        "docs/direct-bank-tiered-pricing.md"
+      ]
+    },
+    "RITES": {
+      "canonical_families": ["memory_and_continuity", "identity", "relationships", "authority_and_consent", "workflow_and_execution", "agents"],
+      "patterns": [
+        "contextual Continuum presentation",
+        "continuity workflow trigger→enrich→policy→classify→recommend→approval→action→verify→emit→notify",
+        "bounded agent registry with identity, purpose, capabilities, subject scope, approval requirements, sensitivity ceiling, tools, expiry and audit behavior",
+        "family, heritage, estate, ceremony, mortuary, cemetery, genealogy, DNA, medical continuity, legal handoff, religious rite, government reporting, marketplace, provision, scenario, memorial and accessibility agent roles"
+      ],
+      "source_paths": [
+        "docs/RITES_IMPLEMENTATION_ROADMAP_V1.md",
+        "docs/superpowers/specs/2026-08-18-rites-continuum-design.md"
+      ]
+    }
+  },
+  "absorption_rule": "These are domain capabilities and data contracts, not new constitutional layers. Preserve domain behavior while binding identity, authority, evidence, workflow, value and provenance to OMNII common contracts."
+}

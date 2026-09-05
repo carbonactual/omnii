@@ -55,3 +55,4 @@ export * from "./task-queue-runtime";
 export * from "./process-progression-runtime";
 export * from "./process-worker-runtime";
 export * from "./bunk-property-ontology";
+export * from "./bunk-property-lifecycle";

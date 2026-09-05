@@ -1,0 +1,107 @@
+{
+  "version": "1.0.0",
+  "purpose": "Machine-readable record of product runtime bindings into OMNII without flattening domain implementations.",
+  "canonical_runtime": "OMNII",
+  "bindings": {
+    "ABBA": {
+      "repository": "carbonactual/abba",
+      "role": "intelligence",
+      "binding": "canonical ABBA runtime contract",
+      "authority_gate": "authority_and_guard",
+      "status": "BOUNDARY_READY",
+      "lineage": ["src/omnii/runtime-contract.mjs"]
+    },
+    "NASC": {
+      "repository": "carbonactual/abba-automation-ecosystem",
+      "role": "institutional_product",
+      "binding": "institutional registry/workflow adapter",
+      "authority_gate": "authority_and_workflow",
+      "status": "BOUNDARY_READY",
+      "lineage": ["lib/nasc/omnii-boundary.ts"]
+    },
+    "RITES": {
+      "repository": "carbonactual/RITES",
+      "role": "continuity_domain",
+      "binding": "continuity/relationship/evidence composition",
+      "authority_gate": "authority_and_consent_evidence",
+      "status": "BOUNDARY_READY",
+      "lineage": ["src/omnii-boundary.mjs"]
+    },
+    "NOUN_STUDENT_BOT": {
+      "repository": "carbonactual/noun-student-bot",
+      "role": "education_service",
+      "binding": "communication/knowledge projection",
+      "authority_gate": "authority_and_human_review",
+      "status": "BOUNDARY_READY",
+      "lineage": ["lib/omnii-boundary.ts"]
+    },
+    "OMNI": {
+      "repository": "carbonactual/omni",
+      "role": "operating_environment",
+      "binding": "canonical state projection",
+      "authority_gate": "canonical_runtime_authority",
+      "status": "BOUNDARY_READY",
+      "lineage": ["api/omnii-projection-contract.mjs"]
+    },
+    "DIRECT_BANK_APP": {
+      "repository": "carbonactual/direct-bank-app",
+      "role": "financial_product",
+      "binding": "transaction/settlement controls",
+      "authority_gate": "authority_and_maker_checker",
+      "status": "BOUNDARY_READY",
+      "lineage": ["src/platform/omnii-contract.mjs"]
+    },
+    "OPEN_BALLOT": {
+      "repository": "carbonactual/open-ballot",
+      "role": "simulation_product",
+      "binding": "simulation/evidence projection",
+      "authority_gate": "simulator_boundary_and_authority",
+      "status": "BOUNDARY_READY",
+      "lineage": ["lib/omnii-boundary.ts"]
+    },
+    "NIGERIAN_CULTURAL_ATLAS": {
+      "repository": "carbonactual/nigerian-cultural-atlas",
+      "role": "atlas_surface",
+      "binding": "provenance/verification/publication projection",
+      "authority_gate": "verification_and_publication_authority",
+      "status": "BOUNDARY_READY",
+      "lineage": ["lib/omnii-boundary.ts"]
+    },
+    "HAPI_WORLD": {
+      "repository": "carbonactual/hapi-world",
+      "role": "participation_environment",
+      "binding": "native autonomous agent world",
+      "authority_gate": "governed_crossing",
+      "status": "BOUNDARY_READY",
+      "lineage": ["omnii-hapi-world-boundary.json"]
+    },
+    "HAPI_WORLD_NEXUS": {
+      "repository": "carbonactual/hapi-world-nexus",
+      "role": "presentation_ecosystem_client",
+      "binding": "communication/relationship projection",
+      "authority_gate": "canonical_runtime",
+      "status": "BOUNDARY_READY",
+      "lineage": ["src/omnii-contract.mjs"]
+    },
+    "BKLIT_UI": {
+      "repository": "carbonactual/bklit-ui",
+      "role": "presentation_surface",
+      "binding": "canonical projection and runtime routing",
+      "authority_gate": "canonical_runtime_and_authority",
+      "status": "BOUNDARY_READY",
+      "lineage": ["packages/ui/src/omnii-boundary.ts"]
+    }
+  },
+  "rules": [
+    "Products remain domain-specific compositions.",
+    "Provider and framework code remains replaceable adapter infrastructure.",
+    "Boundary-ready does not mean production deployment verified.",
+    "Authority is never inferred from capability, evidence, matching, tokenization, or product membership.",
+    "HAPI World autonomy does not transfer legal authority or ownership.",
+    "Atlas remains governed representation rather than operational truth."
+  ],
+  "source": {
+    "repository": "carbonactual/omnii",
+    "disposition": "COMPOSE"
+  }
+}

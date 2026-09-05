@@ -1,0 +1,21 @@
+{
+  "source_repository": "carbonactual/Carbon-Actual-",
+  "source_path": "data/product_family_registry_v2.json",
+  "source_revision": "1fbc0d165c9675f681da8cfdc0b4ec32ad418ad0",
+  "captured_into_omnii_at": "2026-09-05",
+  "provenance": {"status":"source_snapshot","canonical_truth":false},
+  "registry": "product_family_registry_v2",
+  "version": "2.0.0",
+  "ecosystem": "Carbon Actual",
+  "doctrine": "Carbon Actual is a product constellation. IO is the exchange core.",
+  "spine": ["hash", "ABBA", "IO", "PULSE", "Proof", "Return"],
+  "families": [
+    {"id":"core","role":"foundation","count":11},
+    {"id":"exchange","role":"routing and transformation","count":9},
+    {"id":"ai","role":"reasoning and agency","count":7},
+    {"id":"learning","role":"human and AI formation","count":7},
+    {"id":"value","role":"finance and proof backed value","count":10},
+    {"id":"sector","role":"large product families","count":11}
+  ],
+  "definition_fields": ["input", "operation", "output", "value", "proof", "owner", "route", "approval_rule"]
+}

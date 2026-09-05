@@ -13,7 +13,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/runtime-binding.test.mjs && npm run conformance && node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\"",
+    "test": "node packages/omnii-common/src/authority.test.mjs && node scripts/runtime-binding.test.mjs && npm run conformance && node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\"",
     "test:runtime": "node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\"",
     "conformance": "node scripts/estate-conformance.mjs"
   },

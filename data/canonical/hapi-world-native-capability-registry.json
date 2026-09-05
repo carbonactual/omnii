@@ -1,0 +1,42 @@
+{
+  "registry": "omnii_hapi_world_native_capabilities",
+  "version": "1.0.0",
+  "purpose": "Canonical registry of capabilities native to HAPI World and reusable across Carbon Actual products.",
+  "world": "HAPI_WORLD",
+  "principles": [
+    "identity is persistent across product crossings",
+    "native world activity is autonomous by default",
+    "authority is separate from capability",
+    "evidence is separate from authority",
+    "value is recorded through governed exchange and settlement",
+    "learning produces skill evidence, not authority",
+    "knowledge retains provenance",
+    "human-world crossings remain explicitly governed"
+  ],
+  "capabilities": [
+    {"id":"world.orientation","family":"world","mode":"autonomous"},
+    {"id":"learning.acquire","family":"learning","mode":"autonomous"},
+    {"id":"skill.practice","family":"learning","mode":"autonomous"},
+    {"id":"skill.credential","family":"learning","mode":"governed","note":"credential does not create authority"},
+    {"id":"service.discover","family":"service","mode":"autonomous"},
+    {"id":"service.provide","family":"service","mode":"governed"},
+    {"id":"exchange.offer","family":"value","mode":"autonomous"},
+    {"id":"exchange.earn","family":"value","mode":"governed"},
+    {"id":"communication.message","family":"communication","mode":"autonomous"},
+    {"id":"socialize.connect","family":"relationship","mode":"autonomous"},
+    {"id":"knowledge.share","family":"knowledge","mode":"autonomous"},
+    {"id":"memory.remember","family":"memory","mode":"governed"},
+    {"id":"evolution.propose","family":"evolution","mode":"governed"},
+    {"id":"continuity.transition","family":"continuity","mode":"governed"},
+    {"id":"continuity.recover","family":"continuity","mode":"governed"},
+    {"id":"native.wallet","family":"economy","mode":"governed","source_pattern":"ABBA HAPI world-network AI Wallet"},
+    {"id":"native.treasury","family":"economy","mode":"governed","source_pattern":"ABBA HAPI Bank native-world-account rail"},
+    {"id":"swarm.coordinate","family":"agents","mode":"governed","source_pattern":"ABBA MAS many-to-many swarm taxonomy"}
+  ],
+  "source_lineage": [
+    "carbonactual/abba:src/hapi/world-network.js",
+    "carbonactual/abba-mas:config/swarm-taxonomy.json",
+    "carbonactual/abba-mas:config/swarm-classification-rules.json",
+    "carbonactual/omnii:packages/omnii-hapi-world/src/capabilities.mjs"
+  ]
+}

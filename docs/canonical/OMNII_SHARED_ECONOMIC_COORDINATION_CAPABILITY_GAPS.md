@@ -384,6 +384,24 @@ This is the connective intelligence layer between requirements, supply, capabili
 
 It may route concrete source candidates into Global Sourcing and potential new value relationships into Global Opportunity, without becoming either registry.
 
+## 26. Global Market Intelligence
+
+Canonical scope: `docs/canonical/OMNII_GLOBAL_MARKET_INTELLIGENCE_SCOPE.md`.
+
+Market Intelligence describes and interprets changing market conditions including demand, supply, prices, capacity, competition, substitutes, trade, access, finance, logistics, risk and trends. It supplies evidence-backed market context to Sourcing, Opportunity, Matching, Desk, TIP and institutional systems without becoming a marketplace, exchange, regulator or forecasting oracle.
+
+## 27. Global Research Intelligence
+
+Canonical scope: `docs/canonical/OMNII_GLOBAL_RESEARCH_INTELLIGENCE_SCOPE.md`.
+
+Research Intelligence provides global evidence discovery, retrieval, normalization, comparison, synthesis, knowledge investigation and monitoring across domains. It preserves provenance, disagreement, uncertainty, access restrictions and the distinction between fact, interpretation, inference, forecast and hypothesis.
+
+## 28. Global Verification & Trust Intelligence
+
+Canonical scope: `docs/canonical/OMNII_GLOBAL_VERIFICATION_AND_TRUST_INTELLIGENCE_SCOPE.md`.
+
+Verification & Trust Intelligence evaluates claims against evidence for a declared purpose, scope and time. It supports identity, provider/factory capability, credentials, product quality, provenance and performance while preserving regulatory authority, privacy and contextual trust boundaries.
+
 ## Reuse targets
 
 These capabilities should be available to any ecosystem composition involving:
@@ -399,7 +417,7 @@ These capabilities should be available to any ecosystem composition involving:
 - territorial operating systems
 - future products
 
-## Boundary between the three capabilities
+## Boundary between the capabilities
 
 ```text
 SOURCING
@@ -413,9 +431,36 @@ Signal / surplus / gap / possibility
 MATCHING & DISCOVERY INTELLIGENCE
 Needs + supply + people + assets + conditions
 → Discover relationships, rank possibilities, and connect the right objects
+
+MARKET INTELLIGENCE
+External market conditions
+→ Understand what is changing and how it affects available paths
+
+RESEARCH INTELLIGENCE
+Questions + evidence + unknowns
+→ Investigate, synthesize and contextualize knowledge
+
+VERIFICATION & TRUST
+Claim + evidence + purpose + scope + time
+→ Determine what can responsibly be relied upon
 ```
 
-These three capabilities cooperate through shared contracts but remain independently reusable and independently governed.
+These capabilities cooperate through shared contracts but remain independently reusable and independently governed.
+
+## Forward roadmap
+
+The canonical next-wave roadmap is maintained in `docs/canonical/OMNII_GLOBAL_CAPABILITY_EVOLUTION_ROADMAP.md` and currently identifies:
+
+- Global Network & Corridor Intelligence
+- Global Resource & Capacity Exchange Intelligence
+- Global Finance & Funding Discovery
+- Global Trade & Regulatory Intelligence
+- Global Procurement Intelligence
+- Global Capability Development Intelligence
+- Global Resilience & Disruption Intelligence
+- Global Economic Outcome Intelligence
+
+Before any future capability is created, the ecosystem must first test whether existing canonical primitives already provide the required meaning. New capability scope is justified only when its purpose and boundary are genuinely distinct and reusable.
 
 ## Non-goals
 

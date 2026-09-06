@@ -48,6 +48,7 @@ describe("OperatingContextRuntime", () => {
       fleetId: "fleet-1",
       mode: "rental",
       capacity: "rental_user",
+      jurisdiction: "NG",
       validFrom: "2026-09-01T08:00:00.000Z",
       validUntil: "2026-09-01T12:00:00.000Z",
     });

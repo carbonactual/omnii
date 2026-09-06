@@ -65,6 +65,25 @@ test('InstituteGPT native capabilities are capabilities, not products', () => {
   }
 });
 
+test('credential authority remains outside InstituteGPT', () => {
+  assert.equal(
+    EDUCATION_LAYER.credentialAuthorityRule,
+    'EXTERNAL_ISSUER_OR_REGULATOR_RETAINS_AUTHORITATIVE_CONTROL',
+  );
+  assert.equal(
+    EDUCATION_LAYER.productBoundaryRule,
+    'PRODUCT_REQUIRES_INDEPENDENT_SEMANTIC_OPERATIONAL_AND_ECOSYSTEM_BOUNDARY',
+  );
+});
+
+test('provider integration remains an adapter boundary rather than a foundation', () => {
+  assert.equal(EDUCATION_LAYER.providerIntegrationMode, 'REPLACEABLE_ADAPTER');
+  for (const foundation of Object.values(EDUCATION_LAYER.sharedFoundations)) {
+    assert.equal(foundation, 'SHARED');
+  }
+  assert.ok(EDUCATION_LAYER.nativeInstituteGPTCapabilities.includes('provider_integrations'));
+});
+
 test('education component classifications preserve boundaries', () => {
   assert.deepEqual(classifyEducationComponent({ kind: 'learning_capability' }), {
     kind: 'learning_capability',

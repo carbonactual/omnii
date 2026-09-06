@@ -7,6 +7,10 @@
 
 A capability discovered through Desk must be evaluated for ecosystem reuse first. Desk-specific presentation, workflow configuration or provider adapters may live in Desk; the underlying semantic capability belongs here when it can serve another ecosystem product.
 
+## Global-by-default rule
+
+All shared economic coordination capabilities are global by default. Geography is context, constraint and jurisdiction, never a substitute for the underlying capability ontology. Local, national, regional, continental and global implementations consume the same canonical semantics through jurisdiction packs, policies and adapters.
+
 ## Shared capabilities
 
 ### 1. Intent & Need Graph
@@ -356,6 +360,30 @@ discovered
 
 The capability state is separate from legal licensing and market eligibility.
 
+## 23. Global Sourcing Capability
+
+Canonical scope: `docs/canonical/OMNII_GLOBAL_SOURCING_SCOPE.md`.
+
+Global Sourcing is the ecosystem's find-and-qualify access layer for satisfying concrete requirements. It covers global source discovery for goods, factories, production capacity, services, people, technology, infrastructure, capital, market access and other fulfillable requirements; requirement normalization; evidence/provenance; supplier and capability qualification; source comparison; sourcing strategies; substitutions; aggregation; replacement sourcing; and sourcing lifecycle management.
+
+It is global-by-default and uses jurisdiction/configuration for local rules. External directories and marketplaces are source adapters, not constitutional authorities.
+
+## 24. Global Opportunity Capability
+
+Canonical scope: `docs/canonical/OMNII_GLOBAL_OPPORTUNITY_SCOPE.md`.
+
+Global Opportunity is the ecosystem's discover-what-could-be layer. It identifies potential value arising from demand, supply, capability, assets, gaps, idle capacity, timing, relationships, infrastructure, capital, technology, market conditions and other signals. It supports opportunity generation, qualification, composition, aggregation, packaging, alerts, portfolios, reverse opportunities and outcome learning.
+
+Opportunity is distinct from sourcing: sourcing starts with a requirement to obtain something; opportunity starts with a signal or possibility and determines what value could be unlocked.
+
+## 25. Global Matching & Discovery Intelligence
+
+Canonical scope: `docs/canonical/OMNII_GLOBAL_MATCHING_AND_DISCOVERY_INTELLIGENCE_SCOPE.md`.
+
+This is the connective intelligence layer between requirements, supply, capabilities, people, assets, markets and conditions. It performs semantic discovery, exact/approximate matching, multi-party matching, ranking, recommendation, graph traversal, gap detection, substitution discovery, reverse discovery, temporal matching, cross-domain discovery and explainable optimization.
+
+It may route concrete source candidates into Global Sourcing and potential new value relationships into Global Opportunity, without becoming either registry.
+
 ## Reuse targets
 
 These capabilities should be available to any ecosystem composition involving:
@@ -370,6 +398,24 @@ These capabilities should be available to any ecosystem composition involving:
 - institutional systems
 - territorial operating systems
 - future products
+
+## Boundary between the three capabilities
+
+```text
+SOURCING
+Known requirement
+→ Find and qualify ways to obtain it
+
+OPPORTUNITY
+Signal / surplus / gap / possibility
+→ Determine what value or action could be unlocked
+
+MATCHING & DISCOVERY INTELLIGENCE
+Needs + supply + people + assets + conditions
+→ Discover relationships, rank possibilities, and connect the right objects
+```
+
+These three capabilities cooperate through shared contracts but remain independently reusable and independently governed.
 
 ## Non-goals
 

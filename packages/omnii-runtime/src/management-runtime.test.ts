@@ -45,13 +45,15 @@ test("management runtime observes outcome, reconciles state and records Pulse", 
   const mandate = await runtime.createMandate({ subjectId: "service-1", objective: "Improve uptime", authorityRef: "policy-1", managerRef: "manager-1", scope: "service" });
 
   await runtime.observe(mandate.id, { uptime: 99.5, incidents: 2 });
-  await runtime.completeWork(mandate.id, "work-1", { result: "stabilized" });
+  const work = await runtime.createWork(mandate.id, { title: "Stabilize service", assignee: "agent-1", capabilityIds: ["delivery"], dependencyIds: [], authorityRef: "policy-1" });
+  await runtime.completeWork(mandate.id, work.id, { result: "stabilized" });
   const pulse = await runtime.recordOutcome(mandate.id, { outcome: "uptime-improved", valueCreated: 40, valuePreserved: 10, moneyAmount: 5, evidenceRefs: ["obs-1"] });
   const summary = await runtime.snapshot(mandate.id);
 
   assert.equal(pulse.outcome, "uptime-improved");
   assert.equal(summary.latestObservation?.uptime, 99.5);
   assert.equal(summary.latestPulse?.valueCreated, 40);
+  assert.equal(summary.work.find((item) => item.id === work.id)?.state, "completed");
 });
 
 test("management runtime rejects work when the mandate does not exist", async () => {

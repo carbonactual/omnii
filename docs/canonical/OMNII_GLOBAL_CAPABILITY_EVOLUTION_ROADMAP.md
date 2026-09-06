@@ -14,9 +14,9 @@ local → territorial → national → regional → continental → global
 
 Geography is represented as context, jurisdiction, availability and constraint. A country-specific implementation is a configuration, adapter, jurisdiction pack or institutional deployment—not a separate definition of the capability.
 
-## 2. Capability family already established
+## 2. Canonical capability family
 
-The current canonical family is:
+The ecosystem capability family now includes:
 
 ```text
 Intent / Need
@@ -29,171 +29,67 @@ Matching / Discovery Intelligence
 Market Intelligence
 Research Intelligence
 Verification / Trust Intelligence
+Network / Corridor Intelligence
+Resource / Capacity Exchange Intelligence
+Finance / Funding Discovery
+Trade / Regulatory Intelligence
+Procurement Intelligence
+Capability Development Intelligence
+Resilience / Disruption Intelligence
+Economic Outcome Intelligence
 ```
 
-These remain independent capabilities with shared contracts.
+These are independent capabilities with shared contracts. The eight capabilities in sections A–H below have been materialized as canonical scope documents.
 
-## 3. Recommended next capability wave
+## 3. Materialized global capability wave
 
 ### A. Global Network & Corridor Intelligence
 
-Understand how goods, people, services, data and value can move through physical and digital networks.
+Canonical scope: `docs/canonical/OMNII_GLOBAL_NETWORK_AND_CORRIDOR_INTELLIGENCE_SCOPE.md`.
 
-Scope:
-- corridors
-- nodes
-- ports
-- airports
-- roads
-- rail
-- maritime
-- air freight
-- warehousing
-- consolidation/deconsolidation
-- border crossings
-- transfer points
-- capacity
-- congestion
-- reliability
-- cost/time observations
-- backhaul
-- network resilience
-- route alternatives
-- disruption detection
-
-Boundary: extends route/network primitives into intelligence; does not become a carrier or transport regulator.
+Understands physical and digital networks, corridors, nodes, ports, airports, roads, rail, maritime, air freight, warehousing, borders, capacity, congestion, reliability, cost/time, backhaul, alternatives and disruption.
 
 ### B. Global Resource & Capacity Exchange Intelligence
 
-Make latent capacity discoverable across machines, factories, warehouses, land, energy, compute, transport and skilled human capability.
+Canonical scope: `docs/canonical/OMNII_GLOBAL_RESOURCE_AND_CAPACITY_EXCHANGE_INTELLIGENCE_SCOPE.md`.
 
-Scope:
-- available capacity
-- idle capacity
-- future capacity
-- reservation
-- utilization
-- capacity release
-- capacity pooling
-- capacity matching
-- capacity forecasting
-- shared-resource models
-
-Boundary: enriches the Supply & Capacity Graph without replacing it.
+Makes latent capacity discoverable across factories, machines, warehouses, land, energy, transport, compute, facilities and skilled human capability, including availability, reservation, pooling and utilization.
 
 ### C. Global Finance & Funding Discovery
 
-Discover lawful funding paths for needs, assets, trade and projects without becoming a bank or investment authority.
+Canonical scope: `docs/canonical/OMNII_GLOBAL_FINANCE_AND_FUNDING_DISCOVERY_SCOPE.md`.
 
-Scope:
-- finance discovery
-- trade finance
-- equipment finance
-- working capital
-- supplier credit
-- receivables
-- grants
-- guarantees
-- investment opportunities
-- financing eligibility signals
-- financing-gap detection
-- funding composition
-
-Boundary: routes to regulated providers and preserves finance-specific authority.
+Discovers lawful funding pathways for working capital, trade, equipment, assets, projects and capability development while routing regulated decisions to authorized providers.
 
 ### D. Global Trade & Regulatory Intelligence
 
-Understand jurisdictional requirements affecting cross-border activity.
+Canonical scope: `docs/canonical/OMNII_GLOBAL_TRADE_AND_REGULATORY_INTELLIGENCE_SCOPE.md`.
 
-Scope:
-- import/export conditions
-- tariffs/duties
-- product restrictions
-- licensing
-- standards
-- customs processes
-- origin
-- documentation
-- taxes
-- sanctions/restrictions where applicable
-- regulatory changes
-- jurisdiction comparison
-
-Boundary: intelligence and routing only; regulated execution remains with authorities and licensed providers.
+Understands import/export conditions, tariffs, duties, licensing, standards, origin, valuation, customs processes, restrictions, documentation and regulatory change by jurisdiction.
 
 ### E. Global Procurement Intelligence
 
-Understand institutional purchasing demand and procurement pathways.
+Canonical scope: `docs/canonical/OMNII_GLOBAL_PROCUREMENT_INTELLIGENCE_SCOPE.md`.
 
-Scope:
-- tenders
-- RFQs/RFPs
-- recurring procurement
-- framework opportunities
-- supplier eligibility
-- procurement calendars
-- demand aggregation
-- bid preparation support
-- procurement analytics
-
-Boundary: does not become a procurement authority or guarantee contract awards.
+Discovers and interprets tenders, RFQs, RFPs, frameworks, recurring procurement, institutional demand, eligibility signals, deadlines and bid-support pathways.
 
 ### F. Global Capability Development Intelligence
 
-Identify what must be developed when existing supply cannot satisfy demand.
+Canonical scope: `docs/canonical/OMNII_GLOBAL_CAPABILITY_DEVELOPMENT_INTELLIGENCE_SCOPE.md`.
 
-Scope:
-- skills gaps
-- machinery gaps
-- production gaps
-- technology gaps
-- standards gaps
-- infrastructure gaps
-- training pathways
-- certification pathways
-- local manufacturing pathways
-- technology transfer
-- shared facility opportunities
-- industrial cluster opportunities
-
-Boundary: identifies and composes development paths; implementation remains with participants/institutions.
+Diagnoses skills, machinery, production, technology, standards, infrastructure, capital and market-access gaps and identifies development pathways including training, equipment, licensing, transfer, partnerships and shared facilities.
 
 ### G. Global Resilience & Disruption Intelligence
 
-Continuously detect conditions that could break existing economic or institutional pathways.
+Canonical scope: `docs/canonical/OMNII_GLOBAL_RESILIENCE_AND_DISRUPTION_INTELLIGENCE_SCOPE.md`.
 
-Scope:
-- supplier disruption
-- capacity loss
-- route disruption
-- regulatory shocks
-- price shocks
-- demand shocks
-- dependency concentration
-- single-point-of-failure detection
-- alternative-path planning
-- continuity scenarios
-
-Boundary: resilience intelligence and orchestration, not autonomous assumption of legal/control authority.
+Detects dependencies, supplier/route/capacity/regulatory/market disruptions, concentration risk and continuity alternatives while keeping decision authority explicit.
 
 ### H. Global Economic Outcome Intelligence
 
-Measure whether executed paths actually created value and where value leaked.
+Canonical scope: `docs/canonical/OMNII_GLOBAL_ECONOMIC_OUTCOME_INTELLIGENCE_SCOPE.md`.
 
-Scope:
-- expected vs actual outcome
-- cost/value variance
-- delivery performance
-- capacity utilization
-- time saved
-- risk realized
-- failure cost
-- avoided loss
-- participant benefit
-- ecosystem effects
-- repeatability
-
-It feeds Pulse, Value/VCE, reputation, sourcing, opportunity and future recommendations.
+Measures expected versus actual cost, value, time, quality, capacity, risk, failure, leakage and benefit, then feeds learning into Value, Pulse, reputation and future recommendations.
 
 ## 4. Recommended architecture sequence
 
@@ -229,19 +125,15 @@ OUTCOME INTELLIGENCE
 PULSE / VALUE / LEARNING
 ```
 
-This is a dependency-aware capability sequence, not a requirement that all capability layers ship simultaneously.
+This is a dependency-aware sequence. It does not require every capability to ship as one product.
 
 ## 5. Product composition rule
 
-Products such as Desk, Marketplace, Trading/TIP, HAPI World, BUNK, Charter, agriculture, media, institutional systems and territorial operating systems consume these capabilities.
-
-They must not redefine them locally when the underlying meaning is shared.
+Desk, Marketplace, Trading/TIP, HAPI World, BUNK, Charter, agriculture, media, institutional systems and territorial operating systems consume these capabilities through canonical contracts. They do not redefine shared meaning locally.
 
 ## 6. Global source strategy
 
-External providers, marketplaces, registries, data feeds, research sources, logistics platforms and financial services are adapters/evidence sources.
-
-No external service becomes constitutional authority merely because it is integrated.
+External providers, marketplaces, registries, data feeds, research sources, logistics platforms and financial services are adapters/evidence sources. No external service becomes constitutional authority merely because it is integrated.
 
 ## 7. Evidence and uncertainty rule
 
@@ -259,7 +151,7 @@ assumptions
 inference status
 ```
 
-The ecosystem never turns a discovered possibility, AI inference or stale record into a confirmed fact without appropriate evidence.
+A discovered possibility, AI inference or stale record is never silently promoted to confirmed fact.
 
 ## 8. Future recommendation rule
 
@@ -271,7 +163,7 @@ Before creating a new capability, evaluate:
 4. Can it operate globally with jurisdiction-specific configuration?
 5. Does it preserve Human Authority, evidence, policy, TIP/IO, Value/VCE and Pulse boundaries?
 
-If an existing capability can provide the meaning, create an adapter/composition rather than a new ontology.
+If existing canonical meaning is sufficient, create an adapter or composition rather than a new ontology.
 
 ## 9. Ultimate ecosystem flow
 
@@ -287,6 +179,8 @@ SOURCING or OPPORTUNITY
 VERIFICATION
         ↓
 NETWORK / CAPACITY / FINANCE / TRADE
+        ↓
+PROCUREMENT / DEVELOPMENT where required
         ↓
 COMPOSITION
         ↓

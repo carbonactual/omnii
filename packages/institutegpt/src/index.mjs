@@ -71,13 +71,13 @@ export {
   createLearningWallet,
   createCpdActivity,
   createProviderAdapterProfile,
-} from './advance-product.mjs';
+} from './institutegpt-learning-services.mjs';
 
 export {
-  ADVANCE_PROVIDER_PROFILES,
-  getAdvanceProviderProfile,
-  listAdvanceProviders,
-} from './advance-providers.mjs';
+  INSTITUTEGPT_PROVIDER_PROFILES,
+  getInstituteGPTProviderProfile,
+  listInstituteGPTProviders,
+} from './institutegpt-providers.mjs';
 
 export {
   ONBOARDING_CURRICULUM_DIMENSIONS,

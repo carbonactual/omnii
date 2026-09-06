@@ -20,10 +20,16 @@
 
 The ecosystem is global-by-default. Geography is represented as context, jurisdiction, routing constraint and configuration; it does not redefine a capability's canonical semantics.
 
+### Discovery and economic coordination family
+
 - `OMNII_GLOBAL_SOURCING_SCOPE.md` — universal sourcing capability for finding and qualifying ways to satisfy requirements across products, factories, services, people, assets, technology, infrastructure, capital and market access.
 - `OMNII_GLOBAL_OPPORTUNITY_SCOPE.md` — universal opportunity capability for discovering, qualifying and composing latent value arising from demand, supply, capability, assets, gaps, timing, markets, infrastructure, capital and other signals.
 - `OMNII_GLOBAL_MATCHING_AND_DISCOVERY_INTELLIGENCE_SCOPE.md` — reusable semantic discovery, matching, ranking, recommendation, graph-traversal and optimization layer connecting requirements, supply, capabilities, people, assets and conditions.
-- `OMNII_SHARED_ECONOMIC_COORDINATION_CAPABILITY_GAPS.md` — ecosystem register containing the shared economic coordination primitives and the boundary among Sourcing, Opportunity and Matching.
+- `OMNII_GLOBAL_MARKET_INTELLIGENCE_SCOPE.md` — market-condition intelligence covering demand, supply, prices, capacity, competition, trade, access, risk, trends and scenarios across jurisdictions.
+- `OMNII_GLOBAL_RESEARCH_INTELLIGENCE_SCOPE.md` — global evidence discovery, research, synthesis, comparison and knowledge investigation across domains.
+- `OMNII_GLOBAL_VERIFICATION_AND_TRUST_INTELLIGENCE_SCOPE.md` — evidence-based verification and contextual trust intelligence for identity, capability, quality, credentials, provenance and performance.
+- `OMNII_GLOBAL_CAPABILITY_EVOLUTION_ROADMAP.md` — forward roadmap for subsequent global shared capability layers and the global-by-default evolution rule.
+- `OMNII_SHARED_ECONOMIC_COORDINATION_CAPABILITY_GAPS.md` — ecosystem register containing the reusable economic coordination primitives and the boundary among these capabilities.
 
 Canonical distinction:
 
@@ -39,6 +45,18 @@ signal / surplus / gap / possibility
 MATCHING & DISCOVERY INTELLIGENCE
 needs + supply + people + assets + conditions
 → discover relationships, rank possibilities and connect the right objects
+
+MARKET INTELLIGENCE
+external market conditions
+→ understand what is changing and how it affects available paths
+
+RESEARCH INTELLIGENCE
+evidence / questions / unknowns
+→ investigate, synthesize and contextualize what is known
+
+VERIFICATION & TRUST
+a claim + evidence + scope + time
+→ determine what can responsibly be relied upon for a purpose
 ```
 
 These are shared ecosystem capabilities, not products, and may be composed by Desk, TIP, HAPI World, institutional systems and future products.

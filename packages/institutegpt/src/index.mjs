@@ -84,3 +84,8 @@ export {
   createEducationOnboardingProfile,
   curateInstituteGPTLearning,
 } from './onboarding-curation.mjs';
+
+export {
+  EDUCATION_LAYER,
+  classifyEducationComponent,
+} from './education-layer-contract.mjs';

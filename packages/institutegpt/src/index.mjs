@@ -33,3 +33,11 @@ export {
   findEducationCapabilities,
   getEducationDomain,
 } from './education-capability-map.mjs';
+
+export {
+  INSTITUTEGPT_PRODUCTS,
+  OPEN_ED_DEPLOYMENT_PROFILES,
+  getInstituteGPTProduct,
+  getOpenEdDeployment,
+  resolveOpenEdDeployment,
+} from './open-ed-products.mjs';

@@ -22,7 +22,9 @@ const BUILT_PRODUCT_CATALOG = [
   ['NIGERIAN_CULTURAL_ATLAS','carbonactual/nigerian-cultural-atlas','cultural product'],
   ['BKLIT_UI','carbonactual/bklit-ui','presentation/UI'],
   ['BUNK','carbonactual/omnii','property product'],
-  ['NOUN_STUDENT_BOT','carbonactual/noun-student-bot','education product']
+  ['OPEN_ED_BOT','carbonactual/omnii','InstituteGPT global open-education product'],
+  ['INSTITUTEGPT_NOTEBOOK','carbonactual/omnii','InstituteGPT learning/research/teaching workspace'],
+  ['NOUN_BOT','carbonactual/noun-student-bot','institution-specific OpenEd Bot deployment']
 ];
 
 export const BUILT_PRODUCT_REPOSITORIES = Object.freeze(

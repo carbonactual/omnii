@@ -61,9 +61,9 @@ export class NABCertificationRuntime {
     };
 
     await this.persistence.create("registries", {
+      ...record,
       id,
       subject_type: "nab_asset_certification",
-      ...record,
     });
 
     return record;

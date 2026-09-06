@@ -18,7 +18,8 @@ create index if not exists omnii_management_type_idx on public.omnii_management 
 
 alter table public.omnii_management enable row level security;
 
-create policy if not exists "omnii_management_service_role_all"
+drop policy if exists "omnii_management_service_role_all" on public.omnii_management;
+create policy "omnii_management_service_role_all"
   on public.omnii_management
   for all
   to service_role

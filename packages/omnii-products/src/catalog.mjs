@@ -24,6 +24,7 @@ const BUILT_PRODUCT_CATALOG = [
   ['BUNK','carbonactual/omnii','property product'],
   ['OPEN_ED_BOT','carbonactual/omnii','InstituteGPT global open-education product'],
   ['INSTITUTEGPT_NOTEBOOK','carbonactual/omnii','InstituteGPT learning/research/teaching workspace'],
+  ['INSTITUTEGPT_EXAMS','carbonactual/omnii','InstituteGPT examination and testing product'],
   ['NOUN_BOT','carbonactual/noun-student-bot','institution-specific OpenEd Bot deployment']
 ];
 

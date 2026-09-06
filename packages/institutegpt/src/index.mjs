@@ -26,3 +26,10 @@ export {
   createPlacement,
   createAiCapabilityAssessment,
 } from './education-model.mjs';
+
+export {
+  EDUCATION_PROGRESSION_STAGES,
+  EDUCATION_CAPABILITY_DOMAINS,
+  findEducationCapabilities,
+  getEducationDomain,
+} from './education-capability-map.mjs';

@@ -11,3 +11,18 @@ export {
   shouldRouteToInstituteGPT,
   normalizeLearningIntent,
 } from './routing.mjs';
+
+export {
+  EDUCATION_ENTITY_TYPES,
+  createInstitution,
+  createProgramme,
+  createCurriculum,
+  createCourse,
+  createCohort,
+  createEnrollment,
+  canAdvanceEnrollment,
+  createAssessmentResult,
+  createCredentialReference,
+  createPlacement,
+  createAiCapabilityAssessment,
+} from './education-model.mjs';

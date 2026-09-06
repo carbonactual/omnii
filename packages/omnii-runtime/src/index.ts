@@ -51,7 +51,15 @@ export * from "./execution-controller";
 export * from "./evidence-projector";
 export * from "./reconciliation-runtime";
 export * from "./feedback-runtime";
-export * from "./runtime-activation";
+export {
+  RuntimeActivation,
+  type DispatchStatus,
+  type ActivationRoute,
+  type ActivationResolution,
+  type ActivationExecutionResult,
+  type RuntimeActivationDependencies,
+  type RuntimeActivationResult,
+} from "./runtime-activation";
 export * from "./task-queue-runtime";
 export * from "./process-progression-runtime";
 export * from "./process-worker-runtime";

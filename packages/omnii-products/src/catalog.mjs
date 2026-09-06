@@ -29,6 +29,20 @@ const BUILT_PRODUCT_CATALOG = [
   ['NOUN_BOT','carbonactual/noun-student-bot','institution-specific OpenEd Bot deployment']
 ];
 
+export const EDUCATION_LAYER_PRODUCT_HIERARCHY = Object.freeze({
+  layer: 'EDUCATION_LAYER',
+  canonicalProduct: 'INSTITUTEGPT',
+  products: Object.freeze([
+    'INSTITUTEGPT',
+    'OPEN_ED_BOT',
+    'INSTITUTEGPT_NOTEBOOK',
+    'INSTITUTEGPT_EXAMS'
+  ]),
+  deployments: Object.freeze(['NOUN_BOT']),
+  removedProductKeys: Object.freeze(['INSTITUTEGPT_ADVANCE']),
+  rule: 'A capability is not a product unless it has an independently meaningful semantic, operational and ecosystem boundary.'
+});
+
 export const BUILT_PRODUCT_REPOSITORIES = Object.freeze(
   BUILT_PRODUCT_CATALOG.map(([productKey, repository, architecturalClass]) =>
     Object.freeze({ productKey, repository, architecturalClass })

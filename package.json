@@ -13,7 +13,7 @@
     "start": "next start apps/web",
     "lint": "next lint apps/web",
     "typecheck": "tsc --noEmit",
-    "test": "node packages/omnii-common/src/authority.test.mjs && node packages/omnii-common/src/io.test.mjs && node packages/omnii-common/src/io-boundary.test.mjs && node packages/institutegpt/src/contracts.test.mjs && node --test packages/institutegpt/tests/education-model.test.mjs && node packages/institutegpt/src/education-capability-map.test.mjs && node scripts/runtime-binding.test.mjs && npm run conformance && node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\"",
+    "test": "node packages/omnii-common/src/authority.test.mjs && node packages/omnii-common/src/io.test.mjs && node packages/omnii-common/src/io-boundary.test.mjs && node packages/institutegpt/src/contracts.test.mjs && node --test packages/institutegpt/tests/education-model.test.mjs && node packages/institutegpt/src/education-capability-map.test.mjs && node --test packages/institutegpt/src/open-ed-products.test.mjs && node scripts/runtime-binding.test.mjs && npm run conformance && node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\"",
     "test:runtime": "node --import tsx --test \"packages/omnii-runtime/tests/*.test.ts\"",
     "conformance": "node scripts/estate-conformance.mjs"
   },

@@ -231,7 +231,85 @@ InstituteGPT may coordinate physical learning through universal scheduling, reso
 
 The physical activity remains the domain/provider's operational reality; InstituteGPT supplies the educational structure.
 
-## 28. Governance boundaries
+## 28. Open education and OpenEd Bot
+
+Open Education is a first-class InstituteGPT composition, not a separate educational ontology.
+
+`InstituteGPT → OpenEd Bot → institution deployment`
+
+OpenEd Bot covers the global open, distance, flexible, online, blended and lifelong education value chain, including OER discovery, authoring, adaptation, licensing/provenance, open pedagogy, open courseware, distributed learner support, study centres, ODL quality assurance, open assessment, portable credentials, interoperability, cross-border mobility, open research and sustainable open-education models.
+
+UNESCO's OER framework is incorporated as an external normative reference. OpenEd Bot preserves the distinction between public access and an open licence and preserves attribution, provenance and reuse restrictions.
+
+OpenEd Bot composes reusable standards adapters including 1EdTech LTI, Edu-API, OneRoster, QTI, CASE, Caliper, CLR and Open Badges, plus W3C Verifiable Credentials and applicable national/regional quality and qualification frameworks. The adapters are replaceable and do not redefine OMNII.
+
+## 29. OpenEd institutional deployment
+
+A specific open or distance tertiary institution is configured from OpenEd Bot rather than rebuilt:
+
+`OpenEd Bot + institutional identity + authority references + programmes + curricula + academic calendar + admissions + learner support + study centres + assessment rules + grading + credential rules + QA/accreditation + integrations + local language/context + data/privacy policies + branding`
+
+Example:
+
+`NOUN Bot = OpenEd Bot + NOUN institutional configuration`
+
+The same pattern can produce deployments for other open universities, dual-mode universities, distance-learning centres, TVET/ODL institutions, regional consortia and lifelong-learning providers.
+
+## 30. InstituteGPT Notebook
+
+InstituteGPT Notebook is a first-class product/workspace within InstituteGPT and OpenEd Bot.
+
+It supports:
+
+`study notes | course notebooks | research notebooks | teaching notebooks | field notebooks | laboratory notebooks | reading journals | project workspaces | reflective practice | portfolio evidence | supervisor feedback | group work`
+
+Notebook entries may link to learning objects, sources, competencies, assessments, experiences, credentials and IO events. It supports multimodal capture, source provenance, AI-assisted study context, version history and portable learning/evidence export.
+
+## 31. Global standards and interoperability
+
+InstituteGPT and OpenEd Bot use a standards-adapter strategy. Relevant open/global standards include UNESCO OER policy; 1EdTech LTI, Edu-API, OneRoster, QTI, CASE, Caliper, CLR and Open Badges; W3C Verifiable Credentials 2.0; and applicable national/regional frameworks.
+
+CASE can provide machine-readable competency/standards alignment; QTI can provide assessment portability; LTI can connect external learning tools; CLR/Open Badges and W3C VC can support portable verified achievement records. These integrations remain adapters rather than replacements for OMNII's learning semantics.
+
+## 32. Education quality and assurance
+
+InstituteGPT includes quality as a continuous lifecycle:
+
+`design → review → delivery → evidence → learner feedback → learning outcomes → completion/progression → graduate outcomes → tracer/employment evidence → improvement`
+
+For OpenEd/ODL providers this extends to institutional policy, programme/course design, learner support, infrastructure, assessment, evaluation, community engagement, accessibility, regulatory compliance and accreditation readiness.
+
+## 33. Access, inclusion and localization
+
+OpenEd must work across:
+
+`urban | rural | low-bandwidth | offline | mobile | shared-device | basic-phone/voice-assisted | multilingual | disability-accessible | displaced/refugee | working-adult | caregiver | non-traditional learner`
+
+Language, device, network, accessibility and cultural context are configuration dimensions, not afterthoughts.
+
+## 34. Education economy and sustainability
+
+Open learning may be free at point of access while institutions still need sustainable delivery models. InstituteGPT can compose public funding, grants, institutional budgets, employer sponsorship, consortium contributions, philanthropy, training procurement and optional services without turning openly licensed content into proprietary content contrary to its licence.
+
+## 35. Government/system education
+
+InstituteGPT may be composed into system-level deployments for ministries, regulators, funders and consortia covering:
+
+`provider discovery | programme/qualification maps | OER policy | teacher development | learner access | national assessments | workforce skills | equity | funding programmes | quality assurance | system analytics | policy simulation | programme evaluation | national capability planning`
+
+These are governed projections over authorized sources, not universal ownership of all learner data.
+
+## 36. AI education and agentic institutions
+
+InstituteGPT supports AI as learner, tutor, teacher assistant, assessment assistant, administrator, researcher, librarian assistant, accessibility assistant and institutional agent.
+
+Future education may include:
+
+`admissions agents | learner-success agents | academic-advising agents | timetable agents | assessment agents | marking assistants | records agents | library agents | research agents | QA agents | compliance agents | institutional analytics agents`
+
+High-impact decisions remain subject to the applicable authority, policy, human oversight and appeal rights.
+
+## 37. Governance boundaries
 
 InstituteGPT must not:
 
@@ -240,13 +318,36 @@ InstituteGPT must not:
 - infer professional authorization from AI performance alone;
 - turn a simulated result into Actual evidence without a governed real-world event;
 - override Root identity, HAPI authority, SEAL or legal human authority;
+- claim open licensing where licence rights do not exist;
+- disclose learner records merely because an institution participates in an open ecosystem;
+- make a proprietary LMS, cloud or AI vendor constitutionally indispensable;
 - create a product-specific universal education system that competes with InstituteGPT.
 
-## 29. Canonical composition
+## 38. Canonical products and deployment hierarchy
+
+`InstituteGPT = universal education and lifelong human/AI progression layer`
+
+`OpenEd Bot = global open/distance/flexible/open-university composition of InstituteGPT`
+
+`InstituteGPT Notebook = universal study/research/teaching/field/evidence workspace`
+
+`OpenEd Institution Deployment = configured OpenEd Bot for a named provider`
+
+`NOUN Bot = OpenEd institution deployment configured for NOUN`
+
+Institution deployments inherit the canonical architecture and cannot redefine its primitives.
+
+## 39. Canonical composition
 
 Examples:
 
 `University = Application + Admission + Enrollment + Learning + Assessment + Result + Credential`
+
+`Open University = OpenEd Bot + Application + Admission + ODL Learning + Learner Support + Assessment + Credentials + Mobility`
+
+`NOUN Bot = OpenEd Bot + NOUN configuration`
+
+`OpenEd Notebook = Notebook + Learning + Knowledge + Evidence + Portfolio + Research`
 
 `Driving School = Application + Learning + Practice + Assessment + Evidence + Authority/License pathway`
 
@@ -256,15 +357,19 @@ Examples:
 
 `Promotion Exam = Eligibility + Application/Nomination + Assessment + Interview + Decision + Progression`
 
-## 30. Cross-layer flow
+## 40. Cross-layer flow
 
-`HAPI identity → InstituteGPT learning intent → universal Application/Scheduling/Assessment/Evidence capabilities → InstituteGPT learning/competency state → result/credential reference → Root verified state → Actual current state → Atlas governed projection`
+`HAPI identity → InstituteGPT learning intent → OpenEd/institutional configuration where relevant → universal Application/Scheduling/Assessment/Evidence capabilities → InstituteGPT learning/competency state → result/credential reference → Root verified state → Actual current state → Atlas governed projection`
 
 Every consequential transition is carried by IO.
 
-## 31. Architecture principle
+## 41. Architecture principle
 
 `InstituteGPT owns learning meaning.`
+
+`OpenEd Bot owns the open/distance/flexible education composition.`
+
+`Notebook owns the learning/research/teaching workspace experience.`
 
 `Common Layer owns reusable mechanics.`
 

@@ -34,7 +34,7 @@ export const ADVANCE_LEARNING_FORMATS = freeze([
 ]);
 
 export const ADVANCE_PROVIDER_TYPES = freeze([
-  'institute_native', 'school', 'university', 'tv_et', 'professional_body',
+  'institute_native', 'school', 'university', 'tvet', 'professional_body',
   'employer', 'government', 'nonprofit', 'technology_provider',
   'ai_provider', 'open_education_provider', 'marketplace_provider',
   'independent_instructor', 'community_provider', 'international_provider',

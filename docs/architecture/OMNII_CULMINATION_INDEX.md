@@ -49,6 +49,51 @@ ANY INPUT
 
 This is an orchestration path, not a mandatory linear transaction. ABBA selects the minimum valid path and expands it when requirements, risk or context demand.
 
+## Universal Management
+
+Management is a first-class reusable capability built on the production fabric. It directs resources, people, intelligence, processes, relationships, obligations, risk and change toward intended outcomes under valid authority.
+
+- `OMNII_MANAGEMENT_FULL_SCOPE.md` — complete definition, objects, domains, management modes, value chain, boundaries, metrics, decision model, human/AI balance, service model and completion standard.
+- `OMNII_MANAGEMENT_SYSTEM.md` — reusable management-system architecture for sensing, planning, deciding, allocating, coordinating, executing, controlling, assuring, reconciling, learning and lifecycle.
+- `OMNII_MANAGEMENT_SERVICE.md` — management-as-a-service catalog across personal, household, project, program, team, enterprise, institutional, public, asset, resource, service, product, portfolio, financial/value, risk, quality, compliance, data/knowledge, AI/agent, infrastructure, supply/capacity, relationship, change, crisis and ecosystem management.
+- `OMNII_MANAGEMENT_CAPABILITY_REGISTER.md` — canonical registration and ecosystem conformance boundary.
+
+### Management boundary map
+
+```text
+INTENT / MANDATE
+→ AUTHORITY / SCOPE
+→ BASELINE / STATE
+→ OBJECTIVES / OUTCOMES
+→ DIAGNOSE / DISCOVER
+→ PLAN / SIMULATE
+→ DECIDE / AUTHORIZE
+→ ALLOCATE
+→ COORDINATE
+→ EXECUTE
+→ MONITOR / MEASURE
+→ CONTROL / INTERVENE
+→ ASSURE / VERIFY
+→ RECONCILE
+→ VALUE / PULSE / OUTCOME
+→ LEARN / ADAPT
+→ CONTINUE / SCALE / TRANSFORM / CLOSE
+```
+
+Management consumes the Universal Production Fabric and can itself initiate new compositions. This makes it possible to say, in ecosystem terms:
+
+```text
+IDEA / REALITY
+→ MANAGEMENT
+→ COMPOSE WHAT IS NEEDED
+→ BUILD / RUN
+→ OBSERVE
+→ MANAGE THE RESULT
+→ IMPROVE THE SYSTEM
+```
+
+Management does not create ownership, sovereignty, legal authority, professional licensure, employment status, custody, regulation or autonomous authority over humans. Those remain explicit governance/jurisdictional boundaries.
+
 ## Global capability architecture
 
 The ecosystem is global-by-default. Geography is represented as context, jurisdiction, routing constraint, availability and configuration; it does not redefine a capability's canonical semantics.
@@ -147,6 +192,7 @@ Entity
 → Verification
 → Network / Capacity / Finance / Trade
 → Procurement / Development where required
+→ Management
 → Workflow / Authorized Execution
 → Evidence
 → Outcome

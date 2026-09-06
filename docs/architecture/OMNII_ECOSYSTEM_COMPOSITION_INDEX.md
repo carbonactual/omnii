@@ -45,8 +45,18 @@ Observation, telemetry, signal, Pulse, analysis, prediction, simulation, recomme
 ### Interfaces and integration
 IO, API, message, notification, integration, adapter, queue, scheduler, worker, authorized agent.
 
+## IO as the connective layer
+
+Every meaningful action or interaction between actors, systems, products, machines, agents or external providers is represented by IO. IO provides the universal occurrence envelope while the specialized domain record remains authoritative for its own semantics.
+
+Examples include:
+
+`request → IO → decision → IO → authorization → IO → execution → IO → evidence/outcome → IO → settlement → IO → Pulse`
+
+Not every linked step requires a separate domain table, but every material cross-boundary occurrence remains representable and traceable through IO.
+
 ## Composition rule
 
 Any product or ecosystem may compose these categories in arbitrary combinations without creating a new constitutional primitive unless a genuine semantic gap is proven.
 
-Emirati is expected to consume this index as a composition layer and specialize it through local authority, protocol, culture, calendar, language, rules and workflows.
+A product may specialize its own workflow, ontology, UI and economic rules, but it does not create a competing universal interaction record.

@@ -10,6 +10,7 @@ const OPERATING_CHAIN = Object.freeze([
   'authority',
   'workflow',
   'execution',
+  'io',
   'evidence',
   'outcome',
   'settlement',
@@ -48,5 +49,7 @@ export { authorityContext, authorizationDecision, isConsequentialCapability, can
 export { evidenceRecord, assertEvidenceIsNotAuthority } from './evidence.mjs';
 export { valueReference, pulseObservation } from './value.mjs';
 export { workflowRecord, executionRecord } from './workflow.mjs';
+export { ioRecord, isIoRecord, IO_KINDS, IO_STATUSES } from './io.mjs';
+export { toIoOccurrence, withIoOccurrence } from './io-boundary.mjs';
 
-export const OMNII_COMMON_VERSION = '1.0.0';
+export const OMNII_COMMON_VERSION = '1.1.0';

@@ -1,12 +1,14 @@
 # OMNII Common Layer
 
-**Status: CANONICAL — reusable ecosystem fabric — 2026-09-05**
+**Status: CANONICAL — reusable ecosystem fabric — 2026-09-06**
 
 The OMNII Common Layer is the shared semantic fabric used by products, institutions, territories, agents and ecosystems. It is **not** a new constitutional kernel, graph, authority system or ledger.
 
 ## Core interaction
 
-`ENTITY/IDENTITY + RELATIONSHIP + INTENT + CAPABILITY + CONTEXT + AVAILABILITY → DISCOVERY → MATCH → AUTHORITY/AUTHORIZATION → ACTION/EXECUTION → OUTCOME/EVIDENCE → SETTLEMENT/LEDGER → PULSE/LEARNING`
+`IDENTITY + RELATIONSHIP + INTENT + CAPABILITY + CONTEXT + AVAILABILITY → DISCOVERY → MATCH → AUTHORITY/AUTHORIZATION → ACTION/EXECUTION → IO → OUTCOME/EVIDENCE → SETTLEMENT/LEDGER → PULSE/LEARNING`
+
+**Universal IO rule:** every meaningful ecosystem action or interaction is represented by IO. Value movement is one IO class, not the definition of IO.
 
 ## Common denominators
 
@@ -26,7 +28,9 @@ A match is not authority. A capability is not permission. Authentication is not 
 
 **Value/exchange/market/offer/order/transaction/settlement** provide universal economic composition. Financial instruments are domain specializations, not separate constitutional kernels.
 
-**I/O** governs movement and exchange across people, goods, value, information, services, rights and obligations. **Management** composes planning, assignment, coordination, monitoring, approval, execution, escalation and measurement.
+**I/O** is the universal interaction/occurrence connective layer. It captures material actions and interactions across people, goods, value, information, services, rights and obligations. Specialized event, execution, evidence and ledger records remain authoritative for their respective semantics and are linked from IO.
+
+**Management** composes planning, assignment, coordination, monitoring, approval, execution, escalation and measurement.
 
 **Communication** is channel-neutral; email, SMS, WhatsApp, APIs, agent protocols and future transports are adapters. **Documents/evidence** attach provenance and support to entities, events, decisions and transactions.
 
@@ -38,23 +42,23 @@ The Common Primitive Registry is `public.omnii_common_primitives`.
 
 Intent-to-capability matching is `public.omnii_intent_capability_matches`.
 
+Universal interactions are durably represented in `public.omnii_io_records`.
+
 Existing OMNII canonical tables remain authoritative for their respective semantics: objects, relationships, authorities, operating contexts, workflows/processes/tasks, events, evidence, economic records, ledgers and registries.
 
 ## Product composition
 
 BUNK, I/O, Value System, Management, InstituteGPT, NOUN BOT, RITES and future products consume this fabric. They may add domain-specific schemas, policies, workflows and presentation but must not create alternate universal semantics.
 
-## Agentic interoperability
-
-External standards such as REST APIs, MCP, A2A and current commerce protocols are integration bindings. OMNII keeps capability discovery and interoperability separate from authority and settlement so a provider or protocol can change without changing constitutional semantics.
-
-This follows the current interoperability direction in agentic commerce, where capability discovery, typed lifecycle interactions and transport bindings are standardized while authorization and payment/settlement controls remain explicit. citeturn584716search0turn248717search1
+Every product boundary uses IO to preserve the interaction across systems. A product-specific operation may have additional local records, but the material cross-boundary occurrence remains queryable through the universal IO contract.
 
 ## Boundary
 
 `ABBA/AGENT = intelligence + orchestration`
 
 `COMMON LAYER = reusable semantics + composition`
+
+`IO = universal interaction / occurrence connective layer`
 
 `AUTHORITY/SEAL = permission + human/legal control`
 

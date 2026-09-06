@@ -15,6 +15,39 @@
 - `CARBON_ACTUAL_ECONOMIC_ONTOLOGY.md` — economic semantics.
 - `CARBON_ACTUAL_VALUE_PULSE_ENGINE.md` — value/feedback architecture.
 - `CARBON_ACTUAL_OBJECT_ENVELOPE.md` — universal object envelope.
+- `OMNII_UNIVERSAL_PRODUCTION_FABRIC_CONTRACT.md` — complete idea-to-production composition contract.
+
+## Universal production fabric
+
+The production fabric closes the bridge between arbitrary input and real-world execution. It remains inside the existing ten constitutional families.
+
+- `OMNII_UNIVERSAL_COMPOSITION_AND_PRODUCTIZATION_ENGINE_SCOPE.md` — interprets any idea, signal, request or existing reality; discovers reusable capabilities; identifies true gaps; composes; productizes; versions; and recomposes.
+- `OMNII_EXPERIENCE_COMPILER_AND_DESIGN_SYSTEM_SCOPE.md` — template-driven or vibe-generated UX/UI, governed by a reusable design system and complete state/accessibility/localization controls.
+- `OMNII_AGENT_RUNTIME_AND_CONTROL_PLANE_SCOPE.md` — first-class agent identity, bounded authority, tool gateway, memory/context access, multi-agent coordination, approval, revocation and audit.
+- `OMNII_DATA_CONTEXT_AND_MEMORY_FABRIC_SCOPE.md` — shared ingestion, provenance, quality, context assembly, retrieval, memory, privacy, portability and lifecycle.
+- `OMNII_EXECUTION_AND_INTEGRATION_FABRIC_SCOPE.md` — reliable execution across APIs, software, humans, machines and physical systems through replaceable integration contracts.
+- `OMNII_EVALUATION_ASSURANCE_AND_RELEASE_SCOPE.md` — evidence-backed testing, simulation, security, accessibility, performance, agent evaluation and release gates.
+- `OMNII_DEPLOYMENT_ENVIRONMENT_AND_LIFECYCLE_SCOPE.md` — portable build, environment, release, scaling, rollback, recovery and retirement continuum.
+- `OMNII_OBSERVABILITY_TELEMETRY_AND_FEEDBACK_SCOPE.md` — traces, metrics, audit, anomaly response, Pulse and continuous learning from production behavior.
+
+### Production boundary map
+
+```text
+ANY INPUT
+→ Intent / Context
+→ Composition / Productization
+→ Data / Memory / Knowledge
+→ Agents / Humans / Machines
+→ Experience (Template OR Vibe)
+→ Workflow / Integration / Execution
+→ Evaluation / Assurance
+→ Deployment / Lifecycle
+→ Observability
+→ Pulse / Value / Outcome
+→ Learning / Versioning / Recomposition
+```
+
+This is an orchestration path, not a mandatory linear transaction. ABBA selects the minimum valid path and expands it when requirements, risk or context demand.
 
 ## Global capability architecture
 

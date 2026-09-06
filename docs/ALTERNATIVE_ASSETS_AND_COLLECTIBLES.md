@@ -9,12 +9,15 @@ The OMNII financial/value ontology must cover legitimate forms of scarce, collec
 
 These objects remain distinct from money. Their economic value may derive from utility, scarcity, provenance, ownership rights, access rights, cultural significance, collectability, productive capacity, contractual claims, or market demand.
 
+A core extension is **Value Recovery & Conversion**: dormant, fragmented, redundant, promotional, expiring, stranded or otherwise underused value should be detected and, where permitted and economically sensible, converted into useful consumption, access, another entitlement, trade value, credit, points, service, asset, donation, recovered material or other legitimate value rather than silently disappearing.
+
 ## 1. Alternative Asset Families
 
 ### Digital and crypto assets
 
 - Bitcoin and other major cryptoassets
 - Altcoins
+- Memecoins
 - Utility tokens
 - Governance tokens
 - Protocol-native assets
@@ -252,6 +255,8 @@ REPLACEMENT VALUE
 MATERIAL VALUE
 COLLECTOR VALUE
 PULSE / UTILITY VALUE
+RECOVERY VALUE
+CONVERSION VALUE
 ```
 
 These are different measurements and must not be silently substituted for one another.
@@ -412,17 +417,231 @@ SCRAP / OBSOLETE OBJECT
  -> NEW VALUE
 ```
 
-## 12. Open-Ended Asset Registry
+## 12. Dormant, Redundant, Expiring and Stranded Value
+
+The network should actively identify value that is:
+
+- Dormant
+- Unused
+- Underused
+- Fragmented
+- Expiring
+- Promotional
+- Redundant to the current holder
+- Locked inside a closed ecosystem
+- Non-transferable in its original form but redeemable for utility
+- Left over after consumption
+- Superseded by another product
+- Excess inventory
+- Obsolete stock
+- Spare/repair stock
+- Residual from a larger transaction
+
+Examples include:
+
+### Game value
+
+- Game coins that have little or no external monetary meaning
+- In-game points
+- Duplicate items
+- Unused skins/items where transfer is permitted
+- Tournament rewards
+- Achievements with redeemable utility
+- Unused game credits
+
+The system does not automatically convert prohibited or non-transferable game assets. It checks issuer rules, platform terms, jurisdiction and actual redemption rights first.
+
+### Rewards and promotional value
+
+- Rewards
+- Coupons
+- Vouchers
+- Promo codes
+- Special offers
+- Cashback
+- Store credits
+- Gift cards
+- Discount rights
+- Buy-one/get-one offers
+- Referral rewards
+- Loyalty balances
+
+The objective is to find permitted utility, redemption or combination paths before value expires.
+
+### Subscriptions and memberships
+
+- Unused subscription periods
+- Expiring entitlements
+- Unused tickets
+- Memberships
+- Airline miles
+- Hotel points
+- Loyalty points
+- Unused seats/access
+- Software seats
+- Cloud/storage allowances
+- API/compute credits
+
+The system can monitor expiry, recommend useful consumption and identify lawful redemption/transfer paths where supported by the issuer.
+
+### Telecom and digital consumption
+
+- Airtime
+- Mobile data
+- SMS
+- Streaming access
+- Streaming credits/minutes
+- Cloud credits
+- Compute credits
+- Storage
+- Bandwidth
+- API quotas
+- Software licences
+- Digital service bundles
+
+Usage is measured so available capacity can be consumed, reassigned, upgraded, bundled or otherwise used where permitted.
+
+### Physical residual value
+
+- Spare parts
+- Excess inventory
+- Obsolete stock
+- Returned goods
+- Salvageable components
+- Used equipment
+- Repairable assets
+- Packaging
+- Recyclable materials
+- Industrial by-products
+- Agricultural by-products
+- Recoverable energy/materials
+
+The system evaluates:
+
+`REUSE -> REPAIR -> RESALE -> REPURPOSE -> COMPONENT HARVEST -> RECYCLE -> RECOVER`
+
+before classifying something as waste.
+
+## 13. Value Recovery and Conversion Engine
+
+The Recovery Engine evaluates remaining utility and permitted transformation paths:
+
+```text
+VALUE OBJECT
+   ↓
+STATUS / EXPIRY / RESTRICTION CHECK
+   ↓
+REMAINING UTILITY
+   ↓
+RECOVERY OPTIONS
+   ├── USE
+   ├── REDEEM
+   ├── COMBINE
+   ├── TRANSFER
+   ├── EXCHANGE
+   ├── CONVERT
+   ├── REPURPOSE
+   ├── RESELL
+   ├── DONATE
+   ├── RECYCLE
+   └── RECOVER MATERIAL / ENERGY
+   ↓
+VALUE CREATED / PRESERVED
+```
+
+Conversion recommendations account for:
+
+- Legal transferability
+- Issuer/platform rules
+- Ownership and rights
+- Expiry
+- Jurisdiction
+- Market liquidity
+- Conversion fees
+- Taxes
+- Fraud/risk
+- Environmental impact
+- Technical feasibility
+- Expected recovered value
+- User preferences
+
+The engine must never imply that an unconvertible promotional, game, subscription or digital balance is freely exchangeable for cash.
+
+## 14. Expiry Management
+
+Expiration becomes a first-class lifecycle event:
+
+```text
+VALUE
+ -> ACTIVE
+ -> EXPIRING
+ -> EXPIRED
+ -> REDEEMED / ROLLED / TRANSFORMED / LOST
+```
+
+Before expiry, the network may notify the holder and present lawful ways to extract utility.
+
+Where value is legally non-transferable or non-redeemable, the system records the limitation rather than fabricating a conversion.
+
+## 15. Value Bundling and Composition
+
+Small or redundant value can become useful when legitimately combined:
+
+```text
+GAME POINTS
++ LOYALTY POINTS
++ COUPON
++ STORE CREDIT
+= QUALIFYING PURCHASE VALUE
+```
+
+or:
+
+```text
+EXCESS INVENTORY
++ SPARE PART
++ MACHINE CAPACITY
++ SERVICE LABOUR
+= COMPLETED PRODUCT
+```
+
+The system calculates whether bundling creates more useful value than keeping components separate.
+
+## 16. Value Routing and Conversion Graph
+
+Every value object may have a graph of possible next states:
+
+```text
+CURRENT VALUE
+      │
+      ├── USE
+      ├── SELL
+      ├── SWAP
+      ├── REDEEM
+      ├── BUNDLE
+      ├── FINANCE
+      ├── COLLATERALIZE
+      ├── DONATE
+      ├── TRANSFORM
+      └── RECOVER
+             │
+             ↓
+        NEXT VALUE STATE
+```
+
+The engine ranks routes by legal eligibility, expected utility, cost, time, risk, user preference and recoverable value.
+
+## 17. Open-Ended Asset Registry
 
 No fixed list should define the complete universe.
 
 A new asset class can be registered by defining:
 
-`class + identity + unit + rights + evidence + valuation model + lifecycle + restrictions + permitted exchanges + financing eligibility + jurisdictional treatment`
+`class + identity + unit + rights + evidence + valuation model + lifecycle + restrictions + permitted exchanges + financing eligibility + jurisdictional treatment + conversion/recovery rules`
 
 This allows the ecosystem to incorporate new technology, new markets, new collectible categories, new financial instruments and new forms of economic value without redesigning the foundational ontology.
 
-## 13. Relationship to the Global Value Network
+## 18. Relationship to the Global Value Network
 
 ```text
 ALTERNATIVE ASSET
@@ -443,7 +662,9 @@ ACTUAL LEDGER
         ↓
 PULSE / OUTCOME
         ↓
-REUSE / RESALE / TRANSFORMATION / RECOVERY
+USE / REDEMPTION / RESALE / TRANSFORMATION / RECOVERY
+        ↓
+NEW VALUE
 ```
 
-This extension inherits the parent Financial Value Network doctrine: money is one representation of value; payment is one settlement mechanism; finance is one class of relationships around value; and the ontology remains extensible for future forms of value.
+This extension inherits the parent Financial Value Network doctrine: money is one representation of value; payment is one settlement mechanism; finance is one class of relationships around value; residual value should be preserved where possible; and the ontology remains extensible for future forms of value.

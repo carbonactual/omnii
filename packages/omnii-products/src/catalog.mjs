@@ -22,8 +22,9 @@ const BUILT_PRODUCT_CATALOG = [
   ['NIGERIAN_CULTURAL_ATLAS','carbonactual/nigerian-cultural-atlas','cultural product'],
   ['BKLIT_UI','carbonactual/bklit-ui','presentation/UI'],
   ['BUNK','carbonactual/omnii','property product'],
-  ['OPEN_ED_BOT','carbonactual/omnii','InstituteGPT global open-education product'],
-  ['INSTITUTEGPT_NOTEBOOK','carbonactual/omnii','InstituteGPT learning/research/teaching workspace'],
+  ['INSTITUTEGPT','carbonactual/omnii','Education Layer product — canonical education GPT/service'],
+  ['OPEN_ED_BOT','carbonactual/omnii','InstituteGPT open/distance/flexible education composition'],
+  ['INSTITUTEGPT_NOTEBOOK','carbonactual/omnii','InstituteGPT study/research/teaching workspace'],
   ['INSTITUTEGPT_EXAMS','carbonactual/omnii','InstituteGPT examination and testing product'],
   ['NOUN_BOT','carbonactual/noun-student-bot','institution-specific OpenEd Bot deployment']
 ];

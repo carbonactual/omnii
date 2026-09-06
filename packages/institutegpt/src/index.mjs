@@ -56,14 +56,14 @@ export {
 } from './exams-product.mjs';
 
 export {
-  ADVANCE_PRODUCT,
-  ADVANCE_LEARNING_STAGES,
-  ADVANCE_LEARNING_FORMATS,
-  ADVANCE_PROVIDER_TYPES,
-  ADVANCE_LEARNER_TYPES,
-  ADVANCE_CREDENTIAL_TYPES,
-  ADVANCE_SKILL_STATES,
-  ADVANCE_CAPABILITY_GROUPS,
+  INSTITUTEGPT_LEARNING_SURFACE,
+  INSTITUTEGPT_LEARNING_STAGES,
+  INSTITUTEGPT_LEARNING_FORMATS,
+  INSTITUTEGPT_PROVIDER_TYPES,
+  INSTITUTEGPT_LEARNER_TYPES,
+  INSTITUTEGPT_CREDENTIAL_TYPES,
+  INSTITUTEGPT_SKILL_STATES,
+  INSTITUTEGPT_CAPABILITY_GROUPS,
   createLearningExperience,
   createLearningPath,
   createLabDefinition,
@@ -78,3 +78,9 @@ export {
   getAdvanceProviderProfile,
   listAdvanceProviders,
 } from './advance-providers.mjs';
+
+export {
+  ONBOARDING_CURRICULUM_DIMENSIONS,
+  createEducationOnboardingProfile,
+  curateInstituteGPTLearning,
+} from './onboarding-curation.mjs';

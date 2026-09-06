@@ -11,14 +11,19 @@ const enumValue = (value, allowed, field) => {
   return value;
 };
 
-export const ADVANCE_PRODUCT = freeze({
-  productKey: 'INSTITUTEGPT_ADVANCE',
-  parentProduct: 'INSTITUTEGPT',
-  role: 'universal_learning_skills_and_advancement',
-  firstClass: true,
+export const INSTITUTEGPT_LEARNING_SURFACE = freeze({
+  owner: 'INSTITUTEGPT',
+  role: 'universal_learning_skills_certification_and_advancement',
+  firstClassProduct: 'INSTITUTEGPT',
+  subCapabilities: freezeArray([
+    'learning', 'courses_programmes', 'learning_paths', 'skills_competencies',
+    'labs_practice_projects', 'cpd_professional_learning',
+    'badges_certificates_credentials', 'learning_wallet', 'skills_passport',
+    'pathway_builder', 'education_marketplace', 'provider_integrations',
+  ]),
 });
 
-export const ADVANCE_LEARNING_STAGES = freeze([
+export const INSTITUTEGPT_LEARNING_STAGES = freeze([
   'early_childhood', 'primary', 'secondary', 'youth_exploration',
   'post_secondary', 'vocational_technical', 'undergraduate', 'postgraduate',
   'doctoral_research', 'professional_entry', 'workplace_learning',
@@ -26,38 +31,38 @@ export const ADVANCE_LEARNING_STAGES = freeze([
   'community_learning', 'lifelong_learning', 'ai_agent_learning',
 ]);
 
-export const ADVANCE_LEARNING_FORMATS = freeze([
+export const INSTITUTEGPT_LEARNING_FORMATS = freeze([
   'lesson', 'module', 'course', 'programme', 'microlearning', 'cohort', 'live',
   'self_paced', 'hybrid', 'tutoring', 'mentoring', 'coaching', 'lab',
   'simulation', 'project', 'fieldwork', 'apprenticeship', 'internship',
   'workplace', 'research', 'workshop', 'community', 'assessment',
 ]);
 
-export const ADVANCE_PROVIDER_TYPES = freeze([
+export const INSTITUTEGPT_PROVIDER_TYPES = freeze([
   'institute_native', 'school', 'university', 'tvet', 'professional_body',
   'employer', 'government', 'nonprofit', 'technology_provider',
   'ai_provider', 'open_education_provider', 'marketplace_provider',
   'independent_instructor', 'community_provider', 'international_provider',
 ]);
 
-export const ADVANCE_LEARNER_TYPES = freeze([
+export const INSTITUTEGPT_LEARNER_TYPES = freeze([
   'child', 'student', 'adult', 'professional', 'researcher', 'educator',
   'job_seeker', 'entrepreneur', 'organization', 'institution', 'government',
   'ai', 'ai_agent',
 ]);
 
-export const ADVANCE_CREDENTIAL_TYPES = freeze([
+export const INSTITUTEGPT_CREDENTIAL_TYPES = freeze([
   'participation', 'completion', 'open_badge', 'microcredential', 'certificate',
   'professional_certificate', 'diploma', 'degree_reference', 'qualification',
   'professional_certification', 'regulated_authorization', 'cpd_recognition',
 ]);
 
-export const ADVANCE_SKILL_STATES = freeze([
+export const INSTITUTEGPT_SKILL_STATES = freeze([
   'self_declared', 'learning', 'practiced', 'assessed', 'demonstrated',
   'externally_verified', 'expired', 'superseded',
 ]);
 
-export const ADVANCE_CAPABILITY_GROUPS = freeze([
+export const INSTITUTEGPT_CAPABILITY_GROUPS = freeze([
   'learning', 'courses_programmes', 'learning_paths', 'skills_competencies',
   'labs_practice_projects', 'cpd_professional_learning',
   'badges_certificates_credentials', 'learning_wallet', 'skills_passport',
@@ -81,8 +86,8 @@ export function createLearningExperience({
     id: requireId(id),
     title: requireId(title, 'title'),
     description: optionalText(description),
-    formats: freezeArray(formats.map((value) => enumValue(value, ADVANCE_LEARNING_FORMATS, 'format'))),
-    learnerTypes: freezeArray(learnerTypes.map((value) => enumValue(value, ADVANCE_LEARNER_TYPES, 'learnerType'))),
+    formats: freezeArray(formats.map((value) => enumValue(value, INSTITUTEGPT_LEARNING_FORMATS, 'format'))),
+    learnerTypes: freezeArray(learnerTypes.map((value) => enumValue(value, INSTITUTEGPT_LEARNER_TYPES, 'learnerType'))),
     outcomes: freezeArray(outcomes),
     prerequisites: freezeArray(prerequisites),
     evidenceRequirements: freezeArray(evidenceRequirements),
@@ -116,9 +121,9 @@ export function createLearningPath({
     id: requireId(id),
     title: requireId(title, 'title'),
     description: optionalText(description),
-    learnerType: enumValue(learnerType, ADVANCE_LEARNER_TYPES, 'learnerType'),
+    learnerType: enumValue(learnerType, INSTITUTEGPT_LEARNER_TYPES, 'learnerType'),
     goal: optionalText(goal),
-    stage: enumValue(stage, ADVANCE_LEARNING_STAGES, 'stage'),
+    stage: enumValue(stage, INSTITUTEGPT_LEARNING_STAGES, 'stage'),
     experiences: freezeArray(experiences),
     skills: freezeArray(skills),
     competencies: freezeArray(competencies),
@@ -166,7 +171,7 @@ export function createLabDefinition({
 function normalizeSkillEntry(entry) {
   if (!entry || typeof entry !== 'object') throw new Error('skill entry must be an object');
   const skill = requireId(entry.skill, 'skill');
-  const state = enumValue(entry.state, ADVANCE_SKILL_STATES, 'skill state') ?? 'self_declared';
+  const state = enumValue(entry.state, INSTITUTEGPT_SKILL_STATES, 'skill state') ?? 'self_declared';
   return freeze({ skill, state, evidence: freezeArray(entry.evidence ?? []), source: optionalText(entry.source) });
 }
 
@@ -192,7 +197,7 @@ export function createSkillsPassport({
 function normalizeAchievement(entry) {
   if (!entry || typeof entry !== 'object') throw new Error('achievement must be an object');
   return freeze({
-    type: enumValue(entry.type, ADVANCE_CREDENTIAL_TYPES, 'credential type') ?? 'completion',
+    type: enumValue(entry.type, INSTITUTEGPT_CREDENTIAL_TYPES, 'credential type') ?? 'completion',
     id: requireId(entry.id, 'achievement id'),
     issuer: requireId(entry.issuer, 'issuer'),
     verification: optionalText(entry.verification),
@@ -257,9 +262,9 @@ export function createProviderAdapterProfile({
   standards = [],
 } = {}) {
   return freeze({
-    type: 'advance_provider_adapter',
+    type: 'institutegpt_provider_adapter',
     providerKey: requireId(providerKey, 'providerKey'),
-    category: enumValue(category, ADVANCE_PROVIDER_TYPES, 'category') ?? category,
+    category: enumValue(category, INSTITUTEGPT_PROVIDER_TYPES, 'category') ?? category,
     integrationModes: freezeArray(integrationModes),
     capabilities: freezeArray(capabilities),
     authorityModel: requireId(authorityModel, 'authorityModel'),

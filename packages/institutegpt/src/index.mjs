@@ -6,3 +6,8 @@ export {
   createAiLearningRecord,
   classifyCredentialAuthority,
 } from './contracts.mjs';
+
+export {
+  shouldRouteToInstituteGPT,
+  normalizeLearningIntent,
+} from './routing.mjs';

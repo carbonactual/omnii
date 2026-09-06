@@ -24,7 +24,7 @@ export function buildFeedbackObservation(
     kind: options.kind ?? (matched ? "completion" : "exception"),
     value: options.value ?? (matched ? 1 : 0),
     unit: options.unit ?? "outcome",
-    dimension: options.dimension ?? execution.action,
+    dimension: options.dimension ?? reconciliation.kind,
     provenance: {
       executionId: execution.requestId,
       reconciliationId: reconciliation.id,

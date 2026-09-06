@@ -25,6 +25,19 @@ export const EDUCATION_PROGRESSION_STAGES = Object.freeze([
 ]);
 
 export const EDUCATION_CAPABILITY_DOMAINS = Object.freeze([
+  DOMAIN('open_education_ecosystem', 'Open education, OER, ODL and open university ecosystem', [
+    'open_education_discovery', 'open_courseware', 'open_learning_materials', 'oer_discovery',
+    'oer_creation', 'oer_authoring', 'oer_curation', 'oer_adaptation', 'oer_remix',
+    'oer_localization', 'oer_quality_review', 'oer_metadata', 'open_licensing_guidance',
+    'license_compatibility_check', 'open_content_provenance', 'open_pedagogy', 'open_assessment',
+    'open_textbook_support', 'open_research_resources', 'open_data_learning', 'open_science_learning',
+    'open_access_guidance', 'open_education_policy', 'open_education_sustainability',
+    'open_education_partnerships', 'global_open_course_exchange', 'open_education_translation',
+    'multilingual_oer', 'accessible_oer', 'open_education_analytics', 'open_university_operations',
+    'open_distance_learning_design', 'flexible_learning_design', 'dual_mode_institution_support',
+    'study_centre_coordination', 'distributed_tutoring', 'distributed_examination',
+    'learner_support_services', 'open_education_quality_assurance', 'odl_accreditation_support',
+  ]),
   DOMAIN('discovery_guidance', 'Discovery, counselling and guidance', [
     'education_search', 'programme_compare', 'course_compare', 'career_exploration',
     'pathway_planning', 'eligibility_guidance', 'study_abroad_guidance', 'scholarship_discovery',

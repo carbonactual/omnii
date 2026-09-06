@@ -8,7 +8,6 @@ function slugify(value: string) {
 }
 
 export default function NewPropertyPage() {
-  const supabase = createSupabaseBrowserClient();
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [reference, setReference] = useState<string | null>(null);
@@ -17,6 +16,15 @@ export default function NewPropertyPage() {
     event.preventDefault();
     setSaving(true);
     setError(null);
+
+    let supabase;
+    try {
+      supabase = createSupabaseBrowserClient();
+    } catch (clientError) {
+      setError(clientError instanceof Error ? clientError.message : "Supabase is not configured.");
+      setSaving(false);
+      return;
+    }
 
     const form = new FormData(event.currentTarget);
     const { data: { user }, error: userError } = await supabase.auth.getUser();

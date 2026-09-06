@@ -1,35 +1,172 @@
 # OMNII Universal Management Capability Register
 
-**Status:** CANONICAL CAPABILITY REGISTER
-**Scope:** Global / open-world
+**Status:** CANONICAL CAPABILITY REGISTER  
+**Scope:** Global / open-world / historical → present → emerging → future
 
 ## Registered capability
 
 | Capability | Family | Purpose |
 |---|---|---|
-| Universal Management | Capability / Composition | Direct resources, people, intelligence, processes, relationships, obligations, risks and change toward intended outcomes under valid authority. |
+| Universal Management | Capability / Composition | Directs resources, people, intelligence, processes, relationships, obligations, risks and change toward intended outcomes under valid authority. |
 
-## Core management components
+Management is a universal capability rather than a corporate department, job title, hierarchy or software category. It may be exercised by a person, team, institution, software system, AI agent, machine, or combination, subject to explicit authority and accountability.
 
-- Management Registry
-- Objective & Outcome Engine
-- State & Baseline Engine
-- Planning & Scenario Engine
-- Decision Engine
-- Resource Allocation Engine
-- Work & Workflow Engine
-- Coordination Engine
-- Control Engine
-- Risk & Incident Engine
-- Performance Engine
-- Evidence & Audit Engine
-- Reconciliation Engine
-- Learning & Improvement Engine
-- Lifecycle Engine
+## Canonical companion documents
 
-## Management service families
+- `OMNII_MANAGEMENT_FULL_SCOPE.md` — core definition, object model, value chain, domains, modes, boundaries and completion standard.
+- `OMNII_MANAGEMENT_SYSTEM.md` — reusable system architecture and control mechanics.
+- `OMNII_MANAGEMENT_SERVICE.md` — management-as-a-service catalog and service contract.
+- `OMNII_MANAGEMENT_APPLICATION_UNIVERSE.md` — comprehensive application taxonomy across subjects, functions, industries, scales, environments and time horizons.
+- `OMNII_MANAGEMENT_EVOLUTION_DOCTRINE.md` — historical evolution and emerging/future management directions.
 
-Personal, household, project, program, team, enterprise, institutional, public/program, operations, asset, resource, service, product, portfolio, financial/value, risk, quality, compliance, data/knowledge, AI/agent, infrastructure/facility, supply/capacity, relationship/partner, change/transformation, crisis/continuity and ecosystem/network management.
+## Core management capabilities
+
+### Direction
+- purpose and mandate management
+- strategy and objective management
+- priority management
+- policy execution
+- scope and boundary management
+
+### Organization
+- organizational design
+- role/responsibility management
+- staffing and capability management
+- workload management
+- coordination and communication
+- succession and continuity
+
+### Planning and decision
+- baseline/state management
+- forecasting
+- scenario management
+- option analysis
+- decision management
+- scheduling
+- budgeting
+- dependency management
+
+### Resource and capacity
+- human capability
+- money/capital
+- time/attention
+- materials/inventory
+- machines/tools
+- facilities/land
+- energy/water
+- compute/data/bandwidth
+- transport/logistics capacity
+- reuse/pooling/substitution/reallocation
+
+### Execution
+- work management
+- workflow management
+- service delivery
+- operations control
+- project/program/portfolio execution
+- provider coordination
+- physical execution
+- digital execution
+- human and machine handoffs
+
+### Control and assurance
+- performance management
+- quality management
+- risk management
+- security management
+- safety management
+- compliance management
+- audit/evidence management
+- exception/incident management
+- financial and operational reconciliation
+
+### Change and learning
+- corrective action
+- continuous improvement
+- innovation management
+- transformation management
+- capability development
+- recovery and resilience
+- lifecycle management
+- retirement and replacement
+
+### Intelligence
+- decision support
+- prediction
+- optimization
+- simulation
+- discovery
+- recommendation
+- agent supervision
+- multi-agent coordination
+- human-intelligence collaboration
+
+## Management application families
+
+Universal Management may be instantiated for:
+
+- self/personal life;
+- household/family;
+- teams/workforce;
+- organizations/enterprises;
+- institutions/nonprofits;
+- public administration/programs;
+- strategy/enterprise direction;
+- projects;
+- programs;
+- portfolios;
+- operations;
+- production/manufacturing;
+- supply/procurement/logistics;
+- commercial/customer/market relationships;
+- finance/treasury/value;
+- assets/property/facilities;
+- resources/capacity;
+- people/talent/learning;
+- knowledge/data;
+- technology/platform/digital infrastructure;
+- quality;
+- safety/health/environment;
+- security/risk/compliance;
+- contracts/obligations;
+- products/services;
+- research/innovation;
+- change/transformation;
+- crisis/continuity;
+- AI/agents;
+- robotics/physical AI;
+- public/territorial systems;
+- community/culture;
+- networks/ecosystems;
+- future/unknown management subjects.
+
+These are applications/configurations, not separate constitutional management grammars.
+
+## Application dimensions
+
+| Dimension | Range |
+|---|---|
+| Scale | self → household → team → enterprise → institution → territory → global ecosystem |
+| Actor | human → team → AI assistant → agent → machine → human/AI/machine federation |
+| Environment | manual → digital → automated → intelligent → cyber-physical → adaptive |
+| Time | real-time → operational → strategic → lifecycle → intergenerational |
+| Complexity | stable → variable → uncertain → complex → emergency → open-world |
+| Boundary | internal → inter-organizational → network → global |
+| Control | human-led → assisted → delegated → bounded automated → federated |
+
+## Historical, existing, emerging and future coverage
+
+### Historical
+Management includes ancient administration of agriculture, labor, taxation/revenue, inventories, trade, construction, public works, military logistics, records, standards, infrastructure and resource allocation; classical organization developed stronger structures for delegation, communication, discipline and accountability.
+
+### Established modern
+Administrative, bureaucratic, scientific, behavioral, operations, quality, strategic, project/program/portfolio, service, asset, facility, knowledge, compliance, safety, environmental, information-security and continuity management are all included.
+
+### Emerging
+AI/agent management, algorithmic work allocation, dynamic capacity coordination, digital twins, robotics fleets, smart factories, autonomous transport, physical AI, continuous compliance, human-AI teaming and ecosystem/platform management are included.
+
+### Future
+Self-recomposing organizations, adaptive/federated management, autonomous bounded service operations, multi-agent economic networks, robot/agent workforce management, autonomous infrastructure, planetary resource coordination and persistent human-AI-machine ecosystems remain open-world extensions subject to authority, safety and empirical validation.
 
 ## Ecosystem binding
 
@@ -52,26 +189,64 @@ Identity / Authority
 → Learning / Recomposing
 ```
 
+It can also initiate the Universal Production Fabric when management detects that the required capability, product, service, institution or operating environment does not yet exist.
+
 ## Management boundary
 
-Management does not itself create ownership, sovereignty, legal authority, professional licensure, employment status, custody, regulation, banking authority or autonomous authority over humans. Those remain governed by existing constitutional, institutional and jurisdictional systems.
+Management does not itself create:
 
-## Global-by-default
+- ownership;
+- sovereignty;
+- constitutional authority;
+- legal authority;
+- political authority;
+- professional licensure;
+- employment status;
+- banking/custody authority;
+- regulation;
+- adjudication;
+- consent;
+- autonomous authority over humans.
 
-The capability is universal. Jurisdiction, language, culture, sector, organization size, regulatory regime, provider choice, currency, operating model and physical context are configuration/context layers.
+Those remain governed by the applicable constitutional, institutional and jurisdictional layers.
+
+## Global-by-default rule
+
+The capability is universal. Geography, language, culture, sector, organizational form, legal regime, currency, provider choice, technology and physical context are configuration layers.
 
 ## Production-fabric rule
 
-Every Management implementation should be capable of entering the Universal Production Fabric as a reusable composition rather than becoming a bespoke management stack.
+Every Management implementation should enter the Universal Production Fabric as a reusable composition. Specialized management experiences may differ radically while retaining the same underlying semantics.
 
 ## Discovery rule
 
-ABBA must search this register and the wider ecosystem capability graph before declaring a management component missing. A component is promoted to shared fabric when it is repeatedly reusable and cannot be expressed by an existing capability without semantic distortion.
+ABBA must search the shared capability graph and existing product/runtime estate before declaring a management capability missing. Only genuinely reusable semantic gaps should be promoted to shared fabric.
 
 ## Completion rule
 
-A Management implementation is complete only when it declares intent, authority, scope, state, objectives, resources, participants, decisions, work, controls, evidence, outcomes, reconciliation, value/Pulse, continuity and lifecycle state.
+A Management implementation is materially complete only when it has explicit state for:
+
+```text
+purpose / intent
+authority / accountability
+scope / boundaries
+current state / baseline
+objectives / outcomes
+resources / capabilities
+participants / relationships
+decisions / plans
+work / execution
+controls / risks
+exceptions / recovery
+evidence / provenance
+measurements / performance
+reconciliation
+Value / Pulse
+continuity
+lifecycle
+learning / adaptation
+```
 
 ## Primary principle
 
-> **Management is not merely administration. It is the continuous coordination of reality toward intended outcomes.**
+> **Management is the universal capability for continuously coordinating reality toward intended outcomes. Its subject, scale and technology may change; its underlying grammar remains purpose, authority, state, resources, decision, action, control, outcome and learning.**

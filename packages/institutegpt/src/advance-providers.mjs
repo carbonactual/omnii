@@ -50,13 +50,32 @@ export const ADVANCE_PROVIDER_PROFILES = Object.freeze([
   profile('ALISON', 'marketplace_provider', ['courses', 'certificates', 'diplomas', 'career_learning'], ['catalog', 'deep_link', 'credential_reference'], {
     authorityModel: 'external_provider',
   }),
+  profile('COURSIV', 'marketplace_provider', ['ai_mastery', 'hands_on_guides', 'industry_use_cases', 'completion_certificates'], ['catalog', 'deep_link', 'credential_reference'], {
+    authorityModel: 'external_provider',
+  }),
+  profile('EDX', 'marketplace_provider', ['courses', 'professional_certificates', 'microcredentials', 'degrees', 'projects'], ['catalog', 'deep_link', 'credential_reference'], {
+    authorityModel: 'external_provider',
+  }),
   profile('FUTURELEARN', 'marketplace_provider', ['courses', 'microcredentials', 'programmes', 'degrees'], ['catalog', 'deep_link', 'credential_reference'], {
     authorityModel: 'external_provider',
+  }),
+  profile('LINKEDIN_LEARNING', 'marketplace_provider', ['courses', 'role_guides', 'skill_evaluations', 'learning_paths', 'career_learning'], ['catalog', 'deep_link', 'progress_reference'], {
+    authorityModel: 'external_provider',
+  }),
+  profile('KHAN_ACADEMY', 'open_education_provider', ['child_learning', 'school_learning', 'practice', 'teacher_resources'], ['catalog', 'deep_link', 'progress_reference'], {
+    authorityModel: 'external_provider',
+    ageConstraints: { childMode: true },
   }),
   profile('DATACAMP', 'marketplace_provider', ['courses', 'tracks', 'projects', 'practice', 'assessments'], ['catalog', 'deep_link', 'achievement_reference'], {
     authorityModel: 'external_provider',
   }),
   profile('PLURALSIGHT', 'marketplace_provider', ['courses', 'paths', 'skill_assessments', 'labs', 'certification_prep'], ['catalog', 'deep_link', 'assessment_reference'], {
+    authorityModel: 'external_provider',
+  }),
+  profile('CODECADEMY', 'marketplace_provider', ['coding_courses', 'career_paths', 'projects', 'practice'], ['catalog', 'deep_link', 'achievement_reference'], {
+    authorityModel: 'external_provider',
+  }),
+  profile('FREECODECAMP', 'open_education_provider', ['coding_courses', 'projects', 'certifications', 'practice'], ['catalog', 'deep_link', 'credential_reference'], {
     authorityModel: 'external_provider',
   }),
   profile('PROFESSIONAL_BODY', 'professional_body', ['professional_learning', 'cpd', 'competency_frameworks', 'certification', 'recertification'], ['catalog', 'credential_reference', 'verification'], {

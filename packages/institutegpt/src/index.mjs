@@ -54,3 +54,27 @@ export {
   createExamProviderDeployment,
   isAssessmentForProgression,
 } from './exams-product.mjs';
+
+export {
+  ADVANCE_PRODUCT,
+  ADVANCE_LEARNING_STAGES,
+  ADVANCE_LEARNING_FORMATS,
+  ADVANCE_PROVIDER_TYPES,
+  ADVANCE_LEARNER_TYPES,
+  ADVANCE_CREDENTIAL_TYPES,
+  ADVANCE_SKILL_STATES,
+  ADVANCE_CAPABILITY_GROUPS,
+  createLearningExperience,
+  createLearningPath,
+  createLabDefinition,
+  createSkillsPassport,
+  createLearningWallet,
+  createCpdActivity,
+  createProviderAdapterProfile,
+} from './advance-product.mjs';
+
+export {
+  ADVANCE_PROVIDER_PROFILES,
+  getAdvanceProviderProfile,
+  listAdvanceProviders,
+} from './advance-providers.mjs';

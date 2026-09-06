@@ -1,7 +1,7 @@
 # OMNII Culmination Index
 
 **Status:** Canonical navigation index
-**Date:** 2026-09-05
+**Date:** 2026-09-06
 
 `carbonactual/omnii` is the semantic culmination repository for the Carbon Actual ecosystem. Other repositories remain valuable as product branches, compositions, implementation repositories, experiments, providers, and references.
 
@@ -15,6 +15,33 @@
 - `CARBON_ACTUAL_ECONOMIC_ONTOLOGY.md` — economic semantics.
 - `CARBON_ACTUAL_VALUE_PULSE_ENGINE.md` — value/feedback architecture.
 - `CARBON_ACTUAL_OBJECT_ENVELOPE.md` — universal object envelope.
+
+## Global capability architecture
+
+The ecosystem is global-by-default. Geography is represented as context, jurisdiction, routing constraint and configuration; it does not redefine a capability's canonical semantics.
+
+- `OMNII_GLOBAL_SOURCING_SCOPE.md` — universal sourcing capability for finding and qualifying ways to satisfy requirements across products, factories, services, people, assets, technology, infrastructure, capital and market access.
+- `OMNII_GLOBAL_OPPORTUNITY_SCOPE.md` — universal opportunity capability for discovering, qualifying and composing latent value arising from demand, supply, capability, assets, gaps, timing, markets, infrastructure, capital and other signals.
+- `OMNII_GLOBAL_MATCHING_AND_DISCOVERY_INTELLIGENCE_SCOPE.md` — reusable semantic discovery, matching, ranking, recommendation, graph-traversal and optimization layer connecting requirements, supply, capabilities, people, assets and conditions.
+- `OMNII_SHARED_ECONOMIC_COORDINATION_CAPABILITY_GAPS.md` — ecosystem register containing the shared economic coordination primitives and the boundary among Sourcing, Opportunity and Matching.
+
+Canonical distinction:
+
+```text
+SOURCING
+known requirement
+→ find and qualify ways to obtain it
+
+OPPORTUNITY
+signal / surplus / gap / possibility
+→ determine what value or action could be unlocked
+
+MATCHING & DISCOVERY INTELLIGENCE
+needs + supply + people + assets + conditions
+→ discover relationships, rank possibilities and connect the right objects
+```
+
+These are shared ecosystem capabilities, not products, and may be composed by Desk, TIP, HAPI World, institutional systems and future products.
 
 ## Repository-derived architecture now consolidated
 

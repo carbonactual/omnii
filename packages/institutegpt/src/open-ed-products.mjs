@@ -19,7 +19,7 @@ export const INSTITUTEGPT_PRODUCTS = FREEZE({
       'low_bandwidth_learning', 'offline_learning', 'microcredentials', 'portable_learner_records',
       'credential_verification', 'credit_transfer', 'lifelong_learning', 'work_integrated_learning',
       'institutional_analytics', 'quality_assurance', 'accreditation_support', 'ai_governance',
-      'education_policy_support', 'cross_institution_mobility', 'cross_border_learning'
+      'education_policy_support', 'cross_institution_mobility', 'cross_border_learning', 'examination_services'
     ]),
   }),
   NOTEBOOK: FREEZE({
@@ -36,6 +36,28 @@ export const INSTITUTEGPT_PRODUCTS = FREEZE({
       'portfolio_evidence', 'supervisor_feedback', 'peer_collaboration', 'study_group_workspace',
       'multimodal_capture', 'voice_notes', 'offline_capture', 'version_history', 'provenance',
       'knowledge_graph_links', 'competency_mapping', 'assessment_evidence', 'exportable_learning_record'
+    ]),
+  }),
+  EXAMS: FREEZE({
+    productKey: 'EXAMS',
+    productName: 'InstituteGPT Exams',
+    parent: 'INSTITUTEGPT',
+    role: 'examination_and_testing_product',
+    purpose: 'Universal examination operating product for national, institutional, admissions, professional, licensing-support, language, workplace, promotion, certification and competitive examinations.',
+    deploymentModel: 'provider_and_institution_configurable',
+    capabilities: FREEZE([
+      'exam_discovery', 'eligibility', 'registration', 'identity_verification', 'evidence_intake',
+      'exam_scheduling', 'test_centre_allocation', 'remote_test_setup', 'candidate_preparation',
+      'question_banking', 'test_blueprinting', 'adaptive_testing', 'computer_based_testing',
+      'paper_based_testing', 'hybrid_testing', 'practical_testing', 'oral_testing', 'viva',
+      'simulation_testing', 'candidate_authentication', 'invigilation', 'proctoring',
+      'device_integrity', 'environment_checks', 'event_capture', 'response_capture',
+      'automated_marking', 'assisted_marking', 'rubric_scoring', 'human_marking', 'second_marking',
+      'moderation', 'standard_setting', 'scoring', 'quality_assurance', 'result_publication',
+      'result_verification', 'appeal', 'remarking', 'regrading', 'retake', 'credential_reference',
+      'admission_decision_support', 'professional_progression_support', 'employment_selection_support',
+      'assessment_integrity_analytics', 'exam_security', 'exam_centre_operations', 'examiner_management',
+      'exam_content_versioning', 'qti_interoperability', 'portable_results'
     ]),
   }),
   INSTITUTION_DEPLOYMENT: FREEZE({
@@ -85,5 +107,6 @@ export function resolveOpenEdDeployment(deploymentKey) {
     ...deployment,
     canonicalProduct: getInstituteGPTProduct('OPEN_ED_BOT'),
     notebook: getInstituteGPTProduct('NOTEBOOK'),
+    exams: getInstituteGPTProduct('EXAMS'),
   };
 }

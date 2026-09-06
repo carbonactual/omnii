@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BUILT_PRODUCT_REPOSITORIES, catalogBuiltProducts, registerProduct } from '../src/catalog.mjs';
+import {
+  BUILT_PRODUCT_REPOSITORIES,
+  EDUCATION_LAYER_PRODUCT_HIERARCHY,
+  catalogBuiltProducts,
+  registerProduct,
+} from '../src/catalog.mjs';
 
 test('built product catalog preserves canonical repository lineage', () => {
   const products = catalogBuiltProducts();
@@ -10,6 +15,19 @@ test('built product catalog preserves canonical repository lineage', () => {
   assert.ok(products.some((item) => item.productKey === 'INSTITUTEGPT' && item.repository === 'carbonactual/omnii'));
   assert.ok(products.some((item) => item.productKey === 'INSTITUTEGPT_EXAMS' && item.repository === 'carbonactual/omnii'));
   assert.ok(!products.some((item) => item.productKey === 'INSTITUTEGPT_ADVANCE'));
+});
+
+test('Education Layer product hierarchy is explicit and bounded', () => {
+  assert.equal(EDUCATION_LAYER_PRODUCT_HIERARCHY.layer, 'EDUCATION_LAYER');
+  assert.equal(EDUCATION_LAYER_PRODUCT_HIERARCHY.canonicalProduct, 'INSTITUTEGPT');
+  assert.deepEqual(EDUCATION_LAYER_PRODUCT_HIERARCHY.products, [
+    'INSTITUTEGPT',
+    'OPEN_ED_BOT',
+    'INSTITUTEGPT_NOTEBOOK',
+    'INSTITUTEGPT_EXAMS',
+  ]);
+  assert.deepEqual(EDUCATION_LAYER_PRODUCT_HIERARCHY.deployments, ['NOUN_BOT']);
+  assert.deepEqual(EDUCATION_LAYER_PRODUCT_HIERARCHY.removedProductKeys, ['INSTITUTEGPT_ADVANCE']);
 });
 
 test('product registration requires capabilities and source lineage', () => {

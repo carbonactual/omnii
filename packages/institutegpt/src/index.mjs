@@ -41,3 +41,16 @@ export {
   getOpenEdDeployment,
   resolveOpenEdDeployment,
 } from './open-ed-products.mjs';
+
+export {
+  EXAM_FAMILIES,
+  EXAM_LIFECYCLE,
+  EXAM_DELIVERY_MODES,
+  EXAM_ROLES,
+  EXAM_PROVIDER_PROFILES,
+  createExamDefinition,
+  createExamRegistration,
+  createExamResult,
+  createExamProviderDeployment,
+  isAssessmentForProgression,
+} from './exams-product.mjs';

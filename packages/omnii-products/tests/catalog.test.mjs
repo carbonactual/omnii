@@ -4,9 +4,10 @@ import { BUILT_PRODUCT_REPOSITORIES, catalogBuiltProducts, registerProduct } fro
 
 test('built product catalog preserves canonical repository lineage', () => {
   const products = catalogBuiltProducts();
-  assert.equal(products.length, 13);
+  assert.equal(products.length, 17);
   assert.ok(products.some((item) => item.productKey === 'ABBA' && item.repository === 'carbonactual/abba'));
   assert.ok(products.some((item) => item.productKey === 'BUNK' && item.repository === 'carbonactual/omnii'));
+  assert.ok(products.some((item) => item.productKey === 'INSTITUTEGPT_ADVANCE' && item.repository === 'carbonactual/omnii'));
 });
 
 test('product registration requires capabilities and source lineage', () => {
@@ -30,5 +31,5 @@ test('implementation evidence cannot silently promote a specified product', () =
   }, { status: 'specified', implementationEvidence: true }), /upgrade/);
 });
 
-assert.equal(BUILT_PRODUCT_REPOSITORIES.length, 13);
+assert.equal(BUILT_PRODUCT_REPOSITORIES.length, 17);
 console.log('product catalog contract tests passed');

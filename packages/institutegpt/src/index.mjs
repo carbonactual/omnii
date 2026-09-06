@@ -89,3 +89,9 @@ export {
   EDUCATION_LAYER,
   classifyEducationComponent,
 } from './education-layer-contract.mjs';
+
+export {
+  EDUCATION_PERSISTENCE_TABLES,
+  EDUCATION_DERIVED_COMPOSITIONS,
+  getEducationPersistenceTable,
+} from './education-persistence-contract.mjs';

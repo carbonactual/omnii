@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 import {
   assertBunkEcosystemCapabilityUse,
   BUNK_ECOSYSTEM_CAPABILITIES,
@@ -6,16 +7,16 @@ import {
 
 describe("BUNK whole-ecosystem capability map", () => {
   it("exposes OMNII capabilities beyond TIP", () => {
-    expect(BUNK_ECOSYSTEM_CAPABILITIES.some((c) => c.family === "IDENTITY")).toBe(true);
-    expect(BUNK_ECOSYSTEM_CAPABILITIES.some((c) => c.family === "WORKFLOW")).toBe(true);
-    expect(BUNK_ECOSYSTEM_CAPABILITIES.some((c) => c.family === "EVIDENCE")).toBe(true);
-    expect(BUNK_ECOSYSTEM_CAPABILITIES.some((c) => c.family === "ECONOMICS" && c.provider === "TIP")).toBe(true);
+    assert.equal(BUNK_ECOSYSTEM_CAPABILITIES.some((c) => c.family === "IDENTITY"), true);
+    assert.equal(BUNK_ECOSYSTEM_CAPABILITIES.some((c) => c.family === "WORKFLOW"), true);
+    assert.equal(BUNK_ECOSYSTEM_CAPABILITIES.some((c) => c.family === "EVIDENCE"), true);
+    assert.equal(BUNK_ECOSYSTEM_CAPABILITIES.some((c) => c.family === "ECONOMICS" && c.provider === "TIP"), true);
   });
 
   it("rejects BUNK from claiming universal primitives", () => {
-    expect(() => assertBunkEcosystemCapabilityUse({
-      capability: "universal-identity",
-      provider: "BUNK",
-    })).toThrow(/universal identity|cannot own/i);
+    assert.throws(
+      () => assertBunkEcosystemCapabilityUse({ capability: "universal-identity", provider: "BUNK" }),
+      /universal identity|cannot own/i,
+    );
   });
 });

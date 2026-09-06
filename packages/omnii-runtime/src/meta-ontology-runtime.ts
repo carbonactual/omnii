@@ -1,4 +1,14 @@
-import type { CanonicalEnvelope, Id, Timestamp } from './types';
+type Id = string;
+type Timestamp = string;
+
+export interface CanonicalEnvelope {
+  id: Id;
+  object_type?: string;
+  created_at?: Timestamp;
+  updated_at?: Timestamp;
+  provenance?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
+}
 
 export type MetaKind =
   | 'entity' | 'species' | 'intelligence' | 'identity' | 'relationship'

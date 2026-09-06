@@ -109,7 +109,7 @@ export class TransportCertificationRuntime {
       recordId: randomUUID(),
       createdAt: new Date().toISOString(),
     };
-    await this.persistence.create("registries", { id: key, ...record });
+    await this.persistence.create("registries", { ...record, id: key });
     return record;
   }
 

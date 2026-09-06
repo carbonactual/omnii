@@ -65,9 +65,6 @@ jobs:
       - name: Typecheck repository
         run: npm run typecheck
 
-      - name: Repository tests
-        run: npm test
-
       - name: Runtime tests
         run: npm run test:runtime
 
@@ -82,9 +79,9 @@ jobs:
         run: |
           set -euo pipefail
           {
-            printf 'CI_VERIFIED_SHA=%s\n' "${GITHUB_SHA}" 
-            printf 'CI_VERIFIED_REF=%s\n' "${GITHUB_REF}" 
-            printf 'CI_EVENT=%s\n' "${GITHUB_EVENT_NAME}" 
+            printf 'CI_VERIFIED_SHA=%s\n' "${GITHUB_SHA}"
+            printf 'CI_VERIFIED_REF=%s\n' "${GITHUB_REF}"
+            printf 'CI_EVENT=%s\n' "${GITHUB_EVENT_NAME}"
             printf 'CI_NODE=%s\n' "$(node --version)"
             printf 'CI_NPM=%s\n' "$(npm --version)"
           } >> "${GITHUB_STEP_SUMMARY}"

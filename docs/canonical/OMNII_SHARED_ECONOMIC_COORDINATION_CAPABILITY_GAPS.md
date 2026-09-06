@@ -11,459 +11,141 @@ A capability discovered through Desk must be evaluated for ecosystem reuse first
 
 All shared economic coordination capabilities are global by default. Geography is context, constraint and jurisdiction, never a substitute for the underlying capability ontology. Local, national, regional, continental and global implementations consume the same canonical semantics through jurisdiction packs, policies and adapters.
 
-## Shared capabilities
+## Existing shared primitives
 
-### 1. Intent & Need Graph
+### Intent & Need Graph
+Universal representation for need, have, capability, offer, request, reservation, shortage, surplus, recurring demand, opportunity, constraint and urgency.
 
-A universal representation for:
+### Supply & Capacity Graph
+Represents available, latent, idle, reserved, committed and future supply across inventory, production, services, people/capability, machines, compute, storage, property, transport, energy, financial capacity and processing capacity.
 
-- need
-- have
-- capability
-- offer
-- request
-- reservation
-- shortage
-- surplus
-- recurring demand
-- opportunity
-- constraint
-- urgency
+### Provider Capability Registry
+Provider/service records including jurisdiction, coverage, authority, capacity, SLA, price model, restrictions, integration method, current state, verification and provenance. Unknown is valid.
 
-It links participant, object/capability, place, time, quantity, quality, standards, value and outcome.
+### Standards & Conformance Registry
+Specifications, grades, certifications, tests, laboratory/inspection evidence, regulator requirements, expiry, jurisdiction and equivalence rules.
 
-### 2. Supply & Capacity Graph
+### Sourcing & Procurement Orchestrator
+Request → discovery → RFQ → comparison → negotiation → order → confirmation → fulfillment.
 
-Represents available, latent, idle, reserved, committed and future supply across:
+### Aggregation & Fractional Fulfillment
+MOQ pooling, mixed-SKU aggregation, shared shipments/storage/capacity, multi-party demand and distributed supply with preserved lineage.
 
-- inventory
-- production
-- services
-- people/capability
-- machines
-- compute
-- storage
-- property
-- transport
-- energy
-- financial capacity
-- processing capacity
+### Substitution & Equivalence
+Equivalent products/services, alternate manufacturers/materials, used/refurbished, alternate routes/timing/financing and local alternatives with visible differences.
 
-### 3. Provider Capability Registry
+### Total Cost / Total Value Routing
+Price plus transport, storage, insurance, duty/tax, finance, handling, delay, risk, quality, lifecycle and measured environmental effects.
 
-A reusable registry of external/internal providers and services with:
+### Route & Network Intelligence
+Reusable route/network objects for origin/destination, nodes, carriers, modes, transfer points, cost, time, capacity, congestion, risk, border requirements, seasonality, backhaul and failure history.
 
-```text
-provider
-service
-jurisdiction
-coverage
-license/authority
-capacity
-SLA
-price model
-fees
-restrictions
-integration method
-current state
-last verified
-provenance
-```
+### Micro-Hub / Node Capability
+Locations able to collect, inspect, sort, pack, store, consolidate, dispatch, receive returns and repair/recover.
 
-Unknown is a valid state.
+### Fulfillment & Reverse Fulfillment
+Allocate → pick → inspect → pack → dispatch → transit → deliver → accept, with return/repair/recovery.
 
-### 4. Standards & Conformance Registry
+### Evidence & Chain-of-Custody
+Identity, custody, location, condition, transformation, inspection, certification, shipment, delivery, acceptance, return and recovery events.
 
-Common registry for:
+### Service Composition & Replacement
+Select → execute → monitor → replace/reroute without hidden provider lock-in.
 
-- specifications
-- quality grades
-- certifications
-- test methods
-- laboratory evidence
-- inspection evidence
-- regulator requirements
-- expiry
-- jurisdiction
-- equivalence/substitution rules
+### Regulated Handoff
+Explicit boundary to insurers, customs, payments, licensed professionals and regulators.
 
-This does not replace regulators or certification bodies.
+### Trade Compliance Pack
+Classification, origin, valuation, permits, licences, certificates, customs documents, taxes/duties, restrictions and audit evidence.
 
-### 5. Sourcing & Procurement Orchestrator
+### Insurance Coordination
+Shared requirement/quote/coverage/claim model for item, order, shipment and contract protection.
 
-Reusable flow for:
+### Claims & Dispute Orchestration
+Quality, non-delivery, damage, shortage, counterfeit allegation, payment, contract, insurance and returns/refunds.
 
-```text
-request → discovery → RFQ → comparison → negotiation → purchase order → supplier confirmation → fulfillment
-```
+### Transaction Reputation
+Evidence-backed, contextual performance history; not a universal legal/eligibility score.
 
-It supports individual, business, institutional and government procurement patterns.
+### Supply/Demand Intelligence
+Requests, listings, price observations, inventory, schedules, capacity, seasonality, failed matches and route imbalance signals with provenance.
 
-### 6. Aggregation & Fractional Fulfillment Engine
+### Leakage & Bottleneck Detection
+Identifies avoidable loss across sourcing, quality, processing, storage, movement, customs, payments, returns, claims and information.
 
-Reusable engine for:
+### Value-Exchange Composition
+Money, goods, services, credit, advance, barter, gift, grant, sponsorship, CSR and reciprocal obligations subject to jurisdictional law.
 
-- MOQ pooling
-- mixed-SKU aggregation
-- shared shipments
-- pooled storage
-- shared capacity
-- multi-party demand
-- distributed supply aggregation
-- fractional allocation
-- deconsolidation
+### Economic Capability Escalation
+Discovered → profiled → verified → improved → tested → certified → pilot-capable → repeat-capable → scaled.
 
-The engine preserves item/claim lineage and settlement allocation.
+## Canonical global capabilities
 
-### 7. Substitution & Equivalence Engine
+### Global Sourcing
+`docs/canonical/OMNII_GLOBAL_SOURCING_SCOPE.md` — finds and qualifies ways to satisfy concrete requirements across the global source universe.
 
-Determines whether a requirement can be met by:
+### Global Opportunity
+`docs/canonical/OMNII_GLOBAL_OPPORTUNITY_SCOPE.md` — identifies what value or action could become possible from signals, gaps, assets, capabilities, demand and changing conditions.
 
-- local equivalent
-- alternate brand
-- alternate material
-- used/refurbished item
-- alternate service
-- alternate route
-- alternate timing
-- alternate financing
+### Global Matching & Discovery Intelligence
+`docs/canonical/OMNII_GLOBAL_MATCHING_AND_DISCOVERY_INTELLIGENCE_SCOPE.md` — connects needs, supply, people, assets, markets and conditions through discovery, matching, ranking, recommendation and optimization.
 
-Every substitution preserves the requirement, differences, evidence and acceptance decision.
+### Global Market Intelligence
+`docs/canonical/OMNII_GLOBAL_MARKET_INTELLIGENCE_SCOPE.md` — understands changing market conditions, demand, supply, prices, capacity, competition, trade, risk and trends.
 
-### 8. Total Cost / Total Value Routing Engine
+### Global Research Intelligence
+`docs/canonical/OMNII_GLOBAL_RESEARCH_INTELLIGENCE_SCOPE.md` — discovers, synthesizes and monitors evidence across domains, languages, jurisdictions and time.
 
-Combines:
+### Global Verification & Trust Intelligence
+`docs/canonical/OMNII_GLOBAL_VERIFICATION_AND_TRUST_INTELLIGENCE_SCOPE.md` — evaluates claims and evidence for a declared purpose, scope and time.
+
+### Global Network & Corridor Intelligence
+`docs/canonical/OMNII_GLOBAL_NETWORK_AND_CORRIDOR_INTELLIGENCE_SCOPE.md` — understands routes, nodes, corridors, capacity, reliability, congestion, backhaul and disruption.
+
+### Global Resource & Capacity Exchange Intelligence
+`docs/canonical/OMNII_GLOBAL_RESOURCE_AND_CAPACITY_EXCHANGE_INTELLIGENCE_SCOPE.md` — makes shareable, idle, latent, reserved and future capacity discoverable and usable.
+
+### Global Finance & Funding Discovery
+`docs/canonical/OMNII_GLOBAL_FINANCE_AND_FUNDING_DISCOVERY_SCOPE.md` — discovers lawful financing/funding pathways and routes regulated decisions to authorized providers.
+
+### Global Trade & Regulatory Intelligence
+`docs/canonical/OMNII_GLOBAL_TRADE_AND_REGULATORY_INTELLIGENCE_SCOPE.md` — explains jurisdictional requirements, market-access conditions and regulatory change without becoming the authority.
+
+### Global Procurement Intelligence
+`docs/canonical/OMNII_GLOBAL_PROCUREMENT_INTELLIGENCE_SCOPE.md` — discovers and analyzes institutional, public, corporate and network purchasing demand and procurement pathways.
+
+### Global Capability Development Intelligence
+`docs/canonical/OMNII_GLOBAL_CAPABILITY_DEVELOPMENT_INTELLIGENCE_SCOPE.md` — diagnoses capability gaps and composes routes to close them through skills, equipment, technology, standards, infrastructure, capital and partnerships.
+
+### Global Resilience & Disruption Intelligence
+`docs/canonical/OMNII_GLOBAL_RESILIENCE_AND_DISRUPTION_INTELLIGENCE_SCOPE.md` — detects dependencies and disruptions and identifies alternative continuity pathways.
+
+### Global Economic Outcome Intelligence
+`docs/canonical/OMNII_GLOBAL_ECONOMIC_OUTCOME_INTELLIGENCE_SCOPE.md` — measures actual outcomes against expected paths and feeds value, Pulse, reputation and learning.
+
+## Boundary map
 
 ```text
-price
-+ transport
-+ storage
-+ insurance
-+ tax/duty
-+ finance
-+ handling
-+ delay
-+ risk
-+ quality
-+ lifecycle cost
-+ environmental effects where measured
+RESEARCH → understand evidence and context
+MARKET INTELLIGENCE → understand market conditions
+VERIFICATION → establish what can be relied upon
+MATCHING → connect related objects
+SOURCING → satisfy a known requirement
+OPPORTUNITY → unlock latent value or possibility
+NETWORK → understand movement pathways
+CAPACITY → understand usable resources
+FINANCE → discover funding paths
+TRADE/REGULATORY → understand jurisdictional conditions
+PROCUREMENT → understand organized purchasing demand
+CAPABILITY DEVELOPMENT → close capability gaps
+RESILIENCE → preserve continuity under change
+OUTCOME → learn from what actually happened
 ```
 
-It can produce different objectives such as fastest, cheapest acceptable, safest, local-first and best overall.
+## Ecosystem rule
 
-### 9. Route & Network Intelligence
-
-Represents transport routes as reusable network objects containing:
-
-- origin/destination
-- nodes
-- carriers
-- modes
-- transfer points
-- costs
-- times
-- capacity
-- congestion
-- risk
-- border requirements
-- seasonality
-- backhaul opportunities
-- failure history
-
-### 10. Micro-Hub / Node Capability
-
-A standard model for participating locations that can:
-
-- collect
-- inspect
-- sort
-- pack
-- store
-- consolidate
-- dispatch
-- receive returns
-- repair/recover
-
-Nodes may be partner businesses, markets, warehouses, lockers, workshops or community facilities.
-
-### 11. Fulfillment & Reverse Fulfillment
-
-Shared lifecycle:
-
-```text
-allocate → pick → inspect → pack → dispatch → transit → deliver → accept
-                                               ↓
-                                         return/repair
-```
-
-### 12. Evidence & Chain-of-Custody
-
-A reusable event model for:
-
-- identity
-- custody
-- location
-- condition
-- transformation
-- inspection
-- certification
-- shipment
-- delivery
-- acceptance
-- return
-- recovery
-
-Prefer established interoperable standards where appropriate, including GS1 EPCIS and digital freight-document standards.
-
-### 13. Service Composition & Replacement
-
-A workflow can depend on many providers without becoming locked to one:
-
-```text
-capability requirement
- ↓
-provider selection
- ↓
-execution
- ↓
-monitor
- ↓
-failure?
- ↓ yes
-replacement / reroute
-```
-
-### 14. Regulated Handoff Engine
-
-Separates ecosystem orchestration from regulated execution.
-
-Examples:
-
-```text
-Desk → licensed insurer
-Desk → customs/border authority
-Desk → regulated payment provider
-Desk → licensed professional
-Desk → regulator/product registration
-```
-
-Records the handoff and result without pretending to be the regulated authority.
-
-### 15. Trade Compliance Pack
-
-Reusable structure for:
-
-- classification
-- origin
-- valuation
-- permits
-- licenses
-- certificates
-- customs documentation
-- taxes/duties
-- restricted/prohibited status
-- audit evidence
-- expiry/effective dates
-
-### 16. Insurance Coordination
-
-Reusable insurance requirement/quote/coverage/claim object model supporting item, order, shipment and contract-level protection.
-
-### 17. Claims & Dispute Orchestration
-
-Common case model for:
-
-- quality dispute
-- non-delivery
-- damaged goods
-- short shipment
-- counterfeit allegation
-- payment dispute
-- contract breach
-- insurance claim
-- return/refund
-
-### 18. Transaction Reputation
-
-A common evidence-backed reputation graph for participants, providers, goods and services. Reputation is multi-dimensional and never the sole legal or eligibility control.
-
-### 19. Supply/Demand Intelligence
-
-A reusable intelligence layer combining permitted:
-
-- explicit requests
-- listings
-- price observations
-- inventories
-- schedules
-- capacity
-- seasonality
-- failed matches
-- route imbalances
-- local signals
-
-Distinguish observation from inference and preserve confidence/freshness.
-
-### 20. Leakage & Bottleneck Detection
-
-Detect avoidable loss across:
-
-```text
-sourcing
-quality
-aggregation
-processing
-storage
-movement
-customs
-payments
-returns
-claims
-information
-```
-
-Estimate potential recoverable value and route findings into Pulse.
-
-### 21. Value-Exchange Composition
-
-A generic relationship can combine:
-
-- money
-- service
-- goods
-- credit
-- advance
-- barter
-- gift
-- grant
-- sponsorship
-- CSR
-- reciprocal obligation
-
-Legal treatment remains jurisdiction-specific.
-
-### 22. Economic Capability Escalation
-
-A participant or supplier can progress through:
-
-```text
-discovered
- → profiled
- → verified
- → improved
- → tested
- → certified
- → pilot-capable
- → repeat-capable
- → scaled
-```
-
-The capability state is separate from legal licensing and market eligibility.
-
-## 23. Global Sourcing Capability
-
-Canonical scope: `docs/canonical/OMNII_GLOBAL_SOURCING_SCOPE.md`.
-
-Global Sourcing is the ecosystem's find-and-qualify access layer for satisfying concrete requirements. It covers global source discovery for goods, factories, production capacity, services, people, technology, infrastructure, capital, market access and other fulfillable requirements; requirement normalization; evidence/provenance; supplier and capability qualification; source comparison; sourcing strategies; substitutions; aggregation; replacement sourcing; and sourcing lifecycle management.
-
-It is global-by-default and uses jurisdiction/configuration for local rules. External directories and marketplaces are source adapters, not constitutional authorities.
-
-## 24. Global Opportunity Capability
-
-Canonical scope: `docs/canonical/OMNII_GLOBAL_OPPORTUNITY_SCOPE.md`.
-
-Global Opportunity is the ecosystem's discover-what-could-be layer. It identifies potential value arising from demand, supply, capability, assets, gaps, idle capacity, timing, relationships, infrastructure, capital, technology, market conditions and other signals. It supports opportunity generation, qualification, composition, aggregation, packaging, alerts, portfolios, reverse opportunities and outcome learning.
-
-Opportunity is distinct from sourcing: sourcing starts with a requirement to obtain something; opportunity starts with a signal or possibility and determines what value could be unlocked.
-
-## 25. Global Matching & Discovery Intelligence
-
-Canonical scope: `docs/canonical/OMNII_GLOBAL_MATCHING_AND_DISCOVERY_INTELLIGENCE_SCOPE.md`.
-
-This is the connective intelligence layer between requirements, supply, capabilities, people, assets, markets and conditions. It performs semantic discovery, exact/approximate matching, multi-party matching, ranking, recommendation, graph traversal, gap detection, substitution discovery, reverse discovery, temporal matching, cross-domain discovery and explainable optimization.
-
-It may route concrete source candidates into Global Sourcing and potential new value relationships into Global Opportunity, without becoming either registry.
-
-## 26. Global Market Intelligence
-
-Canonical scope: `docs/canonical/OMNII_GLOBAL_MARKET_INTELLIGENCE_SCOPE.md`.
-
-Market Intelligence describes and interprets changing market conditions including demand, supply, prices, capacity, competition, substitutes, trade, access, finance, logistics, risk and trends. It supplies evidence-backed market context to Sourcing, Opportunity, Matching, Desk, TIP and institutional systems without becoming a marketplace, exchange, regulator or forecasting oracle.
-
-## 27. Global Research Intelligence
-
-Canonical scope: `docs/canonical/OMNII_GLOBAL_RESEARCH_INTELLIGENCE_SCOPE.md`.
-
-Research Intelligence provides global evidence discovery, retrieval, normalization, comparison, synthesis, knowledge investigation and monitoring across domains. It preserves provenance, disagreement, uncertainty, access restrictions and the distinction between fact, interpretation, inference, forecast and hypothesis.
-
-## 28. Global Verification & Trust Intelligence
-
-Canonical scope: `docs/canonical/OMNII_GLOBAL_VERIFICATION_AND_TRUST_INTELLIGENCE_SCOPE.md`.
-
-Verification & Trust Intelligence evaluates claims against evidence for a declared purpose, scope and time. It supports identity, provider/factory capability, credentials, product quality, provenance and performance while preserving regulatory authority, privacy and contextual trust boundaries.
-
-## Reuse targets
-
-These capabilities should be available to any ecosystem composition involving:
-
-- TIP
-- Desk
-- BUNK/property
-- Charter/movement
-- agriculture
-- media
-- HAPI World
-- institutional systems
-- territorial operating systems
-- future products
-
-## Boundary between the capabilities
-
-```text
-SOURCING
-Known requirement
-→ Find and qualify ways to obtain it
-
-OPPORTUNITY
-Signal / surplus / gap / possibility
-→ Determine what value or action could be unlocked
-
-MATCHING & DISCOVERY INTELLIGENCE
-Needs + supply + people + assets + conditions
-→ Discover relationships, rank possibilities, and connect the right objects
-
-MARKET INTELLIGENCE
-External market conditions
-→ Understand what is changing and how it affects available paths
-
-RESEARCH INTELLIGENCE
-Questions + evidence + unknowns
-→ Investigate, synthesize and contextualize knowledge
-
-VERIFICATION & TRUST
-Claim + evidence + purpose + scope + time
-→ Determine what can responsibly be relied upon
-```
-
-These capabilities cooperate through shared contracts but remain independently reusable and independently governed.
-
-## Forward roadmap
-
-The canonical next-wave roadmap is maintained in `docs/canonical/OMNII_GLOBAL_CAPABILITY_EVOLUTION_ROADMAP.md` and currently identifies:
-
-- Global Network & Corridor Intelligence
-- Global Resource & Capacity Exchange Intelligence
-- Global Finance & Funding Discovery
-- Global Trade & Regulatory Intelligence
-- Global Procurement Intelligence
-- Global Capability Development Intelligence
-- Global Resilience & Disruption Intelligence
-- Global Economic Outcome Intelligence
-
-Before any future capability is created, the ecosystem must first test whether existing canonical primitives already provide the required meaning. New capability scope is justified only when its purpose and boundary are genuinely distinct and reusable.
+All capabilities are reusable by Desk, TIP, HAPI World, BUNK, Charter, agriculture, media, institutional systems, territorial systems and future products. Products compose these capabilities and may not fork shared meaning into local mini-constitutions.
 
 ## Non-goals
 
-This register does not create a new market ontology, payment currency, regulator, bank, insurer, customs authority or marketplace.
-
-It is a **shared capability layer** that existing and future products can compose.
+No new currency, regulator, bank, insurer, customs authority, marketplace or alternate constitutional architecture is created by this register.

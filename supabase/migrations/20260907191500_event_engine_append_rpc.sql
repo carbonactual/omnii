@@ -29,7 +29,7 @@ language sql
 immutable
 set search_path = public, pg_temp
 as $$
-  encode(
+  select encode(
     digest(
       jsonb_build_object(
         'event_type', p_event_type, 'event_version', p_event_version, 'schema_version', p_schema_version,

@@ -7,7 +7,9 @@ on:
       - 'data/canonical/omnii-control-plane-registry.json'
       - 'docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md'
       - 'docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md'
+      - 'docs/architecture/OMNII_SECURITY_POSTURE_AND_PROVIDER_BOUNDARIES.md'
       - 'scripts/validate-control-plane.mjs'
+      - 'scripts/validate-security-posture.mjs'
       - '.github/workflows/control-plane-conformance.yml'
   pull_request:
     branches: [main]
@@ -15,7 +17,9 @@ on:
       - 'data/canonical/omnii-control-plane-registry.json'
       - 'docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md'
       - 'docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md'
+      - 'docs/architecture/OMNII_SECURITY_POSTURE_AND_PROVIDER_BOUNDARIES.md'
       - 'scripts/validate-control-plane.mjs'
+      - 'scripts/validate-security-posture.mjs'
       - '.github/workflows/control-plane-conformance.yml'
   workflow_dispatch:
 
@@ -44,3 +48,6 @@ jobs:
 
       - name: Validate control registry
         run: node scripts/validate-control-plane.mjs
+
+      - name: Validate security posture
+        run: node scripts/validate-security-posture.mjs

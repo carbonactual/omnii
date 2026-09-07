@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import { EventEngine, normalizeEventInput } from "./event-engine";
 import { MemoryPersistenceAdapter } from "./persistence";
 
@@ -24,28 +25,28 @@ const input = {
 describe("Event Engine", () => {
   it("normalizes a canonical envelope and mirrors payload.type", () => {
     const event = normalizeEventInput({ ...input, payload: { amount: 25 } });
-    expect(event.id).toBeTruthy();
-    expect(event.payload.type).toBe("ORDER_CREATED");
-    expect(event.recorded_at).toBeTruthy();
-    expect(event.event_hash).toMatch(/^[a-f0-9]{64}$/);
+    assert.ok(event.id);
+    assert.equal(event.payload.type, "ORDER_CREATED");
+    assert.ok(event.recorded_at);
+    assert.match(event.event_hash, /^[a-f0-9]{64}$/);
   });
 
   it("rejects payload.type that disagrees with event_type", () => {
-    expect(() => normalizeEventInput({ ...input, payload: { type: "WRONG" } })).toThrow("payload.type must equal event_type");
+    assert.throws(() => normalizeEventInput({ ...input, payload: { type: "WRONG" } }), /payload\.type must equal event_type/);
   });
 
   it("returns the original event on idempotent replay", async () => {
     const engine = new EventEngine(new MemoryPersistenceAdapter());
     const first = await engine.append(input);
     const second = await engine.append({ ...input, id: "different-id" });
-    expect(second.id).toBe(first.id);
-    expect(second.event_hash).toBe(first.event_hash);
+    assert.equal(second.id, first.id);
+    assert.equal(second.event_hash, first.event_hash);
   });
 
   it("rejects an idempotency key reused with different contents", async () => {
     const engine = new EventEngine(new MemoryPersistenceAdapter());
     await engine.append(input);
-    await expect(engine.append({ ...input, payload: { type: "ORDER_CREATED", amount: 99 } })).rejects.toThrow("omnii_event_idempotency_conflict");
+    await assert.rejects(() => engine.append({ ...input, payload: { type: "ORDER_CREATED", amount: 99 } }), /omnii_event_idempotency_conflict/);
   });
 
   it("maps runtime signals without losing actor, subject, context or source", async () => {
@@ -66,12 +67,12 @@ describe("Event Engine", () => {
       location: { lat: 9, lng: 7 },
       provenance: { source: "sensor" },
     });
-    expect(event.actor_ref).toBe("sensor:1");
-    expect(event.subject_ref).toBe("room:1");
-    expect(event.institution_ref).toBe("facility:1");
-    expect(event.operating_context_id).toBe("context:1");
-    expect(event.reality_state).toBe("observed");
-    expect(event.metadata.domain).toBe("environment");
+    assert.equal(event.actor_ref, "sensor:1");
+    assert.equal(event.subject_ref, "room:1");
+    assert.equal(event.institution_ref, "facility:1");
+    assert.equal(event.operating_context_id, "context:1");
+    assert.equal(event.reality_state, "observed");
+    assert.equal(event.metadata.domain, "environment");
   });
 
   it("queries and replays deterministically", async () => {
@@ -80,8 +81,8 @@ describe("Event Engine", () => {
     await engine.append({ ...input, idempotency_key: "earlier", occurred_at: "2026-09-07T18:01:00.000Z", payload: { type: "ORDER_CREATED", seq: 1 } });
     const seen: number[] = [];
     const count = await engine.replay((event) => seen.push(Number(event.payload.seq)), { query: { correlation_id: "order:1" } });
-    expect(count).toBe(2);
-    expect(seen).toEqual([1, 2]);
+    assert.equal(count, 2);
+    assert.deepEqual(seen, [1, 2]);
   });
 
   it("uses unknown reality as the safe default when reading legacy records", async () => {
@@ -99,7 +100,7 @@ describe("Event Engine", () => {
     });
     const engine = new EventEngine(persistence);
     const legacy = await engine.get("legacy:1");
-    expect(legacy?.reality_state).toBe("unknown");
-    expect(legacy?.event_type).toBe("LEGACY");
+    assert.equal(legacy?.reality_state, "unknown");
+    assert.equal(legacy?.event_type, "LEGACY");
   });
 });

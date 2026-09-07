@@ -3,9 +3,9 @@ import test from "node:test";
 
 import {
   assertIntegrationRecord,
-  isValidIntegrationTransition,
   type IntegrationRecord,
 } from "../../src/integration/integration.js";
+import { isValidIntegrationTransition } from "../../src/integration/lifecycle.js";
 
 const validRecord: IntegrationRecord = {
   integrationId: "integration:example",

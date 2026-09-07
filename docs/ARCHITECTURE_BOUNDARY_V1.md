@@ -14,7 +14,20 @@ OMNII is the constitutional/universal ecosystem architecture and kernel. It is n
 - Ash/Phoenix/no-waste lifecycle contracts;
 - Root/Index/Vault/ATLAS/SEAL/Continuum contracts;
 - horizon safety and future-state rules;
-- provider-neutral integration contracts.
+- provider-neutral integration contracts;
+- ecosystem experience quality, natural-habitat context, meaningful-motion and accessibility semantics.
+
+## Ecosystem Experience and Natural Habitat
+
+OMNII owns the canonical experience contract in `docs/canonical/ECOSYSTEM_EXPERIENCE_NATURAL_HABITAT_DESIGN_DOCTRINE_V1.md`.
+
+The contract treats natural habitat and place as first-class ecosystem context where relevant, preserving the relationship among habitat, geography, people, activity, infrastructure, resources, and value.
+
+Products inherit this contract but retain concrete visual implementation and product identity. OMNII does not own product UI code.
+
+The design floor is living-system interaction and world-class institutional infrastructure rather than generic/template-first UI. Meaningful motion, animation, transitions, spatial visualization, progressive disclosure, and responsive feedback are preferred where they improve understanding. Motion must represent actual state and must support accessibility, reduced-motion preferences, and performance.
+
+Audubon-inspired natural-history and ecological storytelling is a reference language, not a grant of rights to proprietary Audubon assets, logos, or branding.
 
 ## Minting versus tokenization
 

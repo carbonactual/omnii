@@ -9,7 +9,9 @@
 - Registry boundary, continuity and relationship policy metadata are present across all 28 records.
 - CVE infrastructure is present and protected by the existing runtime/security boundary.
 - `public.aggregate_stream_window(uuid, timestamptz, timestamptz, text)` is restricted to `service_role`; anonymous, authenticated and public execution are disabled.
-- The repository migration filenames for the PostGIS and stream-aggregation privilege controls match the live Supabase migration ledger.
+- Trigger-only integrity functions are not directly executable by `public`, `anon` or `authenticated` roles.
+- Direct API access to token representation, token identifier, token lifecycle-event and mint-issuance tables is disabled for `anon` and `authenticated`; backend/service-role access remains available.
+- The repository migration filenames for the PostGIS, stream-aggregation, trigger-function and tokenization privilege controls match the live Supabase migration ledger where those controls have been synchronized.
 
 ## Explicit outstanding security gates
 
@@ -32,5 +34,9 @@ A modern publishable key is present alongside an enabled legacy anon key. The le
 ### Performance cleanup
 
 The current performance advisor reports numerous unused indexes. These remain informational until workload evidence demonstrates they are safe to remove; blanket deletion is not part of this hardening pass.
+
+### Control-plane CI
+
+A prior Control Plane Conformance run failed because the repository security scanner detected its own embedded legacy-key detection strings. The scanner was corrected to exclude its own source file from content scanning. The latest hardening commits have not yet produced a retrievable workflow run, so current CI is not represented as passing until GitHub reports a fresh successful run.
 
 This record prevents unresolved security and provider exceptions from being mistaken for invisible or completed controls.

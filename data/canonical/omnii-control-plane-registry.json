@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "registry": "omnii-control-plane",
+  "status": "canonical-seed",
+  "version": "1.0.0",
+  "authority": "OMNII_CONTROL_PLANE_CANONICAL",
+  "promotion_ladder": [
+    "idea",
+    "candidate",
+    "specified",
+    "implemented",
+    "tested",
+    "conformant",
+    "staged",
+    "verified",
+    "production",
+    "deprecated",
+    "retired"
+  ],
+  "authority_precedence": [
+    "constitution",
+    "canonical_architecture",
+    "canonical_registry_or_contract",
+    "runtime_contract",
+    "implementation",
+    "observed_runtime_or_data",
+    "historical_or_proposed"
+  ],
+  "required_fields": [
+    "canonical_id",
+    "owner",
+    "authority_class",
+    "lifecycle",
+    "version",
+    "conformance_status"
+  ],
+  "control_domains": [
+    {
+      "canonical_id": "omnii.control.registry",
+      "owner": "OMNII",
+      "authority_class": "canonical_architecture",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "implemented"
+    },
+    {
+      "canonical_id": "omnii.control.authority-gate",
+      "owner": "OMNII",
+      "authority_class": "canonical_architecture",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "specified"
+    },
+    {
+      "canonical_id": "omnii.control.workflow-reliability",
+      "owner": "Universal Runtime",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "specified"
+    },
+    {
+      "canonical_id": "omnii.control.evidence-actual",
+      "owner": "OMNII",
+      "authority_class": "canonical_architecture",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "specified"
+    },
+    {
+      "canonical_id": "omnii.control.contradiction-resolution",
+      "owner": "Governance",
+      "authority_class": "canonical_architecture",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "implemented"
+    },
+    {
+      "canonical_id": "omnii.control.external-boundary",
+      "owner": "Universal Runtime",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "specified"
+    },
+    {
+      "canonical_id": "omnii.control.agent-governance",
+      "owner": "ABBA / Human Authority boundary",
+      "authority_class": "canonical_architecture",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "specified"
+    },
+    {
+      "canonical_id": "omnii.control.observability",
+      "owner": "Universal Runtime",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "specified"
+    },
+    {
+      "canonical_id": "omnii.control.drift-detection",
+      "owner": "Control Plane",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "specified"
+    }
+  ]
+}

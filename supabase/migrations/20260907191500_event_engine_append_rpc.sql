@@ -1,5 +1,6 @@
 -- Governed atomic append boundary for canonical events.
 -- Retries are safe by idempotency key; materially different retries fail closed.
+create extension if not exists pgcrypto;
 
 create or replace function public.omnii_event_semantic_hash(
   p_event_type text, p_event_version text, p_schema_version text, p_lifecycle text, p_status text,

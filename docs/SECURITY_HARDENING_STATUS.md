@@ -12,15 +12,18 @@
 - Trigger-only integrity functions are not directly executable by `public`, `anon` or `authenticated` roles.
 - Direct API access to token representation, token identifier, token lifecycle-event and mint-issuance tables is disabled for `anon` and `authenticated`; backend/service-role access remains available.
 - Nineteen previously unrestricted authenticated `ALL` policies were reviewed: sensitive economic, settlement, reconciliation, valuation, benchmark, quality and completeness state is now backend-only; open-world reference/graph data is authenticated read-only pending governed write APIs.
+- Core control tables for agents, authorities, executions, execution controls, ledger, process state/tasks and CVE/control findings no longer grant direct API-role table access; governed functions/workers remain the execution path.
 - The live `stream-event` and `recompute-stream-aggregates` Edge Functions were brought under repository source control and upgraded to version 2 with bounded request sizes, strict input parsing, temporal/window validation, and fail-closed backend configuration.
 - The repository security scanner now detects embedded secret material rather than treating legitimate environment-variable names as secrets.
-- The repository migration filenames for the PostGIS, stream-aggregation, trigger-function, tokenization and broad-policy privilege controls match the live Supabase migration ledger where those controls have been synchronized.
+- Transport compliance and credential write policies now require an actually issued, active, non-expired authority record; matching `auth.uid()` alone is insufficient.
+- Authenticated profile editing is limited to display/contact metadata; `active_role`, public identity reference and deletion state remain backend-controlled.
+- The repository migration filenames for the PostGIS, stream-aggregation, trigger-function, tokenization, broad-policy, core-control, authority-binding and profile-role controls match the live Supabase migration ledger where those controls have been synchronized.
 
 ## Explicit outstanding security gates
 
 ### Application-role RLS policy design
 
-The runtime observability tables are intentionally backend-owned and their operational functions are not exposed to anonymous or authenticated roles. Application-role RLS behavior remains unresolved where a policy would depend on an authoritative identity-to-authority mapping.
+Backend-owned tables intentionally do not expose direct API writes. Application-role RLS behavior remains unresolved where a policy requires an authoritative identity-to-authority mapping that has not yet been seeded for a production tenant.
 
 `public.spatial_ref_sys` remains a provider-managed PostGIS table with RLS disabled. Enabling RLS without a provider-compatible policy would risk breaking PostGIS behavior and is therefore not auto-applied.
 
@@ -42,6 +45,6 @@ The current performance advisor reports numerous unused indexes. These remain in
 
 ### Control-plane CI
 
-A fresh Control Plane Conformance run succeeded on the intermediate hardening commit `0c979bc4eeb618a2762029731c672a07a53d833d` after the scanner correction. The final branch head has since advanced; its GitHub verification checks are currently in progress, so the final head is not yet represented as green.
+Control Plane Conformance and the full CI suite both succeeded on the immediately preceding verified hardening head. Subsequent repository hardening commits have advanced the branch, so the latest head must complete a fresh CI run before being called fully green.
 
 This record prevents unresolved security and provider exceptions from being mistaken for invisible or completed controls.

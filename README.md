@@ -17,6 +17,12 @@ See `docs/architecture/OMNII_REPOSITORY_BOUNDARY.md` for the authoritative bound
 - Architecture: `docs/architecture/OMNII_CANONICAL_ARCHITECTURE.md`
 - Terminology: `docs/architecture/OMNII_CANONICAL_TERMINOLOGY.md`
 - Dependency graph: `docs/architecture/OMNII_FINAL_DEPENDENCY_GRAPH.md`
+- Common Layer: `docs/architecture/OMNII_COMMON_LAYER_CANONICAL_1_0.md`
+- Trust, Identity & Assurance: `docs/architecture/OMNII_TRUST_IDENTITY_ASSURANCE_LAYER.md`
+- Universal Settlement & Clearing: `docs/architecture/OMNII_UNIVERSAL_SETTLEMENT_CLEARING_LAYER.md`
+- Universal Execution & Workflow: `docs/architecture/OMNII_UNIVERSAL_EXECUTION_WORKFLOW_LAYER.md`
+- Intelligence & Optimization: `docs/architecture/OMNII_INTELLIGENCE_OPTIMIZATION_LAYER.md`
+- Integrated Runtime Stack: `docs/architecture/OMNII_INTEGRATED_RUNTIME_STACK.md`
 
 Historical Carbon Actual architecture documents remain in the repository for provenance but do not override these canonical OMNII sources.
 

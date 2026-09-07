@@ -27,8 +27,8 @@ This session has no exposed subagent-dispatch tool and no local OMNII checkout. 
 
 ## Task status
 - [x] Preflight branch and plan verified.
-- [ ] Task 1
-- [ ] Task 2
+- [x] Task 1 — universal integration contract and lifecycle implemented/reviewed.
+- [x] Task 2 — identity, naming, and resolution mesh contracts implemented/reviewed.
 - [ ] Task 3
 - [ ] Task 4
 - [ ] Task 5
@@ -40,6 +40,16 @@ This session has no exposed subagent-dispatch tool and no local OMNII checkout. 
 - [ ] Task 11
 - [ ] Task 12
 
+## Task review notes
+### Task 1
+Reviewed `integration.ts` and `lifecycle.ts` against the test seam and approved design. The contract requires source/target, relationship, protocol, trust state, authority requirements, and non-empty provenance. Lifecycle rejects arbitrary jumps, makes `REVOKED -> ACTIVE` impossible, and makes `DEPRECATED` terminal.
+
+### Task 2
+Reviewed `identity.ts` and `resolution.ts`. Identity schemes remain distinct; DID method is optional metadata rather than a hard-coded implementation. Resolution records are explicitly untrusted until `verified === true` and status is `resolved`. ENS/HNS/DNS-specific metadata is represented as optional adapter-facing shapes; no scheme is mandatory. Correlation requires proof-bearing evidence and can return uncorrelated/ambiguous outcomes.
+
 ## Evidence log
-- Feature branch head verified at `d2065cd9e5c807eaf17798bae05778d8217849f4`, whose parent is the approved design commit `135bc547ead6dc95dc9cffa66414decd085781ac`.
-- The plan references `packages/kernel`, but the actual repository has `packages/omnii-runtime`; implementation will follow the repository's real constitutional runtime boundary rather than create a parallel nonexistent kernel package.
+- Feature branch was verified at `d2065cd9e5c807eaf17798bae05778d8217849f4`, whose parent is the approved design commit `135bc547ead6dc95dc9cffa66414decd085781ac`.
+- The plan references `packages/kernel`, but the actual repository has `packages/omnii-runtime`; implementation follows the repository's real constitutional runtime boundary rather than create a parallel nonexistent kernel package.
+- Task 1 implementation commit: `1938b7d916ea4b8528173fd5ac3145e7bfd95402`.
+- Task 2 implementation commits: `0e92fb7f73b86966b57c5a3ff2a4d4d94af76421`, `e97f4dbee92d46a35bf17c962d7e6c209e50a933`.
+- Targeted local execution is unavailable because no local checkout/test runtime is exposed in this session; CI evidence is not inferred from absent workflow records.

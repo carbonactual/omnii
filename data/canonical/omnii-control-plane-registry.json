@@ -106,6 +106,30 @@
       "lifecycle": "production",
       "version": "1.0.0",
       "conformance_status": "specified"
+    },
+    {
+      "canonical_id": "omnii.control.security-posture",
+      "owner": "Security / Control Plane",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "implemented"
+    },
+    {
+      "canonical_id": "omnii.control.api-key-migration",
+      "owner": "Security / Platform Boundary",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "implemented"
+    },
+    {
+      "canonical_id": "omnii.control.provider-managed-extension-boundary",
+      "owner": "Security / Provider Boundary",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "implemented"
     }
   ]
 }

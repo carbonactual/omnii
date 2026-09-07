@@ -10,7 +10,7 @@ create or replace function public.omnii_event_semantic_hash(
   p_evidence_refs jsonb, p_metadata jsonb, p_payload jsonb, p_idempotency_key text
 )
 returns text language sql immutable set search_path = public, pg_temp as $$
-select encode(digest(convert_to(jsonb_build_object(
+select encode(extensions.digest(convert_to(jsonb_build_object(
   'event_type',p_event_type,'event_version',p_event_version,'schema_version',p_schema_version,'lifecycle',p_lifecycle,'status',p_status,
   'occurred_at',to_char(p_occurred_at at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'),
   'actor_ref',p_actor_ref,'subject_ref',p_subject_ref,'institution_ref',p_institution_ref,'operating_context_id',p_operating_context_id,
@@ -32,19 +32,12 @@ create or replace function public.omnii_append_event(
 )
 returns public.omnii_events language plpgsql security invoker set search_path = public, pg_temp as $$
 declare
-  v_existing public.omnii_events;
-  v_hash text;
-  v_reality_state text := coalesce(p_reality_state,'unknown');
-  v_event_version text := coalesce(p_event_version,'1');
-  v_schema_version text := coalesce(p_schema_version,'1');
-  v_lifecycle text := coalesce(p_lifecycle,'active');
-  v_status text := coalesce(p_status,'accepted');
-  v_occurred_at timestamptz := coalesce(p_occurred_at,now());
-  v_recorded_at timestamptz := coalesce(p_recorded_at,now());
-  v_payload jsonb := coalesce(p_payload,'{}'::jsonb);
-  v_provenance jsonb := coalesce(p_provenance,'{}'::jsonb);
-  v_evidence_refs jsonb := coalesce(p_evidence_refs,'[]'::jsonb);
-  v_metadata jsonb := coalesce(p_metadata,'{}'::jsonb);
+  v_existing public.omnii_events; v_hash text; v_reality_state text := coalesce(p_reality_state,'unknown');
+  v_event_version text := coalesce(p_event_version,'1'); v_schema_version text := coalesce(p_schema_version,'1');
+  v_lifecycle text := coalesce(p_lifecycle,'active'); v_status text := coalesce(p_status,'accepted');
+  v_occurred_at timestamptz := coalesce(p_occurred_at,now()); v_recorded_at timestamptz := coalesce(p_recorded_at,now());
+  v_payload jsonb := coalesce(p_payload,'{}'::jsonb); v_provenance jsonb := coalesce(p_provenance,'{}'::jsonb);
+  v_evidence_refs jsonb := coalesce(p_evidence_refs,'[]'::jsonb); v_metadata jsonb := coalesce(p_metadata,'{}'::jsonb);
 begin
   if p_idempotency_key is null or btrim(p_idempotency_key)='' then raise exception 'omnii_event_idempotency_key_required'; end if;
   if p_event_type is null or btrim(p_event_type)='' then raise exception 'omnii_event_type_required'; end if;
@@ -53,14 +46,9 @@ begin
   if v_payload->>'type' is not null and v_payload->>'type'<>p_event_type then raise exception 'omnii_event_payload_type_mismatch'; end if;
   if v_payload->>'type' is null then v_payload:=jsonb_set(v_payload,'{type}',to_jsonb(p_event_type),true); end if;
   if v_reality_state not in ('actual','observed','planned','committed','simulated','estimated','unknown') then raise exception 'omnii_event_invalid_reality_state'; end if;
-
   v_hash:=public.omnii_event_semantic_hash(p_event_type,v_event_version,v_schema_version,v_lifecycle,v_status,v_occurred_at,p_actor_ref,p_subject_ref,p_institution_ref,p_operating_context_id,p_correlation_id,p_causation_id,p_parent_event_id,v_reality_state,p_authority_ref,p_source,v_provenance,v_evidence_refs,v_metadata,v_payload,p_idempotency_key);
   select * into v_existing from public.omnii_events where idempotency_key=p_idempotency_key limit 1;
-  if found then
-    if v_existing.event_hash=v_hash then return v_existing; end if;
-    raise exception 'omnii_event_idempotency_conflict';
-  end if;
-
+  if found then if v_existing.event_hash=v_hash then return v_existing; end if; raise exception 'omnii_event_idempotency_conflict'; end if;
   begin
     insert into public.omnii_events(
       id,version,lifecycle,authority,provenance,payload,correlation_id,idempotency_key,event_type,event_version,schema_version,

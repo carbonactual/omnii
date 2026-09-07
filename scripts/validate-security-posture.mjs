@@ -3,6 +3,7 @@ import path from 'node:path';
 
 const root = process.cwd();
 const ignoredDirs = new Set(['.git', 'node_modules', '.next', 'dist', 'build', '.vercel']);
+const ignoredFiles = new Set(['scripts/validate-security-posture.mjs']);
 const scannedExtensions = new Set(['.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx', '.json', '.yml', '.yaml', '.toml', '.ini', '.env']);
 const legacyKeyNames = ['SUPABASE_ANON_KEY', 'SUPABASE_SERVICE_ROLE_KEY', 'anon_key', 'service_role_key'];
 const secretPatterns = [
@@ -26,6 +27,7 @@ function walk(dir) {
 
 function inspect(file) {
   const relative = path.relative(root, file).replaceAll(path.sep, '/');
+  if (ignoredFiles.has(relative)) return;
   const text = fs.readFileSync(file, 'utf8');
   const lower = relative.toLowerCase();
   const documentation = lower.endsWith('.md') || lower.includes('/docs/');

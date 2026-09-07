@@ -12,6 +12,8 @@
 - Trigger-only integrity functions are not directly executable by `public`, `anon` or `authenticated` roles.
 - Direct API access to token representation, token identifier, token lifecycle-event and mint-issuance tables is disabled for `anon` and `authenticated`; backend/service-role access remains available.
 - Nineteen previously unrestricted authenticated `ALL` policies were reviewed: sensitive economic, settlement, reconciliation, valuation, benchmark, quality and completeness state is now backend-only; open-world reference/graph data is authenticated read-only pending governed write APIs.
+- The live `stream-event` and `recompute-stream-aggregates` Edge Functions were brought under repository source control and upgraded to version 2 with bounded request sizes, strict input parsing, temporal/window validation, and fail-closed backend configuration.
+- The repository security scanner now detects embedded secret material rather than treating legitimate environment-variable names as secrets.
 - The repository migration filenames for the PostGIS, stream-aggregation, trigger-function, tokenization and broad-policy privilege controls match the live Supabase migration ledger where those controls have been synchronized.
 
 ## Explicit outstanding security gates
@@ -32,12 +34,14 @@ Required provider-boundary action: use the supported Supabase/PostGIS extension-
 
 A modern publishable key is present alongside an enabled legacy anon key. The legacy key is not disabled yet because all external consumers have not been independently inventoried and migrated. No secret value is stored in this record.
 
+The remaining live Edge Functions still read the legacy service-role environment variable. Supabase's current migration guidance recommends moving Edge Functions to the modern secret-key environment and retiring the legacy service-role key after consumer migration. This is a controlled next-stage migration, not an implicit assumption that the legacy credential can be removed immediately.
+
 ### Performance cleanup
 
 The current performance advisor reports numerous unused indexes. These remain informational until workload evidence demonstrates they are safe to remove; blanket deletion is not part of this hardening pass.
 
 ### Control-plane CI
 
-A prior Control Plane Conformance run failed because the repository security scanner detected its own embedded legacy-key detection strings. The scanner was corrected to exclude its own source file from content scanning. The latest hardening commits have not yet produced a retrievable workflow run, so current CI is not represented as passing until GitHub reports a fresh successful run.
+A fresh Control Plane Conformance run succeeded on the intermediate hardening commit `0c979bc4eeb618a2762029731c672a07a53d833d` after the scanner correction. The final branch head has since advanced; its GitHub verification checks are currently in progress, so the final head is not yet represented as green.
 
 This record prevents unresolved security and provider exceptions from being mistaken for invisible or completed controls.

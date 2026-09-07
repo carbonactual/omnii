@@ -4,154 +4,51 @@ import type { PersistencePort } from "./persistence";
 import { MemoryPersistenceAdapter } from "./persistence";
 import type { RuntimeSignal } from "./runtime-signal";
 
-export const EVENT_REALITY_STATES = [
-  "actual", "observed", "planned", "committed", "simulated", "estimated", "unknown",
-] as const;
+export const EVENT_REALITY_STATES = ["actual", "observed", "planned", "committed", "simulated", "estimated", "unknown"] as const;
 export type EventRealityState = (typeof EVENT_REALITY_STATES)[number];
 
 export interface CanonicalEvent<T extends JsonObject = JsonObject> {
-  id: string;
-  event_type: string;
-  event_version: string;
-  schema_version: string;
-  lifecycle: string;
-  status: string;
-  occurred_at: string;
-  recorded_at: string;
-  actor_ref?: string;
-  subject_ref?: string;
-  institution_ref?: string;
-  operating_context_id?: string;
-  correlation_id: string;
-  causation_id?: string;
-  parent_event_id?: string;
-  reality_state: EventRealityState;
-  authority_ref?: string;
-  source: string;
-  provenance: JsonObject;
-  evidence_refs: unknown[];
-  metadata: JsonObject;
-  payload: T;
-  idempotency_key: string;
-  event_hash: string;
+  id: string; event_type: string; event_version: string; schema_version: string; lifecycle: string; status: string;
+  occurred_at: string; recorded_at: string; actor_ref?: string; subject_ref?: string; institution_ref?: string;
+  operating_context_id?: string; correlation_id: string; causation_id?: string; parent_event_id?: string;
+  reality_state: EventRealityState; authority_ref?: string; source: string; provenance: JsonObject; evidence_refs: unknown[];
+  metadata: JsonObject; payload: T; idempotency_key: string; event_hash: string;
 }
-
-export type EventAppendInput<T extends JsonObject = JsonObject> = Omit<CanonicalEvent<T>, "id" | "recorded_at" | "event_hash" | "payload"> & {
-  id?: string;
-  recorded_at?: string;
-  payload: T;
-};
-export interface EventQuery {
-  event_type?: string; actor_ref?: string; subject_ref?: string; institution_ref?: string;
-  correlation_id?: string; causation_id?: string; parent_event_id?: string;
-  reality_state?: EventRealityState; source?: string; occurred_from?: string; occurred_to?: string;
-}
+export type EventAppendInput<T extends JsonObject = JsonObject> = Omit<CanonicalEvent<T>, "id" | "recorded_at" | "event_hash" | "payload"> & { id?: string; recorded_at?: string; payload: T };
+export interface EventQuery { event_type?: string; actor_ref?: string; subject_ref?: string; institution_ref?: string; correlation_id?: string; causation_id?: string; parent_event_id?: string; reality_state?: EventRealityState; source?: string; occurred_from?: string; occurred_to?: string; }
 export interface EventReplayOptions { query?: EventQuery; limit?: number; }
-export function isEventRealityState(value: unknown): value is EventRealityState {
-  return typeof value === "string" && (EVENT_REALITY_STATES as readonly string[]).includes(value);
-}
-function sortedJson(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(sortedJson);
-  if (value && typeof value === "object") return Object.fromEntries(Object.entries(value as Record<string, unknown>).sort(([a], [b]) => a.localeCompare(b)).map(([key, child]) => [key, sortedJson(child)]));
-  return value;
-}
-function semanticMaterial(event: Omit<CanonicalEvent, "event_hash" | "id" | "recorded_at">): unknown {
-  return {
-    event_type: event.event_type, event_version: event.event_version, schema_version: event.schema_version,
-    lifecycle: event.lifecycle, status: event.status, occurred_at: event.occurred_at,
-    actor_ref: event.actor_ref ?? null, subject_ref: event.subject_ref ?? null, institution_ref: event.institution_ref ?? null,
-    operating_context_id: event.operating_context_id ?? null, correlation_id: event.correlation_id,
-    causation_id: event.causation_id ?? null, parent_event_id: event.parent_event_id ?? null,
-    reality_state: event.reality_state, authority_ref: event.authority_ref ?? null, source: event.source,
-    provenance: event.provenance, evidence_refs: event.evidence_refs, metadata: event.metadata,
-    payload: event.payload, idempotency_key: event.idempotency_key,
-  };
-}
-function calculateEventHash(event: Omit<CanonicalEvent, "event_hash" | "id" | "recorded_at">): string {
-  return createHash("sha256").update(JSON.stringify(sortedJson(semanticMaterial(event)))).digest("hex");
-}
+export interface EventPersistencePort { appendEvents?(events: CanonicalEvent[]): Promise<CanonicalEvent[]>; }
+export function isEventRealityState(value: unknown): value is EventRealityState { return typeof value === "string" && (EVENT_REALITY_STATES as readonly string[]).includes(value); }
+function sortedJson(value: unknown): unknown { if (Array.isArray(value)) return value.map(sortedJson); if (value && typeof value === "object") return Object.fromEntries(Object.entries(value as Record<string, unknown>).sort(([a], [b]) => a.localeCompare(b)).map(([key, child]) => [key, sortedJson(child)])); return value; }
+function semanticMaterial(event: Omit<CanonicalEvent, "event_hash" | "id" | "recorded_at">): unknown { return { event_type: event.event_type, event_version: event.event_version, schema_version: event.schema_version, lifecycle: event.lifecycle, status: event.status, occurred_at: event.occurred_at, actor_ref: event.actor_ref ?? null, subject_ref: event.subject_ref ?? null, institution_ref: event.institution_ref ?? null, operating_context_id: event.operating_context_id ?? null, correlation_id: event.correlation_id, causation_id: event.causation_id ?? null, parent_event_id: event.parent_event_id ?? null, reality_state: event.reality_state, authority_ref: event.authority_ref ?? null, source: event.source, provenance: event.provenance, evidence_refs: event.evidence_refs, metadata: event.metadata, payload: event.payload, idempotency_key: event.idempotency_key }; }
+function calculateEventHash(event: Omit<CanonicalEvent, "event_hash" | "id" | "recorded_at">): string { return createHash("sha256").update(JSON.stringify(sortedJson(semanticMaterial(event)))).digest("hex"); }
 function clone<T>(value: T): T { return structuredClone(value); }
-function assertNonEmpty(name: string, value: unknown): asserts value is string {
-  if (typeof value !== "string" || value.trim() === "") throw new Error(`${name} is required`);
-}
+function assertNonEmpty(name: string, value: unknown): asserts value is string { if (typeof value !== "string" || value.trim() === "") throw new Error(`${name} is required`); }
 
 export function normalizeEventInput<T extends JsonObject>(input: EventAppendInput<T>): CanonicalEvent<T> {
-  assertNonEmpty("event_type", input.event_type); assertNonEmpty("source", input.source); assertNonEmpty("correlation_id", input.correlation_id);
-  assertNonEmpty("idempotency_key", input.idempotency_key); assertNonEmpty("event_version", input.event_version); assertNonEmpty("schema_version", input.schema_version);
-  const realityState = input.reality_state ?? "unknown";
-  if (!isEventRealityState(realityState)) throw new Error(`Unsupported event reality_state: ${String(realityState)}`);
+  assertNonEmpty("event_type", input.event_type); assertNonEmpty("source", input.source); assertNonEmpty("correlation_id", input.correlation_id); assertNonEmpty("idempotency_key", input.idempotency_key); assertNonEmpty("event_version", input.event_version); assertNonEmpty("schema_version", input.schema_version);
+  const realityState = input.reality_state ?? "unknown"; if (!isEventRealityState(realityState)) throw new Error(`Unsupported event reality_state: ${String(realityState)}`);
   const occurredAt = new Date(input.occurred_at); if (Number.isNaN(occurredAt.getTime())) throw new Error("occurred_at must be a valid timestamp");
   const recordedAt = new Date(input.recorded_at ?? new Date().toISOString()); if (Number.isNaN(recordedAt.getTime())) throw new Error("recorded_at must be a valid timestamp");
-  const payload = clone(input.payload);
-  if (typeof payload.type === "undefined") payload.type = input.event_type;
-  if (typeof payload.type !== "string" || payload.type !== input.event_type) throw new Error("payload.type must equal event_type");
-  const eventWithoutHash: Omit<CanonicalEvent<T>, "event_hash"> = {
-    id: input.id ?? randomUUID(), event_type: input.event_type, event_version: input.event_version, schema_version: input.schema_version,
-    lifecycle: input.lifecycle ?? "active", status: input.status ?? "accepted", occurred_at: occurredAt.toISOString(), recorded_at: recordedAt.toISOString(),
-    actor_ref: input.actor_ref, subject_ref: input.subject_ref, institution_ref: input.institution_ref, operating_context_id: input.operating_context_id,
-    correlation_id: input.correlation_id, causation_id: input.causation_id, parent_event_id: input.parent_event_id, reality_state: realityState,
-    authority_ref: input.authority_ref, source: input.source, provenance: clone(input.provenance ?? {}), evidence_refs: clone(input.evidence_refs ?? []),
-    metadata: clone(input.metadata ?? {}), payload, idempotency_key: input.idempotency_key,
-  };
+  const payload = clone(input.payload); if (typeof payload.type === "undefined") payload.type = input.event_type; if (typeof payload.type !== "string" || payload.type !== input.event_type) throw new Error("payload.type must equal event_type");
+  const eventWithoutHash: Omit<CanonicalEvent<T>, "event_hash"> = { id: input.id ?? randomUUID(), event_type: input.event_type, event_version: input.event_version, schema_version: input.schema_version, lifecycle: input.lifecycle ?? "active", status: input.status ?? "accepted", occurred_at: occurredAt.toISOString(), recorded_at: recordedAt.toISOString(), actor_ref: input.actor_ref, subject_ref: input.subject_ref, institution_ref: input.institution_ref, operating_context_id: input.operating_context_id, correlation_id: input.correlation_id, causation_id: input.causation_id, parent_event_id: input.parent_event_id, reality_state: realityState, authority_ref: input.authority_ref, source: input.source, provenance: clone(input.provenance ?? {}), evidence_refs: clone(input.evidence_refs ?? []), metadata: clone(input.metadata ?? {}), payload, idempotency_key: input.idempotency_key };
   return { ...eventWithoutHash, event_hash: calculateEventHash(eventWithoutHash) };
 }
 
 function fromPersistence(record: Record<string, unknown>): CanonicalEvent {
   const payload = (record.payload ?? {}) as JsonObject;
   const eventType = String(record.event_type ?? payload.type ?? "UNKNOWN");
-  const normalizedInput: EventAppendInput = {
-    id: String(record.id), event_type: eventType, event_version: String(record.event_version ?? record.version ?? "1"), schema_version: String(record.schema_version ?? "1"),
-    lifecycle: String(record.lifecycle ?? "active"), status: String(record.status ?? "accepted"), occurred_at: String(record.occurred_at ?? record.created_at), recorded_at: String(record.recorded_at ?? record.created_at),
-    actor_ref: typeof record.actor_ref === "string" ? record.actor_ref : typeof payload.actor === "string" ? payload.actor : undefined,
-    subject_ref: typeof record.subject_ref === "string" ? record.subject_ref : typeof payload.subject === "string" ? payload.subject : undefined,
-    institution_ref: typeof record.institution_ref === "string" ? record.institution_ref : undefined,
-    operating_context_id: typeof record.operating_context_id === "string" ? record.operating_context_id : undefined,
-    correlation_id: String(record.correlation_id ?? record.id), causation_id: typeof record.causation_id === "string" ? record.causation_id : undefined,
-    parent_event_id: typeof record.parent_event_id === "string" ? record.parent_event_id : undefined, reality_state: isEventRealityState(record.reality_state) ? record.reality_state : "unknown",
-    authority_ref: typeof record.authority_ref === "string" ? record.authority_ref : undefined,
-    source: String(record.source ?? (record.provenance as Record<string, unknown> | undefined)?.source ?? "legacy"), provenance: clone((record.provenance ?? {}) as JsonObject),
-    evidence_refs: clone((record.evidence_refs ?? []) as unknown[]), metadata: clone((record.metadata ?? {}) as JsonObject), payload,
-    idempotency_key: String(record.idempotency_key ?? `legacy:${record.id}`),
-  };
-  const normalized = normalizeEventInput(normalizedInput);
-  return typeof record.event_hash === "string" && record.event_hash ? { ...normalized, event_hash: record.event_hash } : normalized;
+  const normalizedInput: EventAppendInput = { id: String(record.id), event_type: eventType, event_version: String(record.event_version ?? record.version ?? "1"), schema_version: String(record.schema_version ?? "1"), lifecycle: String(record.lifecycle ?? "active"), status: String(record.status ?? "accepted"), occurred_at: String(record.occurred_at ?? record.created_at), recorded_at: String(record.recorded_at ?? record.created_at), actor_ref: typeof record.actor_ref === "string" ? record.actor_ref : typeof payload.actor === "string" ? payload.actor : undefined, subject_ref: typeof record.subject_ref === "string" ? record.subject_ref : typeof payload.subject === "string" ? payload.subject : undefined, institution_ref: typeof record.institution_ref === "string" ? record.institution_ref : undefined, operating_context_id: typeof record.operating_context_id === "string" ? record.operating_context_id : undefined, correlation_id: String(record.correlation_id ?? record.id), causation_id: typeof record.causation_id === "string" ? record.causation_id : undefined, parent_event_id: typeof record.parent_event_id === "string" ? record.parent_event_id : undefined, reality_state: isEventRealityState(record.reality_state) ? record.reality_state : "unknown", authority_ref: typeof record.authority_ref === "string" ? record.authority_ref : undefined, source: String(record.source ?? (record.provenance as Record<string, unknown> | undefined)?.source ?? "legacy"), provenance: clone((record.provenance ?? {}) as JsonObject), evidence_refs: clone((record.evidence_refs ?? []) as unknown[]), metadata: clone((record.metadata ?? {}) as JsonObject), payload, idempotency_key: String(record.idempotency_key ?? `legacy:${record.id}`) };
+  const normalized = normalizeEventInput(normalizedInput); return typeof record.event_hash === "string" && record.event_hash ? { ...normalized, event_hash: record.event_hash } : normalized;
 }
 
 export class EventEngine {
-  constructor(private readonly persistence: PersistencePort = new MemoryPersistenceAdapter()) {}
-  async append<T extends JsonObject>(input: EventAppendInput<T>): Promise<CanonicalEvent<T>> {
-    const normalized = normalizeEventInput(input); const existing = await this.findByIdempotencyKey(normalized.idempotency_key);
-    if (existing) { if (existing.event_hash !== normalized.event_hash) throw new Error("omnii_event_idempotency_conflict"); return clone(existing as CanonicalEvent<T>); }
-    const created = await this.persistence.create("events", normalized as unknown as { id: string });
-    return clone(fromPersistence(created as Record<string, unknown>) as CanonicalEvent<T>);
-  }
-  async appendMany<T extends JsonObject>(inputs: EventAppendInput<T>[]): Promise<CanonicalEvent<T>[]> {
-    return this.persistence.transaction(async () => { const results: CanonicalEvent<T>[] = []; for (const input of inputs) results.push(await this.append(input)); return results; });
-  }
-  async appendSignal<T extends JsonObject>(signal: RuntimeSignal<T>): Promise<CanonicalEvent<T>> {
-    return this.append({ event_type: signal.eventType, event_version: "1", schema_version: "1", lifecycle: "active", status: "accepted", occurred_at: signal.receivedAt,
-      actor_ref: signal.actorId, subject_ref: signal.subjectId, institution_ref: signal.institutionId, operating_context_id: signal.operatingContextId,
-      correlation_id: signal.correlationId, reality_state: "observed", source: signal.source, provenance: clone(signal.provenance ?? {}), evidence_refs: [],
-      metadata: { domain: signal.domain, location: clone(signal.location ?? {}) }, payload: clone(signal.payload), idempotency_key: signal.idempotencyKey });
-  }
+  constructor(private readonly persistence: PersistencePort & Partial<EventPersistencePort> = new MemoryPersistenceAdapter()) {}
+  async append<T extends JsonObject>(input: EventAppendInput<T>): Promise<CanonicalEvent<T>> { const normalized = normalizeEventInput(input); const existing = await this.findByIdempotencyKey(normalized.idempotency_key); if (existing) { if (existing.event_hash !== normalized.event_hash) throw new Error("omnii_event_idempotency_conflict"); return clone(existing as CanonicalEvent<T>); } const durableAppend = this.persistence.create.bind(this.persistence); if (this.persistence.appendEvents) { const result = await this.persistence.appendEvents([normalized]); return clone(result[0] as CanonicalEvent<T>); } const created = await durableAppend("events", normalized as unknown as { id: string }); return clone(fromPersistence(created as Record<string, unknown>) as CanonicalEvent<T>); }
+  async appendMany<T extends JsonObject>(inputs: EventAppendInput<T>[]): Promise<CanonicalEvent<T>[]> { const normalized = inputs.map(normalizeEventInput); if (this.persistence.appendEvents) { return clone(await this.persistence.appendEvents(normalized)); } return this.persistence.transaction(async () => { const results: CanonicalEvent<T>[] = []; for (const input of inputs) results.push(await this.append(input)); return results; }); }
+  async appendSignal<T extends JsonObject>(signal: RuntimeSignal<T>): Promise<CanonicalEvent<T>> { return this.append({ event_type: signal.eventType, event_version: "1", schema_version: "1", lifecycle: "active", status: "accepted", occurred_at: signal.receivedAt, actor_ref: signal.actorId, subject_ref: signal.subjectId, institution_ref: signal.institutionId, operating_context_id: signal.operatingContextId, correlation_id: signal.correlationId, reality_state: "observed", source: signal.source, provenance: clone(signal.provenance ?? {}), evidence_refs: [], metadata: { domain: signal.domain, location: clone(signal.location ?? {}) }, payload: clone(signal.payload), idempotency_key: signal.idempotencyKey }); }
   async get(id: string): Promise<CanonicalEvent | undefined> { const record = await this.persistence.read("events", id); return record ? clone(fromPersistence(record as Record<string, unknown>)) : undefined; }
-  async findByIdempotencyKey(idempotencyKey: string): Promise<CanonicalEvent | undefined> {
-    assertNonEmpty("idempotency_key", idempotencyKey); const records = await this.persistence.query("events", (record) => record.idempotency_key === idempotencyKey);
-    return records[0] ? clone(fromPersistence(records[0] as Record<string, unknown>)) : undefined;
-  }
-  async query(filter: EventQuery = {}, limit = Number.MAX_SAFE_INTEGER): Promise<CanonicalEvent[]> {
-    const events = await this.persistence.query("events", (record) => {
-      const e = fromPersistence(record as Record<string, unknown>);
-      if (filter.event_type && e.event_type !== filter.event_type) return false; if (filter.actor_ref && e.actor_ref !== filter.actor_ref) return false;
-      if (filter.subject_ref && e.subject_ref !== filter.subject_ref) return false; if (filter.institution_ref && e.institution_ref !== filter.institution_ref) return false;
-      if (filter.correlation_id && e.correlation_id !== filter.correlation_id) return false; if (filter.causation_id && e.causation_id !== filter.causation_id) return false;
-      if (filter.parent_event_id && e.parent_event_id !== filter.parent_event_id) return false; if (filter.reality_state && e.reality_state !== filter.reality_state) return false;
-      if (filter.source && e.source !== filter.source) return false; if (filter.occurred_from && e.occurred_at < filter.occurred_from) return false;
-      if (filter.occurred_to && e.occurred_at > filter.occurred_to) return false; return true;
-    });
-    return events.map((record) => fromPersistence(record as Record<string, unknown>)).sort((a, b) => a.occurred_at.localeCompare(b.occurred_at) || a.recorded_at.localeCompare(b.recorded_at) || a.id.localeCompare(b.id)).slice(0, Math.max(0, limit)).map(clone);
-  }
-  async replay(handler: (event: CanonicalEvent) => Promise<void> | void, options: EventReplayOptions = {}): Promise<number> {
-    const events = await this.query(options.query, options.limit ?? Number.MAX_SAFE_INTEGER); for (const event of events) await handler(clone(event)); return events.length;
-  }
+  async findByIdempotencyKey(idempotencyKey: string): Promise<CanonicalEvent | undefined> { assertNonEmpty("idempotency_key", idempotencyKey); const records = await this.persistence.query("events", (record) => record.idempotency_key === idempotencyKey); return records[0] ? clone(fromPersistence(records[0] as Record<string, unknown>)) : undefined; }
+  async query(filter: EventQuery = {}, limit = Number.MAX_SAFE_INTEGER): Promise<CanonicalEvent[]> { const events = await this.persistence.query("events", (record) => { const e = fromPersistence(record as Record<string, unknown>); if (filter.event_type && e.event_type !== filter.event_type) return false; if (filter.actor_ref && e.actor_ref !== filter.actor_ref) return false; if (filter.subject_ref && e.subject_ref !== filter.subject_ref) return false; if (filter.institution_ref && e.institution_ref !== filter.institution_ref) return false; if (filter.correlation_id && e.correlation_id !== filter.correlation_id) return false; if (filter.causation_id && e.causation_id !== filter.causation_id) return false; if (filter.parent_event_id && e.parent_event_id !== filter.parent_event_id) return false; if (filter.reality_state && e.reality_state !== filter.reality_state) return false; if (filter.source && e.source !== filter.source) return false; if (filter.occurred_from && e.occurred_at < filter.occurred_from) return false; if (filter.occurred_to && e.occurred_at > filter.occurred_to) return false; return true; }); return events.map((record) => fromPersistence(record as Record<string, unknown>)).sort((a, b) => a.occurred_at.localeCompare(b.occurred_at) || a.recorded_at.localeCompare(b.recorded_at) || a.id.localeCompare(b.id)).slice(0, Math.max(0, limit)).map(clone); }
+  async replay(handler: (event: CanonicalEvent) => Promise<void> | void, options: EventReplayOptions = {}): Promise<number> { const events = await this.query(options.query, options.limit ?? Number.MAX_SAFE_INTEGER); for (const event of events) await handler(clone(event)); return events.length; }
 }

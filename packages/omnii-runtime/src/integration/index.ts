@@ -6,3 +6,4 @@ export * from "./capability.js";
 export * from "./protocols.js";
 export * from "./routing.js";
 export * from "./accountability.js";
+export * from "./adapters/index.js";

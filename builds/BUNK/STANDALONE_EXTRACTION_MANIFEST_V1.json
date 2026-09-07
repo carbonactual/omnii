@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "product": "BUNK",
+  "source_repository": "carbonactual/omnii",
+  "target_repository": "B3C0M1NG/BUNK",
+  "status": "source-mapped-awaiting-repository-creation",
+  "source_paths": {
+    "documentation": ["builds/BUNK", "docs/canonical/BUNK_SUPABASE_IMPLEMENTATION.md", "docs/canonical/BUNK_OMNII_ECOSYSTEM_COMPOSITION.md", "docs/canonical/BUNK_PRODUCT_MANIFEST.md", "docs/canonical/BUNK_PRODUCT_UNIVERSE.md"],
+    "runtime": ["packages/omnii-runtime/src/bunk-outcome-projection.ts", "packages/omnii-runtime/src/bunk-product-manifest.ts", "packages/omnii-runtime/src/bunk-operational-flow.ts", "packages/omnii-runtime/src/bunk-property-ontology.ts"],
+    "permissions": ["packages/permissions/src/product-roles.ts"],
+    "persistence": ["supabase/migrations/0001_bunk_marketplace_core.sql", "supabase/migrations/0002_bunk_auth_roles_permissions.sql", "supabase/migrations/20260905070000_bunk_operational_review_queue.sql", "supabase/migrations/20260905070000_bunk_product_extensions.sql"]
+  },
+  "product_capabilities": ["property_registry", "buildings", "units", "listings", "search", "matching", "verification", "inspection", "tenancy", "maintenance", "payments", "agreements", "proof", "pulse", "crm", "marketplace", "investment"],
+  "universal_dependencies": ["OMNII", "ABBA", "HAPI", "HAPI_WORLD", "IO", "SEAL", "ROOT", "INDEX", "VAULT", "PROOF", "ACTUAL", "PULSE", "VALUE", "ASH", "PHOENIX", "CONTINUUM"],
+  "no_waste_rule": "Preserve all source history and migrate capability references without silent loss.",
+  "extraction_safety": "Do not delete or rewrite source files until the standalone repository exists, contents are verified, consumers are mapped, and rollback is possible."
+}

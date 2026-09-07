@@ -7,7 +7,6 @@ on:
       - 'packages/omnii-runtime/src/process-progression-runtime.ts'
       - 'packages/omnii-runtime/src/process-worker-runtime.ts'
       - 'packages/omnii-runtime/src/task-queue-runtime.ts'
-      - 'packages/omnii-runtime/src/persistence.ts'
       - 'packages/omnii-runtime/src/event-runtime.ts'
       - 'packages/omnii-runtime/src/event-engine.ts'
       - 'packages/omnii-runtime/src/event-engine.test.ts'
@@ -25,7 +24,6 @@ on:
       - 'packages/omnii-runtime/src/process-progression-runtime.ts'
       - 'packages/omnii-runtime/src/process-worker-runtime.ts'
       - 'packages/omnii-runtime/src/task-queue-runtime.ts'
-      - 'packages/omnii-runtime/src/persistence.ts'
       - 'packages/omnii-runtime/src/event-runtime.ts'
       - 'packages/omnii-runtime/src/event-engine.ts'
       - 'packages/omnii-runtime/src/event-engine.test.ts'
@@ -52,7 +50,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Node
-        uses: actions/setup-node@49933ea5288ca2eca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@49933ea528caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22.23.2
           cache: npm
@@ -93,7 +91,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Node
-        uses: actions/setup-node@49933ea528ca2eca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@49933ea528caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22.23.2
           cache: npm

@@ -83,4 +83,4 @@ $$;
 revoke all on function public.omnii_event_semantic_hash(text,text,text,text,text,timestamptz,text,text,text,text,text,text,text,text,text,text,jsonb,jsonb,jsonb,jsonb,text) from public,anon,authenticated;
 revoke all on function public.omnii_append_event(text,text,text,text,text,text,timestamptz,timestamptz,text,text,text,text,text,text,text,text,text,text,jsonb,jsonb,jsonb,jsonb,text) from public,anon,authenticated;
 grant select,insert on public.omnii_events to service_role;
-grant execute on function public.omnii_append_event(text,text,text,text,text,text,timestamptz,text,text,text,text,text,text,text,text,text,text,text,jsonb,jsonb,jsonb,jsonb,text) to service_role;
+grant execute on function public.omnii_append_event(text,text,text,text,text,text,timestamptz,timestamptz,text,text,text,text,text,text,text,text,text,text,text,text,jsonb,jsonb,jsonb,jsonb,text) to service_role;

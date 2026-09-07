@@ -2,38 +2,28 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { PersistenceCollection, PersistencePort, PersistenceRecord } from "./persistence";
 import { ProcessTask } from "./task-queue-runtime";
 import type { WorkflowRecord } from "./process-progression-runtime";
+import type { CanonicalEvent, EventPersistencePort } from "./event-engine";
 const TABLES: Record<PersistenceCollection, string> = { objects: "omnii_objects", relationships: "omnii_relationships", dependencies: "omnii_dependencies", registries: "omnii_registries", events: "omnii_events", state: "omnii_state", executions: "omnii_executions", workflows: "omnii_workflows", agents: "omnii_agents", audit: "omnii_audit", ledger: "omnii_ledger", authorities: "omnii_authorities", process_instances: "omnii_process_instances", process_tasks: "omnii_process_tasks", management: "omnii_management" };
 
 function eventRpcArgs(record: Record<string, unknown>) {
   const payload = (record.payload ?? {}) as Record<string, unknown>;
   return {
-    p_id: String(record.id ?? ""),
-    p_event_type: String(record.event_type ?? payload.type ?? "UNKNOWN"),
-    p_event_version: String(record.event_version ?? record.version ?? "1"),
-    p_schema_version: String(record.schema_version ?? "1"),
-    p_lifecycle: String(record.lifecycle ?? "active"),
-    p_status: String(record.status ?? "accepted"),
-    p_occurred_at: String(record.occurred_at ?? record.created_at ?? new Date().toISOString()),
-    p_recorded_at: String(record.recorded_at ?? new Date().toISOString()),
+    p_id: String(record.id ?? ""), p_event_type: String(record.event_type ?? payload.type ?? "UNKNOWN"),
+    p_event_version: String(record.event_version ?? record.version ?? "1"), p_schema_version: String(record.schema_version ?? "1"),
+    p_lifecycle: String(record.lifecycle ?? "active"), p_status: String(record.status ?? "accepted"),
+    p_occurred_at: String(record.occurred_at ?? record.created_at ?? new Date().toISOString()), p_recorded_at: String(record.recorded_at ?? new Date().toISOString()),
     p_actor_ref: typeof record.actor_ref === "string" ? record.actor_ref : typeof payload.actor === "string" ? payload.actor : null,
     p_subject_ref: typeof record.subject_ref === "string" ? record.subject_ref : typeof payload.subject === "string" ? payload.subject : null,
-    p_institution_ref: typeof record.institution_ref === "string" ? record.institution_ref : null,
-    p_operating_context_id: typeof record.operating_context_id === "string" ? record.operating_context_id : null,
-    p_correlation_id: String(record.correlation_id ?? record.id ?? ""),
-    p_causation_id: typeof record.causation_id === "string" ? record.causation_id : null,
-    p_parent_event_id: typeof record.parent_event_id === "string" ? record.parent_event_id : null,
-    p_reality_state: String(record.reality_state ?? "unknown"),
-    p_authority_ref: typeof record.authority_ref === "string" ? record.authority_ref : null,
-    p_source: String(record.source ?? "runtime"),
-    p_provenance: (record.provenance ?? {}) as Record<string, unknown>,
-    p_evidence_refs: (record.evidence_refs ?? []) as unknown[],
-    p_metadata: (record.metadata ?? {}) as Record<string, unknown>,
-    p_payload: payload,
-    p_idempotency_key: String(record.idempotency_key ?? `legacy:${String(record.id ?? "unknown")}`),
+    p_institution_ref: typeof record.institution_ref === "string" ? record.institution_ref : null, p_operating_context_id: typeof record.operating_context_id === "string" ? record.operating_context_id : null,
+    p_correlation_id: String(record.correlation_id ?? record.id ?? ""), p_causation_id: typeof record.causation_id === "string" ? record.causation_id : null,
+    p_parent_event_id: typeof record.parent_event_id === "string" ? record.parent_event_id : null, p_reality_state: String(record.reality_state ?? "unknown"),
+    p_authority_ref: typeof record.authority_ref === "string" ? record.authority_ref : null, p_source: String(record.source ?? "runtime"),
+    p_provenance: (record.provenance ?? {}) as Record<string, unknown>, p_evidence_refs: (record.evidence_refs ?? []) as unknown[],
+    p_metadata: (record.metadata ?? {}) as Record<string, unknown>, p_payload: payload, p_idempotency_key: String(record.idempotency_key ?? `legacy:${String(record.id ?? "unknown")}`),
   };
 }
 
-export class SupabasePersistenceAdapter implements PersistencePort {
+export class SupabasePersistenceAdapter implements PersistencePort, EventPersistencePort {
   constructor(private readonly client: SupabaseClient) {}
   async create<T extends { id: string }>(collection: PersistenceCollection, record: T): Promise<PersistenceRecord> {
     if (collection === "events") {
@@ -43,9 +33,14 @@ export class SupabasePersistenceAdapter implements PersistencePort {
       if (!row) throw new Error("omnii_append_event returned no event");
       return row as PersistenceRecord;
     }
-    const { data, error } = await this.client.from(TABLES[collection]).insert(record).select("*").single();
+    const { data, error } = await this.client.from(TABLES[collection]).insert(record).select("*").single(); if (error) throw error; return data as PersistenceRecord;
+  }
+  async appendEvents(events: CanonicalEvent[]): Promise<CanonicalEvent[]> {
+    const { data, error } = await this.client.rpc("omnii_append_events", { p_events: events });
     if (error) throw error;
-    return data as PersistenceRecord;
+    const rows = Array.isArray(data) ? data : data ? [data] : [];
+    if (rows.length !== events.length) throw new Error(`omnii_append_events returned ${rows.length} events for ${events.length} inputs`);
+    return rows as CanonicalEvent[];
   }
   async read(collection: PersistenceCollection, id: string) { const { data, error } = await this.client.from(TABLES[collection]).select("*").eq("id", id).maybeSingle(); if (error) throw error; return (data ?? undefined) as PersistenceRecord | undefined; }
   async update<T extends object>(collection: PersistenceCollection, id: string, patch: T) { const { data, error } = await this.client.from(TABLES[collection]).update({ ...patch, updated_at: new Date().toISOString() }).eq("id", id).select("*").single(); if (error) throw error; return data as PersistenceRecord; }

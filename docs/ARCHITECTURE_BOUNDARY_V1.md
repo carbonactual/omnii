@@ -10,10 +10,39 @@ OMNII is the constitutional/universal ecosystem architecture and kernel. It is n
 - universal capability/composition contracts;
 - Value/Pulse/Proof/Actual contracts;
 - IO and settlement contracts;
+- Terminal → curation → optional tokenization → Index lifecycle contracts;
 - Ash/Phoenix/no-waste lifecycle contracts;
 - Root/Index/Vault/ATLAS/SEAL/Continuum contracts;
 - horizon safety and future-state rules;
 - provider-neutral integration contracts.
+
+## Minting versus tokenization
+
+OMNII defines the distinction as constitutional:
+
+```text
+MINT
+  ↓
+TERMINAL
+  ↓
+CURATION / ELIGIBILITY / RECOGNITION
+  ↓
+TOKENIZATION
+  ↓
+INDEX
+```
+
+Minting establishes accountable identity/provenance for a feedback or ecosystem object and routes the minted object to Terminal. A minted object may stop at Terminal without becoming Index value.
+
+Tokenization is explicit and subsequent. Only tokenized objects enter the Index. Therefore:
+
+```text
+MINT != TOKENIZE
+MINT -> TERMINAL
+TOKENIZE -> INDEX
+```
+
+This applies equally to useful and unsuccessful operations. A timeout, network failure, inaccessible resource, or other failed discovery can consume value, produce minted feedback, and stop at Terminal. Minting does not retroactively make the failed result useful or tokenized. Value consumed by the attempt remains subject to the existing accounting, Proof, settlement, and ASH/no-waste contracts.
 
 ## OMNII does not retain as constitutional ownership
 

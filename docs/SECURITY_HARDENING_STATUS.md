@@ -11,7 +11,8 @@
 - `public.aggregate_stream_window(uuid, timestamptz, timestamptz, text)` is restricted to `service_role`; anonymous, authenticated and public execution are disabled.
 - Trigger-only integrity functions are not directly executable by `public`, `anon` or `authenticated` roles.
 - Direct API access to token representation, token identifier, token lifecycle-event and mint-issuance tables is disabled for `anon` and `authenticated`; backend/service-role access remains available.
-- The repository migration filenames for the PostGIS, stream-aggregation, trigger-function and tokenization privilege controls match the live Supabase migration ledger where those controls have been synchronized.
+- Nineteen previously unrestricted authenticated `ALL` policies were reviewed: sensitive economic, settlement, reconciliation, valuation, benchmark, quality and completeness state is now backend-only; open-world reference/graph data is authenticated read-only pending governed write APIs.
+- The repository migration filenames for the PostGIS, stream-aggregation, trigger-function, tokenization and broad-policy privilege controls match the live Supabase migration ledger where those controls have been synchronized.
 
 ## Explicit outstanding security gates
 

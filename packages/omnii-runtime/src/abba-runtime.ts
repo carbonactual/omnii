@@ -1,6 +1,7 @@
 import { Authority, JsonObject } from "./types";
 import { AgentRuntime } from "./agent-runtime";
 import { EventStore } from "./event-runtime";
+import { MissionDefinition, MissionAssessment, MissionIntelligenceRuntime, MissionTeamMember } from "./mission-intelligence-runtime";
 
 export interface DelegationRequest { subject: string; capability: string; purpose: string; resourceIds: string[]; context: JsonObject; }
 export interface AuthorityBroker { request(request: DelegationRequest): Authority | null | Promise<Authority | null>; }
@@ -15,6 +16,7 @@ export interface AbbaBoundary {
   requestAuthority(request: DelegationRequest): Promise<Authority>;
   selectCapability(plan: AbbaPlan): string;
   delegate(plan: AbbaPlan, authority: Authority): Promise<void>;
+  assessMission(mission: MissionDefinition, members: MissionTeamMember[]): MissionAssessment;
   observe(subject: string): Promise<JsonObject>;
   report(subject: string, result: JsonObject): Promise<void>;
   escalate(subject: string, reason: string): Promise<void>;
@@ -23,7 +25,7 @@ export interface AbbaBoundary {
 const MODES = new Set<AbbaPlan["mode"]>(["recommend", "confirm", "delegate", "execute", "simulate", "defer", "escalate"]);
 
 export class AbbaRuntime implements AbbaBoundary {
-  constructor(private readonly broker: AuthorityBroker, private readonly agents: AgentRuntime, private readonly events: EventStore, private readonly abbaIdentity = "ABBA", private readonly capabilities?: CapabilityCatalog) {}
+  constructor(private readonly broker: AuthorityBroker, private readonly agents: AgentRuntime, private readonly events: EventStore, private readonly abbaIdentity = "ABBA", private readonly capabilities?: CapabilityCatalog, private readonly missionIntelligence = new MissionIntelligenceRuntime()) {}
 
   perceive(input: JsonObject): JsonObject { return structuredClone(input); }
 
@@ -41,7 +43,8 @@ export class AbbaRuntime implements AbbaBoundary {
         evidence: "EVIDENCE",
         provenance: "PROVENANCE",
         time: "TIME",
-        place: "PLACE"
+        place: "PLACE",
+        mission_intelligence: "MISSION_INTELLIGENCE"
       }
     };
   }
@@ -86,6 +89,10 @@ export class AbbaRuntime implements AbbaBoundary {
   async discoverCapability(name: string): Promise<CapabilityRecord[]> {
     if (!this.capabilities) return [];
     return this.capabilities.lookup((record) => record.name === name && ["verified", "available"].includes(record.status), this.abbaIdentity);
+  }
+
+  assessMission(mission: MissionDefinition, members: MissionTeamMember[]): MissionAssessment {
+    return this.missionIntelligence.assess(mission, members);
   }
 
   async delegate(plan: AbbaPlan, authority: Authority): Promise<void> {

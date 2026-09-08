@@ -1,5 +1,6 @@
 import { JsonObject } from "./types";
-import { CapabilityRouterRuntime, CapabilityRouteResult, CapabilityRiskClass, CapabilitySideEffect } from "./capability-router-runtime";
+import { CapabilityRiskClass, CapabilitySideEffect } from "./capability-fabric-runtime";
+import { CapabilityRouterRuntime, CapabilityRouteResult } from "./capability-router-runtime";
 
 export interface AbbaRelationshipContext {
   id: string;

@@ -58,3 +58,11 @@ test("admission blocks revoked objects", () => {
   assert.equal(result.status, "blocked");
   assert.equal(result.reason, "object_revoked");
 });
+
+test("admission reuses a canonical identity after it has been admitted", () => {
+  const runtime = new AdmissionRuntime();
+  assert.equal(runtime.admit(candidate).status, "admitted");
+  const second = runtime.admit({ ...candidate, id: "candidate-2" });
+  assert.equal(second.status, "reused");
+  assert.equal(second.canonicalId, "person-1");
+});

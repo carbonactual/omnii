@@ -2,6 +2,7 @@ import { Authority, JsonObject } from "./types";
 import { AgentRuntime } from "./agent-runtime";
 import { EventStore } from "./event-runtime";
 import { MissionDefinition, MissionAssessment, MissionIntelligenceRuntime, MissionTeamMember } from "./mission-intelligence-runtime";
+import { AbbaCommandRequest, AbbaCommandResult, AbbaOrchestrationRuntime } from "./abba-orchestration-runtime";
 
 export interface DelegationRequest { subject: string; capability: string; purpose: string; resourceIds: string[]; context: JsonObject; }
 export interface AuthorityBroker { request(request: DelegationRequest): Authority | null | Promise<Authority | null>; }
@@ -16,6 +17,7 @@ export interface AbbaBoundary {
   requestAuthority(request: DelegationRequest): Promise<Authority>;
   selectCapability(plan: AbbaPlan): string;
   delegate(plan: AbbaPlan, authority: Authority): Promise<void>;
+  command(request: AbbaCommandRequest): Promise<AbbaCommandResult>;
   assessMission(mission: MissionDefinition, members: MissionTeamMember[]): MissionAssessment;
   observe(subject: string): Promise<JsonObject>;
   report(subject: string, result: JsonObject): Promise<void>;
@@ -25,7 +27,7 @@ export interface AbbaBoundary {
 const MODES = new Set<AbbaPlan["mode"]>(["recommend", "confirm", "delegate", "execute", "simulate", "defer", "escalate"]);
 
 export class AbbaRuntime implements AbbaBoundary {
-  constructor(private readonly broker: AuthorityBroker, private readonly agents: AgentRuntime, private readonly events: EventStore, private readonly abbaIdentity = "ABBA", private readonly capabilities?: CapabilityCatalog, private readonly missionIntelligence = new MissionIntelligenceRuntime()) {}
+  constructor(private readonly broker: AuthorityBroker, private readonly agents: AgentRuntime, private readonly events: EventStore, private readonly abbaIdentity = "ABBA", private readonly capabilities?: CapabilityCatalog, private readonly missionIntelligence = new MissionIntelligenceRuntime(), private readonly orchestration?: AbbaOrchestrationRuntime) {}
 
   perceive(input: JsonObject): JsonObject { return structuredClone(input); }
 
@@ -92,6 +94,11 @@ export class AbbaRuntime implements AbbaBoundary {
   async discoverCapability(name: string): Promise<AbbaCapabilityRecord[]> {
     if (!this.capabilities) return [];
     return this.capabilities.lookup((record) => record.name === name && ["verified", "available"].includes(record.status), this.abbaIdentity);
+  }
+
+  async command(request: AbbaCommandRequest): Promise<AbbaCommandResult> {
+    if (!this.orchestration) throw new Error("ABBA orchestration runtime is not configured");
+    return this.orchestration.command(request);
   }
 
   assessMission(mission: MissionDefinition, members: MissionTeamMember[]): MissionAssessment {

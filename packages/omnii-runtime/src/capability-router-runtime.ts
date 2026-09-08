@@ -38,8 +38,11 @@ export class CapabilityRouterRuntime {
 
   async route(request: CapabilityRouteRequest): Promise<CapabilityRouteResult> {
     const descriptors = await this.registry.active(request.capabilityId);
-    const filtered = descriptors.filter((item) => !request.providerIds || request.providerIds.includes(item.providerId));
-    const candidates = filtered.map((item) => this.toCandidate(item, request)).sort((left, right) =>
+    const filtered = descriptors
+      .filter((item) => !request.providerIds || request.providerIds.includes(item.providerId))
+      .filter((item) => !request.riskClass || riskRank[item.riskClass] <= riskRank[request.riskClass])
+      .filter((item) => !request.sideEffect || item.sideEffect === request.sideEffect);
+    const candidates = filtered.map((item) => this.toCandidate(item)).sort((left, right) =>
       right.score - left.score || left.providerId.localeCompare(right.providerId),
     );
     const selected = candidates[0];
@@ -54,21 +57,14 @@ export class CapabilityRouterRuntime {
       requiresApproval,
       explanation: selected
         ? [`selected_provider=${selected.providerId}`, `candidate_count=${candidates.length}`, `authorization=separate_authority_gate`]
-        : ["no_active_provider"]
+        : ["no_compatible_active_provider"]
     };
   }
 
-  private toCandidate(item: CapabilityDescriptor, request: CapabilityRouteRequest): CapabilityRouteCandidate {
-    const riskCompatible = !request.riskClass || riskRank[item.riskClass] <= riskRank[request.riskClass];
-    const sideEffectCompatible = !request.sideEffect || item.sideEffect === request.sideEffect;
+  private toCandidate(item: CapabilityDescriptor): CapabilityRouteCandidate {
     const requiresAuthority = item.authorityClass === "delegated" || item.authorityClass === "human-required";
-    const requiresApproval = item.riskClass === "high" || item.riskClass === "critical" || requiresAuthority;
-    const score =
-      (riskCompatible ? 100 : -1000) +
-      (sideEffectCompatible ? 50 : -500) +
-      item.reliabilityHint * 30 -
-      item.latencyHint * 0.05 -
-      item.costHint * 0.1;
+    const requiresApproval = item.riskClass === "high" || item.riskClass === "critical" || item.authorityClass === "human-required";
+    const score = item.reliabilityHint * 30 - item.latencyHint * 0.05 - item.costHint * 0.1;
     return {
       capabilityId: item.id,
       providerId: item.providerId,

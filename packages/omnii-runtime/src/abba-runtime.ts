@@ -50,7 +50,10 @@ export class AbbaRuntime implements AbbaBoundary {
   }
 
   reason(context: JsonObject): JsonObject {
-    const requested = context["perception"];
+    const perception = context["perception"];
+    const requested = perception && typeof perception === "object" && "requested" in perception
+      ? (perception["requested"] as unknown)
+      : perception;
     return {
       context: structuredClone(context),
       decision: "reuse-common-capability-before-specialization",

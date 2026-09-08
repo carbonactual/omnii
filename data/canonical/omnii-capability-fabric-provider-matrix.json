@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "registry": "omnii-capability-fabric-provider-matrix",
+  "status": "canonical-seed",
+  "version": "1.0.0",
+  "authority": "OMNII_CONTROL_PLANE_CANONICAL",
+  "principle": "one canonical capability meaning with replaceable provider implementations",
+  "providers": [
+    {
+      "providerId": "github",
+      "displayName": "GitHub",
+      "adapterStatus": "connected",
+      "domains": ["technology", "knowledge", "collaboration", "governance"],
+      "capabilities": [
+        {"id":"capability.source_control.repository_read","operation":"read","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.source_control.repository_write","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.source_control.branch_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.source_control.commit_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.collaboration.issue_manage","operation":"write","sideEffect":"external-write","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.collaboration.pull_request_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.verification.workflow_observe","operation":"observe","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.governance.release_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"}
+      ]
+    },
+    {
+      "providerId": "supabase",
+      "displayName": "Supabase",
+      "adapterStatus": "connected",
+      "domains": ["data", "identity", "runtime", "infrastructure"],
+      "capabilities": [
+        {"id":"capability.data.query","operation":"read","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.data.mutate","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.data.schema_manage","operation":"write","sideEffect":"external-write","riskClass":"critical","authorityClass":"delegated"},
+        {"id":"capability.identity.authenticate","operation":"authenticate","sideEffect":"none","riskClass":"medium","authorityClass":"provider-scoped"},
+        {"id":"capability.runtime.edge_function_manage","operation":"write","sideEffect":"external-write","riskClass":"critical","authorityClass":"delegated"},
+        {"id":"capability.runtime.realtime_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.storage.object_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"}
+      ]
+    },
+    {
+      "providerId": "vercel",
+      "displayName": "Vercel",
+      "adapterStatus": "connected",
+      "domains": ["technology", "infrastructure", "deployment"],
+      "capabilities": [
+        {"id":"capability.build.application","operation":"build","sideEffect":"compute","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.deployment.create","operation":"deploy","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.deployment.observe","operation":"observe","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.deployment.preview","operation":"create","sideEffect":"external-write","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.network.domain_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"}
+      ]
+    },
+    {
+      "providerId": "appdeploy",
+      "displayName": "AppDeploy",
+      "adapterStatus": "connected",
+      "domains": ["technology", "deployment", "qa", "infrastructure"],
+      "capabilities": [
+        {"id":"capability.build.application","operation":"build","sideEffect":"compute","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.deployment.publish","operation":"deploy","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.deployment.qa_observe","operation":"observe","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.deployment.version_snapshot","operation":"write","sideEffect":"external-write","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.security.backend_secret_configure","operation":"write","sideEffect":"external-write","riskClass":"critical","authorityClass":"delegated"},
+        {"id":"capability.network.domain_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"}
+      ]
+    },
+    {
+      "providerId": "notion",
+      "displayName": "Notion",
+      "adapterStatus": "connected",
+      "domains": ["knowledge", "planning", "documentation"],
+      "capabilities": [
+        {"id":"capability.knowledge.document_read","operation":"read","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.knowledge.document_write","operation":"write","sideEffect":"external-write","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.knowledge.research_context","operation":"retrieve","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.planning.task_context","operation":"retrieve","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.planning.project_context","operation":"retrieve","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"}
+      ]
+    },
+    {
+      "providerId": "canva",
+      "displayName": "Canva",
+      "adapterStatus": "connected",
+      "domains": ["creation", "media", "representation"],
+      "capabilities": [
+        {"id":"capability.creation.design_create","operation":"create","sideEffect":"external-write","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.creation.design_refine","operation":"write","sideEffect":"external-write","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.representation.design_transform","operation":"transform","sideEffect":"external-write","riskClass":"low","authorityClass":"delegated"},
+        {"id":"capability.media.social_resize","operation":"transform","sideEffect":"external-write","riskClass":"low","authorityClass":"delegated"}
+      ]
+    },
+    {
+      "providerId": "amplitude",
+      "displayName": "Amplitude",
+      "adapterStatus": "connected",
+      "domains": ["intelligence", "analytics", "experimentation"],
+      "capabilities": [
+        {"id":"capability.analytics.event_discover","operation":"search","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.analytics.property_discover","operation":"search","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.analytics.chart_query","operation":"query","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.analytics.dashboard_query","operation":"query","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.analytics.experiment_query","operation":"query","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"}
+      ]
+    },
+    {
+      "providerId": "posthog",
+      "displayName": "PostHog",
+      "adapterStatus": "connected",
+      "domains": ["intelligence", "analytics", "experimentation", "observability"],
+      "capabilities": [
+        {"id":"capability.analytics.product_query","operation":"query","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.experimentation.experiment_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.runtime.feature_flag_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.observability.error_observe","operation":"observe","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.observability.log_query","operation":"query","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.observability.llm_analytics","operation":"query","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"}
+      ]
+    },
+    {
+      "providerId": "quicknode",
+      "displayName": "Quicknode",
+      "adapterStatus": "connected",
+      "domains": ["distributed_infrastructure", "blockchain", "security"],
+      "capabilities": [
+        {"id":"capability.blockchain.endpoint_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.blockchain.rpc_request","operation":"query","sideEffect":"network","riskClass":"medium","authorityClass":"provider-scoped"},
+        {"id":"capability.blockchain.log_query","operation":"query","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"},
+        {"id":"capability.security.rate_limit_manage","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.billing.usage_observe","operation":"observe","sideEffect":"none","riskClass":"low","authorityClass":"provider-scoped"}
+      ]
+    },
+    {
+      "providerId": "openai-platform",
+      "displayName": "OpenAI Platform",
+      "adapterStatus": "connected",
+      "domains": ["intelligence", "ai", "platform"],
+      "capabilities": [
+        {"id":"capability.ai.model_provider","operation":"execute","sideEffect":"compute","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.ai.application_configure","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.security.api_key_lifecycle","operation":"write","sideEffect":"secret-management","riskClass":"critical","authorityClass":"delegated"}
+      ],
+      "securityInvariant": "key material remains outside the capability descriptor and telemetry"
+    },
+    {
+      "providerId": "automations",
+      "displayName": "Automations",
+      "adapterStatus": "connected",
+      "domains": ["automation", "scheduling", "orchestration"],
+      "capabilities": [
+        {"id":"capability.scheduling.reminder_create","operation":"write","sideEffect":"external-write","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.scheduling.recurring_run","operation":"write","sideEffect":"external-write","riskClass":"high","authorityClass":"delegated"},
+        {"id":"capability.automation.conditional_check","operation":"execute","sideEffect":"compute","riskClass":"medium","authorityClass":"delegated"},
+        {"id":"capability.automation.scheduled_search","operation":"execute","sideEffect":"external-query","riskClass":"medium","authorityClass":"delegated"}
+      ]
+    }
+  ],
+  "routingRules": [
+    "Prefer an existing canonical capability before creating a new one.",
+    "Permit multiple providers for one canonical capability when their semantics are equivalent.",
+    "Do not use provider status as constitutional authority.",
+    "Do not promote external responses to Actual without verification and provenance.",
+    "Do not route consequential mutations without the existing authority and mission gates."
+  ]
+}

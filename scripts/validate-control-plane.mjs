@@ -2,6 +2,7 @@ import fs from 'node:fs';
 
 const path = 'data/canonical/omnii-control-plane-registry.json';
 const doc = JSON.parse(fs.readFileSync(path, 'utf8'));
+const canonPath = 'CANON.md';
 
 const required = new Set(doc.required_fields ?? []);
 const errors = [];
@@ -23,6 +24,24 @@ const ids = new Set();
 for (const entry of doc.control_domains ?? []) {
   if (ids.has(entry.canonical_id)) errors.push(`duplicate canonical_id: ${entry.canonical_id}`);
   ids.add(entry.canonical_id);
+}
+
+if (!fs.existsSync(canonPath)) {
+  errors.push('CANON.md is required at repository root');
+} else {
+  const canon = fs.readFileSync(canonPath, 'utf8');
+  const requiredCanonTerms = [
+    'Know Before Use',
+    'Human Authority',
+    'Single Canonical Object',
+    'No Waste',
+    'HAPi Bank',
+    'Execution Law',
+    'Contradictions and Change',
+  ];
+  for (const term of requiredCanonTerms) {
+    if (!canon.includes(term)) errors.push(`CANON.md missing required section: ${term}`);
+  }
 }
 
 if (errors.length) {

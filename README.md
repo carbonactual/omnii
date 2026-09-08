@@ -18,17 +18,33 @@ See `docs/architecture/OMNII_REPOSITORY_BOUNDARY.md` for the authoritative bound
 - Terminology: `docs/architecture/OMNII_CANONICAL_TERMINOLOGY.md`
 - Dependency graph: `docs/architecture/OMNII_FINAL_DEPENDENCY_GRAPH.md`
 - Common Layer: `docs/architecture/OMNII_COMMON_LAYER_CANONICAL_1_0.md`
+- Capability Fabric: `docs/architecture/CARBON_ACTUAL_CAPABILITY_FABRIC.md`
+- Capability Provider Matrix: `docs/canonical/CACF_PROVIDER_CAPABILITY_MATRIX.md`
 - Trust, Identity & Assurance: `docs/architecture/OMNII_TRUST_IDENTITY_ASSURANCE_LAYER.md`
 - Universal Settlement & Clearing: `docs/architecture/OMNII_UNIVERSAL_SETTLEMENT_CLEARING_LAYER.md`
 - Universal Execution & Workflow: `docs/architecture/OMNII_UNIVERSAL_EXECUTION_WORKFLOW_LAYER.md`
 - Intelligence & Optimization: `docs/architecture/OMNII_INTELLIGENCE_OPTIMIZATION_LAYER.md`
 - Integrated Runtime Stack: `docs/architecture/OMNII_INTEGRATED_RUNTIME_STACK.md`
+- Mission Intelligence: `docs/architecture/OMNII_MISSION_INTELLIGENCE.md`
+- Mission Adaptation & Recovery: `docs/architecture/OMNII_MISSION_ADAPTATION_RECOVERY.md`
 - **Control Plane: `docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md`**
 - **Contradiction Resolution: `docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md`**
 - **Control Registry: `data/canonical/omnii-control-plane-registry.json`**
+- **Capability Fabric Provider Matrix: `data/canonical/omnii-capability-fabric-provider-matrix.json`**
+- **Capability Fabric Meta Providers: `data/canonical/omnii-capability-fabric-meta-providers.json`**
 - **Security & Provider Boundaries: `docs/architecture/OMNII_SECURITY_POSTURE_AND_PROVIDER_BOUNDARIES.md`**
 
 Historical Carbon Actual architecture documents remain in the repository for provenance but do not override these canonical OMNII sources. Contradictions are governed by the canonical contradiction-resolution doctrine rather than erased.
+
+## Carbon Actual Capability Fabric
+
+The Capability Fabric is the provider-neutral integration/composition layer for Carbon Actual. External providers supply capabilities through replaceable adapters; OMNII supplies identity, context, relationship, authority, value, evidence, governance, mission readiness and execution semantics.
+
+Current connected capability providers include GitHub, Supabase, Vercel, AppDeploy, Notion, Canva, Amplitude, PostHog, Quicknode, OpenAI Platform and Automations, plus Plugin Management and the conversation/file library as meta/data boundaries.
+
+The canonical rule is:
+
+`one capability meaning → many provider implementations → one governed execution boundary`
 
 ## BUNK product
 

@@ -2,11 +2,12 @@ import { Authority, JsonObject } from "./types";
 import { AgentRuntime } from "./agent-runtime";
 import { EventStore } from "./event-runtime";
 import { MissionDefinition, MissionAssessment, MissionIntelligenceRuntime, MissionTeamMember } from "./mission-intelligence-runtime";
+import { AbbaCommandRequest, AbbaCommandResult, AbbaOrchestrationRuntime } from "./abba-orchestration-runtime";
 
 export interface DelegationRequest { subject: string; capability: string; purpose: string; resourceIds: string[]; context: JsonObject; }
 export interface AuthorityBroker { request(request: DelegationRequest): Authority | null | Promise<Authority | null>; }
 export interface AbbaCapabilityRecord { id: string; name: string; version: string; status: string; authority: JsonObject; provenance: JsonObject; constraints: JsonObject; }
-export interface CapabilityCatalog { lookup(predicate: (record: AbbaCapabilityRecord) => boolean, actor?: string): Promise<AbbaCapabilityRecord[]>; }
+interface CapabilityCatalog { lookup(predicate: (record: AbbaCapabilityRecord) => boolean, actor?: string): Promise<AbbaCapabilityRecord[]>; }
 export interface AbbaPlan { purpose: string; capability: string; targetAgent: string; input: JsonObject; mode: "recommend" | "confirm" | "delegate" | "execute" | "simulate" | "defer" | "escalate"; approvalRequired: boolean; }
 export interface AbbaBoundary {
   perceive(input: JsonObject): JsonObject;
@@ -16,6 +17,7 @@ export interface AbbaBoundary {
   requestAuthority(request: DelegationRequest): Promise<Authority>;
   selectCapability(plan: AbbaPlan): string;
   delegate(plan: AbbaPlan, authority: Authority): Promise<void>;
+  command(request: AbbaCommandRequest): Promise<AbbaCommandResult>;
   assessMission(mission: MissionDefinition, members: MissionTeamMember[]): MissionAssessment;
   observe(subject: string): Promise<JsonObject>;
   report(subject: string, result: JsonObject): Promise<void>;
@@ -25,7 +27,7 @@ export interface AbbaBoundary {
 const MODES = new Set<AbbaPlan["mode"]>(["recommend", "confirm", "delegate", "execute", "simulate", "defer", "escalate"]);
 
 export class AbbaRuntime implements AbbaBoundary {
-  constructor(private readonly broker: AuthorityBroker, private readonly agents: AgentRuntime, private readonly events: EventStore, private readonly abbaIdentity = "ABBA", private readonly capabilities?: CapabilityCatalog, private readonly missionIntelligence = new MissionIntelligenceRuntime()) {}
+  constructor(private readonly broker: AuthorityBroker, private readonly agents: AgentRuntime, private readonly events: EventStore, private readonly abbaIdentity = "ABBA", private readonly capabilities?: CapabilityCatalog, private readonly missionIntelligence = new MissionIntelligenceRuntime(), private readonly orchestration?: AbbaOrchestrationRuntime) {}
 
   perceive(input: JsonObject): JsonObject { return structuredClone(input); }
 
@@ -50,7 +52,10 @@ export class AbbaRuntime implements AbbaBoundary {
   }
 
   reason(context: JsonObject): JsonObject {
-    const requested = context["perception"];
+    const perception = context["perception"];
+    const requested = perception && typeof perception === "object" && "requested" in perception
+      ? (perception["requested"] as unknown)
+      : perception;
     return {
       context: structuredClone(context),
       decision: "reuse-common-capability-before-specialization",
@@ -89,6 +94,11 @@ export class AbbaRuntime implements AbbaBoundary {
   async discoverCapability(name: string): Promise<AbbaCapabilityRecord[]> {
     if (!this.capabilities) return [];
     return this.capabilities.lookup((record) => record.name === name && ["verified", "available"].includes(record.status), this.abbaIdentity);
+  }
+
+  async command(request: AbbaCommandRequest): Promise<AbbaCommandResult> {
+    if (!this.orchestration) throw new Error("ABBA orchestration runtime is not configured");
+    return this.orchestration.command(request);
   }
 
   assessMission(mission: MissionDefinition, members: MissionTeamMember[]): MissionAssessment {

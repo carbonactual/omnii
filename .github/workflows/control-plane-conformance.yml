@@ -4,21 +4,31 @@ on:
   push:
     branches: [main]
     paths:
+      - 'CANON.md'
       - 'data/canonical/omnii-control-plane-registry.json'
+      - 'data/canonical/omnii-capability-fabric-provider-matrix.json'
+      - 'data/canonical/omnii-capability-fabric-meta-providers.json'
       - 'docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md'
       - 'docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md'
       - 'docs/architecture/OMNII_SECURITY_POSTURE_AND_PROVIDER_BOUNDARIES.md'
+      - 'docs/architecture/CARBON_ACTUAL_CAPABILITY_FABRIC.md'
       - 'scripts/validate-control-plane.mjs'
+      - 'scripts/validate-capability-fabric.mjs'
       - 'scripts/validate-security-posture.mjs'
       - '.github/workflows/control-plane-conformance.yml'
   pull_request:
     branches: [main]
     paths:
+      - 'CANON.md'
       - 'data/canonical/omnii-control-plane-registry.json'
+      - 'data/canonical/omnii-capability-fabric-provider-matrix.json'
+      - 'data/canonical/omnii-capability-fabric-meta-providers.json'
       - 'docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md'
       - 'docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md'
       - 'docs/architecture/OMNII_SECURITY_POSTURE_AND_PROVIDER_BOUNDARIES.md'
+      - 'docs/architecture/CARBON_ACTUAL_CAPABILITY_FABRIC.md'
       - 'scripts/validate-control-plane.mjs'
+      - 'scripts/validate-capability-fabric.mjs'
       - 'scripts/validate-security-posture.mjs'
       - '.github/workflows/control-plane-conformance.yml'
   workflow_dispatch:
@@ -48,6 +58,9 @@ jobs:
 
       - name: Validate control registry
         run: node scripts/validate-control-plane.mjs
+
+      - name: Validate capability fabric
+        run: node scripts/validate-capability-fabric.mjs
 
       - name: Validate security posture
         run: node scripts/validate-security-posture.mjs

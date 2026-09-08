@@ -7,6 +7,7 @@ import { MemoryPersistenceAdapter } from "../src/persistence";
 import { OperatingContext } from "../src/operating-context-runtime";
 import { createRuntimeSignal } from "../src/runtime-signal";
 import { RuntimeActivation } from "../src/runtime-activation";
+import { AdmissionRuntime } from "../src/admission-runtime";
 
 const context: OperatingContext = {
   id: "ctx-1",
@@ -36,13 +37,17 @@ async function fixture() {
     status: "active",
   };
   await persistence.create("authorities", root);
-  return { events, authorities, executions };
+  const admission = new AdmissionRuntime({
+    inspect: (signal) => ({ known: true, verified: true, canonicalId: `signal:${signal.id}` }),
+  });
+  return { events, authorities, executions, admission };
 }
 
 test("RuntimeActivation completes the governed loop and is replay-safe", async () => {
-  const { events, authorities, executions } = await fixture();
+  const { events, authorities, executions, admission } = await fixture();
   let handlerCalls = 0;
   const runtime = new RuntimeActivation({
+    admission,
     authorityRuntime: authorities,
     executionRuntime: executions,
     events,
@@ -85,9 +90,10 @@ test("RuntimeActivation completes the governed loop and is replay-safe", async (
 });
 
 test("RuntimeActivation blocks consequential work when authority is absent", async () => {
-  const { events, authorities, executions } = await fixture();
+  const { events, authorities, executions, admission } = await fixture();
   let handlerCalls = 0;
   const runtime = new RuntimeActivation({
+    admission,
     authorityRuntime: authorities,
     executionRuntime: executions,
     events,

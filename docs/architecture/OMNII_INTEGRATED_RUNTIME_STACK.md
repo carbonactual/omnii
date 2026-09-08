@@ -1,10 +1,10 @@
 # OMNII Integrated Runtime Stack
 
-**Status:** CANONICAL COMPOSITION MAP — 2026-09-07
+**Status:** CANONICAL COMPOSITION MAP — 2026-09-08
 
 ## Objective
 
-Define how the newly extended layers operate together at the same time while remaining routed by domain, authority and action type. The layers are not sequential applications; they are a shared runtime fabric.
+Define how the layers operate together at the same time while remaining routed by domain, authority and action type. The layers are not sequential applications; they are a shared runtime fabric.
 
 ## Stack
 
@@ -12,54 +12,59 @@ Define how the newly extended layers operate together at the same time while rem
 CONSTITUTION / GOVERNANCE / HUMAN AUTHORITY
                     │
                     ▼
-ROOT / IDENTITY / RELATIONSHIPS
+ROOT / IDENTITY / RELATIONSHIPS / CONTEXT
                     │
                     ▼
 TRUST / EVIDENCE / RIGHTS / AUTHORITY
                     │
-          ┌─────────┴─────────┐
-          ▼                   ▼
-        VALUE                 KNOWLEDGE
-          │                   │
-          ├──────────┬────────┤
-          ▼          ▼        ▼
-         IO       MARKET    CAPABILITY
-          │          │        │
-          └──────┬───┴────────┘
-                 ▼
-           INTENT / OFFER / ORDER / CONTRACT
-                 │
-                 ▼
-        UNIVERSAL WORKFLOW / EXECUTION
-                 │
-          ┌──────┴──────┐
-          ▼             ▼
-      FULFILLMENT    EXTERNAL SYSTEMS
-          │             │
-          └──────┬──────┘
-                 ▼
-       OBLIGATION / CLEARING
-                 │
-                 ▼
-        SETTLEMENT / RECONCILIATION
-                 │
-                 ▼
-             ACTUAL STATE
-                 │
-                 ▼
-               PULSE
-                 │
-                 ▼
-       INTELLIGENCE / SIMULATION
-                 │
-          ┌──────┴─────────┐
-          ▼                ▼
-     RECOMMENDATION      LEARNING
-          │                │
-          ▼                └──────→ KNOWLEDGE
-     AUTHORIZED PLAN
-          │
-          └──────────────→ WORKFLOW
+          ┌─────────┴──────────────┐
+          ▼                        ▼
+        VALUE                    KNOWLEDGE
+          │                        │
+          └──────────┬─────────────┘
+                     ▼
+            INTENT / REQUEST
+                     │
+                     ▼
+          CAPABILITY FABRIC (CACF)
+        ┌────────────┼────────────┐
+        │            │            │
+     REGISTRY      ROUTER       ADAPTERS
+        │            │            │
+        └────────────┼────────────┘
+                     ▼
+            TEAM / AUTO-TEAM
+                     │
+                     ▼
+          MISSION INTELLIGENCE
+                     │
+                     ▼
+       ADAPTATION / RECOVERY (when needed)
+                     │
+                     ▼
+          AUTHORITY / APPROVAL
+                     │
+                     ▼
+         UNIVERSAL EXECUTION
+                     │
+            ┌────────┴─────────┐
+            ▼                  ▼
+      INTERNAL RUNTIME     EXTERNAL PROVIDERS
+            │                  │
+            └────────┬─────────┘
+                     ▼
+         ACKNOWLEDGEMENT / EVIDENCE
+                     │
+                     ▼
+          VERIFICATION / ACTUAL
+                     │
+                     ▼
+                  PULSE
+                     │
+                     ▼
+             OUTCOME / LEARNING
+                     │
+                     └──────────→ CAPABILITY SELECTION EVIDENCE
 ```
 
 ## Runtime principle
@@ -68,19 +73,25 @@ All layers may be active concurrently. A request is routed only through the capa
 
 Examples:
 
-`marketplace listing` may require identity + rights + discovery + trust + workflow.
+`marketplace listing` may require identity + rights + discovery + trust + CACF + workflow.
 
-`property purchase` may require identity + ownership + offer + contract + IO + settlement + fulfillment + evidence.
+`property purchase` may require identity + ownership + offer + contract + IO + CACF + settlement + fulfillment + evidence.
 
-`AI agent action` may require agent identity + delegation + policy + authorization + workflow + IO + outcome + audit.
+`AI agent action` may require agent identity + delegation + CACF + policy + authorization + workflow + IO + outcome + audit.
 
-`education credential` may require identity + enrollment + learning + assessment + evidence + result + credential + external authority issuance.
+`education credential` may require identity + enrollment + learning + assessment + evidence + result + credential + CACF + external authority issuance.
 
-`government revenue collection` may require entity identity + mandate + tariff/value + collection workflow + receipt + reconciliation + audit + territorial governance.
+`government revenue collection` may require entity identity + mandate + tariff/value + CACF + collection workflow + receipt + reconciliation + audit + territorial governance.
+
+## Capability Fabric rule
+
+CACF is the provider-neutral integration/composition boundary. A canonical capability may have many provider implementations, but provider systems do not become alternate constitutional authorities or competing systems of record.
+
+`canonical capability → provider adapter → governed execution → external evidence → verification`
 
 ## Routing rule
 
-ABBA may select and compose capabilities, but capability selection does not itself create authority.
+ABBA may discover, rank and compose capabilities, but capability selection does not itself create authority.
 
 The routing decision must preserve:
 
@@ -104,6 +115,7 @@ ATLAS is a governed discoverable projection. Historical records remain immutable
 
 - Trust failure may hold an action.
 - Authority failure must prevent unauthorized consequential action.
+- Mission failure must block or adapt before execution.
 - Workflow failure pauses/escalates execution.
 - Settlement failure leaves obligation state visible and unreconciled.
 - External connector failure must not fabricate success.

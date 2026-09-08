@@ -12,6 +12,7 @@ export * from "./execution-runtime";
 export * from "./workflow-runtime";
 export * from "./agent-runtime";
 export * from "./abba-runtime";
+export * from "./abba-orchestration-runtime";
 export * from "./authority-runtime";
 export * from "./audit-runtime";
 export * from "./ledger-boundary";

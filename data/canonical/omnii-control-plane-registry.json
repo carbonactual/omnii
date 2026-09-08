@@ -130,6 +130,14 @@
       "lifecycle": "production",
       "version": "1.0.0",
       "conformance_status": "implemented"
+    },
+    {
+      "canonical_id": "omnii.control.capability-fabric",
+      "owner": "Universal Runtime / Control Plane",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "implemented"
     }
   ]
 }

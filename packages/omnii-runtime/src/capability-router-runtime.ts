@@ -6,6 +6,7 @@ export interface CapabilityRouteRequest {
   sideEffect?: CapabilitySideEffect;
   providerIds?: string[];
   requireApproval?: boolean;
+  selectionHints?: Record<string, number>;
 }
 
 export interface CapabilityRouteCandidate {
@@ -42,7 +43,7 @@ export class CapabilityRouterRuntime {
       .filter((item) => !request.providerIds || request.providerIds.includes(item.providerId))
       .filter((item) => !request.riskClass || riskRank[item.riskClass] <= riskRank[request.riskClass])
       .filter((item) => !request.sideEffect || item.sideEffect === request.sideEffect);
-    const candidates = filtered.map((item) => this.toCandidate(item)).sort((left, right) =>
+    const candidates = filtered.map((item) => this.toCandidate(item, request.selectionHints ?? {})).sort((left, right) =>
       right.score - left.score || left.providerId.localeCompare(right.providerId),
     );
     const selected = candidates[0];
@@ -61,10 +62,13 @@ export class CapabilityRouterRuntime {
     };
   }
 
-  private toCandidate(item: CapabilityDescriptor): CapabilityRouteCandidate {
+  private toCandidate(item: CapabilityDescriptor, selectionHints: Record<string, number>): CapabilityRouteCandidate {
     const requiresAuthority = item.authorityClass === "delegated" || item.authorityClass === "human-required";
     const requiresApproval = item.riskClass === "high" || item.riskClass === "critical" || item.authorityClass === "human-required";
-    const score = item.reliabilityHint * 30 - item.latencyHint * 0.05 - item.costHint * 0.1;
+    const evidence = Number.isFinite(selectionHints[`${item.id}::${item.providerId}`])
+      ? Math.max(0, Math.min(1, selectionHints[`${item.id}::${item.providerId}`]))
+      : 0;
+    const score = evidence * 40 + item.reliabilityHint * 30 - item.latencyHint * 0.05 - item.costHint * 0.1;
     return {
       capabilityId: item.id,
       providerId: item.providerId,

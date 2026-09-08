@@ -9,6 +9,12 @@ export interface AbbaRelationshipContext {
   target: string;
 }
 
+export type AbbaRelationshipStatus = "contextual" | "canonical";
+
+export interface AbbaRelationshipResolver {
+  resolve(id: string): Promise<AbbaRelationshipContext | undefined>;
+}
+
 export interface AbbaCommandRequest {
   principal: string;
   command: string;
@@ -30,6 +36,7 @@ export interface AbbaCommandResult {
   idempotencyKey: string;
   context: JsonObject;
   relationships: AbbaRelationshipContext[];
+  relationshipStatus: AbbaRelationshipStatus;
   routes: CapabilityRouteResult[];
   nextBoundary: "MISSION_OR_AUTHORITY" | "CAPABILITY_GAP";
   executable: false;
@@ -42,7 +49,7 @@ export interface AbbaCommandResult {
  * mission/authority/execution boundaries take over.
  */
 export class AbbaOrchestrationRuntime {
-  constructor(private readonly router: CapabilityRouterRuntime) {}
+  constructor(private readonly router: CapabilityRouterRuntime, private readonly relationships?: AbbaRelationshipResolver) {}
 
   async command(request: AbbaCommandRequest): Promise<AbbaCommandResult> {
     const principal = request.principal.trim();
@@ -63,20 +70,36 @@ export class AbbaOrchestrationRuntime {
 
     const warnings = routes
       .filter((route) => route.candidates.length === 0)
-      .map((route) => `no_active_provider:${route.capabilityId}`)
-      .sort();
+      .map((route) => `no_active_provider:${route.capabilityId}`);
 
+    if (capabilityIds.length === 0) warnings.push("capability_required");
+
+    const relationshipInput = request.relationships ?? [];
+    let resolvedRelationships = structuredClone(relationshipInput);
+    let relationshipStatus: AbbaRelationshipStatus = "contextual";
+    if (this.relationships && relationshipInput.length) {
+      const resolved = await Promise.all(relationshipInput.map((relationship) => this.relationships?.resolve(relationship.id)));
+      if (resolved.some((relationship) => !relationship)) {
+        warnings.push("canonical_relationship_not_resolved");
+      } else {
+        resolvedRelationships = resolved.filter((relationship): relationship is AbbaRelationshipContext => Boolean(relationship));
+        relationshipStatus = "canonical";
+      }
+    }
+
+    const uniqueWarnings = [...new Set(warnings)].sort();
     return {
       principal,
       command,
       correlationId: request.correlationId,
       idempotencyKey: request.idempotencyKey,
       context: structuredClone(request.context ?? {}),
-      relationships: structuredClone(request.relationships ?? []),
+      relationships: resolvedRelationships,
+      relationshipStatus,
       routes,
-      nextBoundary: warnings.length ? "CAPABILITY_GAP" : "MISSION_OR_AUTHORITY",
+      nextBoundary: uniqueWarnings.length ? "CAPABILITY_GAP" : "MISSION_OR_AUTHORITY",
       executable: false,
-      warnings,
+      warnings: uniqueWarnings,
     };
   }
 }

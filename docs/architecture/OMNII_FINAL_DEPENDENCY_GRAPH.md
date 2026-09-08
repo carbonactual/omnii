@@ -53,16 +53,18 @@ WORLD / CIVILIZATION HORIZONS
                  \      |      /
                   UNIVERSAL RUNTIME
                         ↑
+               HUMAN AUTHORITY / HAPI
+                        ↑
                       ABBA
                         ↑
-          MISSION / TEAMS / WORKFLOWS
+       COMMAND / REASON / PLAN / ROUTE / COMPOSE
                         ↑
-                  CACF / ADAPTERS
+             CACF / TEAMS / MISSIONS
                         ↑
-             EXTERNAL PROVIDERS
+             EXTERNAL PROVIDERS / SYSTEMS
 ```
 
-CACF is an integration/composition capability, not a new constitutional kernel. ABBA is above execution orchestration but below constitutional authority. Neither becomes a prerequisite of Being or Identity.
+ABBA is the single intelligence/orchestration center. CACF is an integration/composition capability beneath ABBA, not a new intelligence or constitutional kernel. Neither becomes a prerequisite of Being or Identity.
 
 ## Graph dependency versus relationship
 
@@ -78,7 +80,37 @@ A relationship can connect any two compatible objects. A dependency means the so
 - Capability → authority: forbidden.
 - Planning → execution without authorization: forbidden.
 - Learning → authority: forbidden.
+- Product-specific command intelligence → competing universal ABBA role: forbidden.
 - Phase 40 → canonical object redefinition: forbidden.
+
+## ABBA orchestration dependency law
+
+```text
+human / HAPI request
+        ↓
+      ABBA
+        ↓
+identity + context + relationships + intent
+        ↓
+capability discovery / CACF routing
+        ↓
+TEAM / AUTO-TEAM
+        ↓
+MISSION INTELLIGENCE
+        ↓
+ADAPTATION / RECOVERY
+        ↓
+AUTHORITY / APPROVAL
+        ↓
+GOVERNED EXECUTION
+        ↓
+EVIDENCE / VERIFICATION / ACTUAL
+        ↓
+PULSE / LEARNING
+        └────────────→ ABBA selection evidence
+```
+
+The command orchestration component is an internal ABBA runtime component. It does not create a second orchestration hierarchy.
 
 ## Capability Fabric dependency law
 
@@ -87,7 +119,9 @@ canonical capability meaning
           ↓
 provider adapter(s)
           ↓
-CACF router / catalog
+CACF registry / router
+          ↓
+ABBA
           ↓
 TEAM / MISSION
           ↓
@@ -96,11 +130,6 @@ Mission Intelligence
 Authority / Approval
           ↓
 Governed Execution
-          ↓
-Evidence / Verification / Actual
-          ↓
-Pulse / Learning
-          └────────────→ selection evidence
 ```
 
 A provider may fail, change pricing, change schema or be replaced without changing the canonical capability identity.

@@ -1,9 +1,10 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 type Json = Record<string, unknown>;
-type AbbaRequest = { objective?: Json; subjectRef?: string; operatingContextId?: string; authorityRef?: string; capabilityRef?: string; requiresHumanApproval?: boolean; execute?: boolean; constraints?: Json; memoryScope?: Json; evidenceRequirements?: unknown[]; steps?: unknown[]; idempotencyKey?: string; };
+type AbbaRequest = { objective?: Json; subjectRef?: string; operatingContextId?: string; authorityRef?: string; capabilityRef?: string; denominatorRefs?: string[]; requiresHumanApproval?: boolean; execute?: boolean; constraints?: Json; memoryScope?: Json; evidenceRequirements?: unknown[]; steps?: unknown[]; idempotencyKey?: string; };
 const json=(body:Json,status=200)=>new Response(JSON.stringify(body),{status,headers:{"content-type":"application/json; charset=utf-8"}});
 const isRecord=(v:unknown):v is Json=>!!v&&typeof v==="object"&&!Array.isArray(v);
+const boundedRefs=(value:unknown):string[]=>Array.isArray(value)?[...new Set(value.filter((item):item is string=>typeof item==="string"&&item.length>0&&item.length<=160))].slice(0,32):[];
 Deno.serve(async(req)=>{
  if(req.method!=="POST")return json({error:"method_not_allowed"},405);
  const url=Deno.env.get("SUPABASE_URL"), key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -17,20 +18,26 @@ Deno.serve(async(req)=>{
  if(idem){const {data:existing}=await db.from("omnii_abba_sessions").select("id,version,lifecycle,authority_ref,objective,started_at").contains("provenance",{idempotencyKey:idem}).maybeSingle(); if(existing)return json({accepted:true,replayed:true,session:existing});}
  const sessionId=`abba:session:${crypto.randomUUID()}`, planId=`abba:plan:${crypto.randomUUID()}`, decisionId=`abba:decision:${crypto.randomUUID()}`;
  const execute=input.execute===true, capabilityRef=typeof input.capabilityRef==="string"?input.capabilityRef:null, authorityRef=typeof input.authorityRef==="string"?input.authorityRef:null, humanApproval=input.requiresHumanApproval===true;
- const provenance={authenticatedUserId:user.id,authenticatedAt:new Date().toISOString(),ingress:"supabase:function:abba",idempotencyKey:idem,executionRequested:execute};
+ const denominatorRefs=boundedRefs(input.denominatorRefs);
+ const {data:commonDenominators,error:denominatorError}=denominatorRefs.length?await db.from("omnii_common_primitives").select("key,semantic_class,layer_role,canonical_backing,lifecycle").in("key",denominatorRefs):{data:[],error:null};
+ if(denominatorError)return json({error:"common_layer_lookup_failed"},500);
+ const resolvedDenominatorKeys=(commonDenominators??[]).map((record)=>record.key as string);
+ const missingDenominatorKeys=denominatorRefs.filter((ref)=>!resolvedDenominatorKeys.includes(ref));
+ if(missingDenominatorKeys.length)return json({error:"unknown_common_denominator",missing:missingDenominatorKeys},422);
+ const provenance={authenticatedUserId:user.id,authenticatedAt:new Date().toISOString(),ingress:"supabase:function:abba",idempotencyKey:idem,executionRequested:execute,commonDenominatorKeys:resolvedDenominatorKeys};
  const {error:sessionError}=await db.from("omnii_abba_sessions").insert({id:sessionId,version:"1",lifecycle:"active",subject_ref:input.subjectRef??null,operating_context_id:input.operatingContextId??null,authority_ref:authorityRef,objective:input.objective,constraints:input.constraints??{},memory_scope:input.memoryScope??{},provenance});
  if(sessionError)return json({error:"session_create_failed",detail:sessionError.message},500);
  const proposedSteps=Array.isArray(input.steps)&&input.steps.length?input.steps:[{type:execute?"authorized_action":"analysis",status:execute?"pending_authorization_check":"proposed"}];
- let authorityChecks:Json={required:execute,provided:!!authorityRef,capabilityProvided:!!capabilityRef,humanApprovalRequired:humanApproval}; let status=execute?"proposed":"proposed"; let blockReason:string|null=null;
+ let authorityChecks:Json={required:execute,provided:!!authorityRef,capabilityProvided:!!capabilityRef,humanApprovalRequired:humanApproval}; let status=execute?"proposed":"proposed"; let decisionState="proposed"; let blockReason:string|null=null;
  if(execute){
-  if(!authorityRef){status="failed";blockReason="missing_authority";}
-  else if(!capabilityRef){status="failed";blockReason="missing_capability";}
-  else {const {data:guard,error:guardError}=await db.rpc("omnii_abba_guard_action",{p_session_id:sessionId,p_capability_ref:capabilityRef,p_authority_ref:authorityRef,p_requires_human:humanApproval}); if(guardError){status="failed";blockReason=guardError.message;authorityChecks={...authorityChecks,allowed:false,guardError:guardError.message};}else{status="authorized";authorityChecks={...authorityChecks,allowed:true,guard};}}
+  if(!authorityRef){status="failed";blockReason="missing_authority";decisionState="rejected";}
+  else if(!capabilityRef){status="failed";blockReason="missing_capability";decisionState="rejected";}
+  else {const {data:guard,error:guardError}=await db.rpc("omnii_abba_guard_action",{p_session_id:sessionId,p_capability_ref:capabilityRef,p_authority_ref:authorityRef,p_requires_human:humanApproval}); if(guardError){status="failed";blockReason=guardError.message;decisionState="rejected";authorityChecks={...authorityChecks,allowed:false,guardError:guardError.message};}else{status="authorized";decisionState="accepted";authorityChecks={...authorityChecks,allowed:true,guard};}}
  }
- const {error:planError}=await db.from("omnii_abba_plans").insert({id:planId,session_id:sessionId,version:"1",status,intent:input.objective,steps:proposedSteps,required_capabilities:capabilityRef?[capabilityRef]:[],required_resources:[],policy_checks:{constitutionalBoundary:"enforced",humanAuthorityBoundary:"preserved",evidenceRequired:true,unknownContextsEscalate:true},authority_checks:authorityChecks,evidence_requirements:input.evidenceRequirements??[],provenance});
+ const {error:planError}=await db.from("omnii_abba_plans").insert({id:planId,session_id:sessionId,version:"1",status,intent:input.objective,steps:proposedSteps,required_capabilities:capabilityRef?[capabilityRef]:[],required_resources:[],policy_checks:{constitutionalBoundary:"enforced",humanAuthorityBoundary:"preserved",evidenceRequired:true,unknownContextsEscalate:true,commonLayerReuseRequired:true,commonDenominatorKeys:resolvedDenominatorKeys},authority_checks:authorityChecks,evidence_requirements:input.evidenceRequirements??[],provenance});
  if(planError)return json({error:"plan_create_failed",detail:planError.message},500);
- const {error:decisionError}=await db.from("omnii_abba_decisions").insert({id:decisionId,session_id:sessionId,plan_id:planId,decision_type:execute?"execution_gate":"planning",decision_state:status,rationale:{objective:input.objective,blockReason},evidence_refs:input.evidenceRequirements??[],authority_ref:authorityRef,human_approval_required:humanApproval,human_approval_ref:humanApproval?authorityRef:null,confidence:status==="authorized"?1:0.5});
+ const {error:decisionError}=await db.from("omnii_abba_decisions").insert({id:decisionId,session_id:sessionId,plan_id:planId,decision_type:execute?"execution_gate":"planning",decision_state:decisionState,rationale:{objective:input.objective,blockReason,commonDenominators:commonDenominators??[]},evidence_refs:input.evidenceRequirements??[],authority_ref:authorityRef,human_approval_required:humanApproval,human_approval_ref:humanApproval?authorityRef:null,confidence:status==="authorized"?1:0.5});
  if(decisionError)return json({error:"decision_create_failed",detail:decisionError.message},500);
- await db.from("omnii_events").insert({id:crypto.randomUUID(),version:"1",lifecycle:"active",authority:authorityRef?{authorityRef,capabilityRef}:{},provenance:{...provenance,abbaSessionId:sessionId,abbaPlanId:planId,abbaDecisionId:decisionId},payload:{type:execute?"ABBA_EXECUTION_GATE":"ABBA_PLAN_PROPOSED",objective:input.objective,status,blockReason},correlation_id:sessionId,idempotency_key:idem?`${idem}:event`:`abba:event:${sessionId}`,operating_context_id:input.operatingContextId??null});
- return json({accepted:true,sessionId,planId,decisionId,status,executable:execute&&status==="authorized",blockReason,authorityBoundary:"ABBA cannot issue authority, change the constitution, or replace human authority.",plannerMode:"provider-agnostic-control-plane"},execute&&status!=="authorized"?403:202);
+ await db.from("omnii_events").insert({id:crypto.randomUUID(),version:"1",lifecycle:"active",authority:authorityRef?{authorityRef,capabilityRef}:{},provenance:{...provenance,abbaSessionId:sessionId,abbaPlanId:planId,abbaDecisionId:decisionId},payload:{type:execute?"ABBA_EXECUTION_GATE":"ABBA_PLAN_PROPOSED",objective:input.objective,status,decisionState,blockReason,commonDenominatorKeys:resolvedDenominatorKeys},correlation_id:sessionId,idempotency_key:idem?`${idem}:event`:`abba:event:${sessionId}`,operating_context_id:input.operatingContextId??null});
+ return json({accepted:true,sessionId,planId,decisionId,status,decisionState,executable:execute&&status==="authorized",blockReason,commonDenominators:commonDenominators??[],authorityBoundary:"ABBA cannot issue authority, change the constitution, or replace human authority.",plannerMode:"provider-agnostic-control-plane"},execute&&status!=="authorized"?403:202);
 });

@@ -6,6 +6,16 @@
 
 The Common Layer is the reusable semantic fabric beneath Carbon Actual products and institutional deployments. It does not create a second constitutional kernel and it does not replace the canonical OMNII object/relationship model.
 
+## Denominator Taxonomy — added 2026-09-08
+
+The Common Layer now explicitly separates **Universal Denominators** from **Ecosystem Denominators** while retaining one authoritative registry, `public.omnii_common_primitives`.
+
+- **Universal denominators** are conservative cross-domain abstractions supported by established ontology and interoperability patterns: `THING, AGENT, ACTIVITY, PROCESS, RELATION, QUALITY, STATE, CHANGE, IDENTITY, IDENTIFIER, INFORMATION, COLLECTION, MEASUREMENT, TIME, PLACE, REPRESENTATION, CONTEXT, PURPOSE`.
+- **Ecosystem denominators** are recurring Carbon Actual operating capabilities: `INTENT, CAPABILITY, AUTHORITY, AUTHORIZATION, OBLIGATION, REQUEST, SERVICE, WORKFLOW, TASK, DISCOVERY, MATCHING, AVAILABILITY, RESOURCE, RIGHTS, VALUE, EXCHANGE, MARKET, OFFER, ORDER, TRANSACTION, SETTLEMENT, EVIDENCE, PROVENANCE, POLICY, DECISION, COMMUNICATION, AUDIT, REGISTRY, COMPLIANCE, RISK, CONSENT, CREDENTIAL, SCHEDULING, BOOKING, QUEUE, ALLOCATION, EXECUTION, FULFILLMENT, DELIVERY, INTEROPERABILITY`.
+- Domain-specific concepts extend these contracts; technology-specific implementations sit at the edge and remain replaceable.
+
+The complete research-backed taxonomy and reuse rules are defined in `docs/architecture/OMNII_UNIVERSAL_AND_ECOSYSTEM_DENOMINATORS_1_0.md`.
+
 ## Eight Deep Common Denominators
 
 `ENTITY + RELATIONSHIP + INTENT + CAPABILITY + VALUE + AUTHORITY + MOTION + OUTCOME`
@@ -52,6 +62,22 @@ Expanded reusable capabilities include, among others:
 `intent → discovery → match → context/availability → authority/authorization → application/request → workflow → execution → evidence → result/outcome → settlement/ledger → pulse/learning`
 
 Not every flow uses every stage; the pattern is compositional.
+
+## TEAM → MISSION Intelligence
+
+TEAM is the selected composition of members drawn from SWIRMs. **Mission Intelligence** is a reusable Common Layer capability that evaluates a TEAM before consequential execution.
+
+Its common contract is:
+
+`TEAM → coverage → SWIRM coverage → dependencies → conflicts → authority requirements → human approval → execution order → readiness`
+
+Readiness is explicitly one of:
+
+`READY | INCOMPLETE | BLOCKED`
+
+The capability is domain-neutral. Transport, education, property, finance, media, government, household and agent missions supply their own members and constraints while reusing the same readiness machinery.
+
+Mission Intelligence does not authorize execution. It prepares the mission for the existing authority/authorization and execution boundaries. A readiness result is not permission.
 
 ## Education / InstituteGPT Boundary
 

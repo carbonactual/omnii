@@ -1,0 +1,12 @@
+drop policy if exists "authenticated access token identifiers" on public.omnii_token_identifiers;
+drop policy if exists token_representations_authenticated on public.omnii_token_representations;
+drop policy if exists "authenticated access token lifecycle" on public.omnii_token_lifecycle_events;
+drop policy if exists mint_issuances_authenticated on public.omnii_mint_issuances;
+revoke select, insert, update, delete, truncate, references, trigger on table public.omnii_token_identifiers from anon, authenticated;
+revoke select, insert, update, delete, truncate, references, trigger on table public.omnii_token_representations from anon, authenticated;
+revoke select, insert, update, delete, truncate, references, trigger on table public.omnii_token_lifecycle_events from anon, authenticated;
+revoke select, insert, update, delete, truncate, references, trigger on table public.omnii_mint_issuances from anon, authenticated;
+revoke all on table public.omnii_token_identifiers from public;
+revoke all on table public.omnii_token_representations from public;
+revoke all on table public.omnii_token_lifecycle_events from public;
+revoke all on table public.omnii_mint_issuances from public;

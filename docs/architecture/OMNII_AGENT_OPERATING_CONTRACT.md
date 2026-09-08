@@ -41,7 +41,9 @@ This is a convention, not a provider-specific requirement.
 
 ```text
 DEFINE
+→ DISCOVER / REUSE
 → PLAN
+→ AUTHORIZE
 → BUILD / EXECUTE
 → VERIFY
 → REVIEW
@@ -64,7 +66,8 @@ Context may include:
 - current Actual state;
 - relationships;
 - Intent;
-- capabilities;
+- universal denominators;
+- ecosystem capabilities;
 - authority/authorization;
 - resource state;
 - relevant memory/evidence;
@@ -75,7 +78,17 @@ Context may include:
 
 Compression may reduce verbosity, but must not remove semantics required for correctness, security or auditability.
 
-## 5. Skills
+## 5. Common-layer reuse
+
+Before implementing a capability locally, an agent or orchestrator should query the canonical Common Layer and Capability Registry.
+
+The required decision order is:
+
+`discover → reuse → compose → specialize → adapt technology`
+
+A domain-specific implementation may extend a common capability but must not silently redefine its canonical semantics.
+
+## 6. Skills
 
 A skill is a reusable procedure for a capability. It is not authority.
 
@@ -89,7 +102,7 @@ Skills must be:
 - composable;
 - reversible where practical.
 
-## 6. Tool use
+## 7. Tool use
 
 Tools are capability interfaces. Before use, the runtime should establish:
 
@@ -97,13 +110,13 @@ Tools are capability interfaces. Before use, the runtime should establish:
 
 A tool result is evidence/data unless separately established as authoritative.
 
-## 7. Human-in-the-loop
+## 8. Human-in-the-loop
 
 Human involvement is required where policy, law, risk, consent, or consequence requires it. Human approval is represented by the canonical authority/SEAL boundary.
 
 Agents must escalate rather than fabricate approval.
 
-## 8. Multi-agent orchestration
+## 9. Multi-agent orchestration
 
 Swarms provide candidate capability fields. Teams are purposeful compositions selected for a specific outcome.
 
@@ -118,11 +131,13 @@ Multi-agent execution must preserve:
 - audit;
 - substitution/recovery options.
 
-## 9. Communication and channels
+ABBA coordinates these compositions but does not become the authority of the participating humans, institutions or agents.
+
+## 10. Communication and channels
 
 Slack, Discord, WhatsApp, HTTP, MCP, A2A-compatible messaging, email and other channels are adapters. Channel identity must not silently become constitutional identity.
 
-## 10. Brevity and compression
+## 11. Brevity and compression
 
 Token-efficient communication is valuable where it preserves meaning. Compression should:
 
@@ -133,7 +148,7 @@ Token-efficient communication is valuable where it preserves meaning. Compressio
 - preserve required evidence;
 - never truncate a safety-critical instruction merely for brevity.
 
-## 11. Adversarial review
+## 12. Adversarial review
 
 Non-trivial work should be challengeable before irreversible action.
 
@@ -143,13 +158,15 @@ Useful review patterns include:
 
 and independent fresh-context review for high-stakes changes.
 
-## 12. Observability
+## 13. Observability
 
 Agent execution should be traceable through:
 
 - session;
+- intent;
 - plan;
 - decision;
+- capability discovery;
 - tool call;
 - authorization;
 - execution;
@@ -160,7 +177,7 @@ Agent execution should be traceable through:
 
 The runtime should support correlation IDs and structured records where appropriate.
 
-## 13. Safety boundaries
+## 14. Safety boundaries
 
 Agents must not:
 
@@ -172,15 +189,18 @@ Agents must not:
 - treat events as current state;
 - expose unnecessary private memory;
 - erase provenance to simplify a workflow;
-- substitute a provider's semantics for OMNII's canonical contract.
+- substitute a provider's semantics for OMNII's canonical contract;
+- recreate an existing canonical capability merely to avoid reuse.
 
-## 14. Canonical relation to ABBA
+## 15. Canonical relation to ABBA
 
 ABBA is the master intelligence/orchestrator. Other agents are specialized participants or implementation agents.
 
-ABBA may curate, coordinate, compare, route, learn and orchestrate. It remains bounded by OMNII governance, authority, policy, evidence and human/legal control.
+ABBA may curate, coordinate, compare, discover, reuse, compose, route, learn and orchestrate. It remains bounded by OMNII governance, authority, policy, evidence and human/legal control.
 
-## 15. Development-quality inheritance
+ABBA can request delegated authority but cannot issue constitutional authority itself.
+
+## 16. Development-quality inheritance
 
 Agent development should inherit the strongest validated engineering disciplines harvested from the connected account:
 

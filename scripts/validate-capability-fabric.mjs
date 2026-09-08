@@ -10,11 +10,18 @@ const requiredCapabilityFields = ["id", "operation", "sideEffect", "riskClass", 
 const riskClasses = new Set(["low", "medium", "high", "critical"]);
 const sideEffects = new Set(["none", "compute", "network", "external-query", "external-write", "secret-management"]);
 const authorityClasses = new Set(["none", "provider-scoped", "delegated", "human-required"]);
-const credentialKey = /(api[_-]?key|token|secret|password|credential|private[_-]?key|authorization|bearer)/i;
-const secretValue = /(?:bearer\s+)?[A-Za-z0-9_./+=:-]{16,}/i;
+const credentialKey = /^(?:api[_-]?key|token|secret|password|credential|private[_-]?key|authorization|bearer)$/i;
+const credentialValue = /^(?:bearer\s+)?[A-Za-z0-9_./+=:-]{24,}$/i;
 
 const errors = [];
 const entries = [];
+
+function containsCredentialMaterial(value, keyName = "") {
+  if (typeof value === "string") return credentialKey.test(keyName) && credentialValue.test(value.trim());
+  if (!value || typeof value !== "object") return false;
+  if (Array.isArray(value)) return value.some((item) => containsCredentialMaterial(item, keyName));
+  return Object.entries(value).some(([key, child]) => containsCredentialMaterial(child, key));
+}
 
 for (const relative of files) {
   const filename = path.join(root, relative);
@@ -34,6 +41,8 @@ for (const relative of files) {
     errors.push(`providers_required:${relative}`);
     continue;
   }
+  if (containsCredentialMaterial(document)) errors.push(`credential_material:${relative}`);
+
   for (const provider of document.providers) {
     if (!provider?.providerId || !provider?.displayName) errors.push(`provider_identity_required:${relative}`);
     if (!Array.isArray(provider?.capabilities) || provider.capabilities.length === 0) {
@@ -49,11 +58,6 @@ for (const relative of files) {
       if (!authorityClasses.has(capability.authorityClass)) errors.push(`invalid_authority_class:${provider.providerId}:${capability.id}`);
       entries.push({ providerId: provider.providerId, capabilityId: capability.id });
     }
-  }
-
-  const serialized = JSON.stringify(document);
-  if (credentialKey.test(serialized) && secretValue.test(serialized.replace(/"securityInvariant"[^,}]+/g, ""))) {
-    errors.push(`possible_credential_material:${relative}`);
   }
 }
 

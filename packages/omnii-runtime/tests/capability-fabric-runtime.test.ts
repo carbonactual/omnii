@@ -70,7 +70,7 @@ test("retains side effect and authority metadata for mutation capabilities", asy
 test("rejects credential material from descriptors", async () => {
   const registry = new CapabilityRegistryRuntime();
   await assert.rejects(
-    () => registry.register(descriptor({ metadata: { authorization: "Bearer secret" } }), "ABBA"),
+    () => registry.register(descriptor({ metadata: { authorization: "Bearer 0123456789abcdef" } }), "ABBA"),
     /credential_material_forbidden/,
   );
 });

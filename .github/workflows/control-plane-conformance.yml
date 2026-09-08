@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'CANON.md'
       - 'data/canonical/omnii-control-plane-registry.json'
       - 'docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md'
       - 'docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md'
@@ -14,6 +15,7 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - 'CANON.md'
       - 'data/canonical/omnii-control-plane-registry.json'
       - 'docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md'
       - 'docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md'

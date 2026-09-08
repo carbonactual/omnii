@@ -14,6 +14,10 @@
 - Nineteen previously unrestricted authenticated `ALL` policies were reviewed: sensitive economic, settlement, reconciliation, valuation, benchmark, quality and completeness state is now backend-only; open-world reference/graph data is authenticated read-only pending governed write APIs.
 - Core control tables for agents, authorities, executions, execution controls, ledger, process state/tasks and CVE/control findings no longer grant direct API-role table access; governed functions/workers remain the execution path.
 - The live `stream-event` and `recompute-stream-aggregates` Edge Functions were brought under repository source control and upgraded to version 2 with bounded request sizes, strict input parsing, temporal/window validation, and fail-closed backend configuration.
+- The live `abba` Edge Function is production version 4 with JWT verification enabled and repository source control aligned.
+- ABBA now resolves declared common denominators through `public.omnii_common_primitives`, carries denominator provenance through sessions/plans/decisions/events, and fails closed on unknown denominator references.
+- ABBA runtime plans now carry explicit execution modes and approval requirements; delegated execution remains brokered and ABBA cannot self-issue constitutional authority.
+- The canonical `abba:master` profile is version 2 and explicitly requires common-layer-first reuse, canonical capability reuse, provider agnosticism, governed promotion of repeated capabilities, and technology adapters at the edge.
 - The repository security scanner now detects embedded secret material rather than treating legitimate environment-variable names as secrets.
 - Transport compliance and credential write policies now require an actually issued, active, non-expired authority record; matching `auth.uid()` alone is insufficient.
 - Authenticated profile editing is limited to display/contact metadata; `active_role`, public identity reference and deletion state remain backend-controlled.
@@ -45,6 +49,6 @@ The current performance advisor reports numerous unused indexes. These remain in
 
 ### Control-plane CI
 
-Control Plane Conformance and the full CI suite both succeeded on the immediately preceding verified hardening head. Subsequent repository hardening commits have advanced the branch, so the latest head must complete a fresh CI run before being called fully green.
+Control Plane Conformance and the full CI suite both succeeded on the immediately preceding verified hardening head. Subsequent ABBA/common-layer repository commits have advanced the branch, so the latest head must complete a fresh CI run before being called fully green.
 
 This record prevents unresolved security and provider exceptions from being mistaken for invisible or completed controls.

@@ -63,6 +63,22 @@ Expanded reusable capabilities include, among others:
 
 Not every flow uses every stage; the pattern is compositional.
 
+## TEAM → MISSION Intelligence
+
+TEAM is the selected composition of members drawn from SWIRMs. **Mission Intelligence** is a reusable Common Layer capability that evaluates a TEAM before consequential execution.
+
+Its common contract is:
+
+`TEAM → coverage → SWIRM coverage → dependencies → conflicts → authority requirements → human approval → execution order → readiness`
+
+Readiness is explicitly one of:
+
+`READY | INCOMPLETE | BLOCKED`
+
+The capability is domain-neutral. Transport, education, property, finance, media, government, household and agent missions supply their own members and constraints while reusing the same readiness machinery.
+
+Mission Intelligence does not authorize execution. It prepares the mission for the existing authority/authorization and execution boundaries. A readiness result is not permission.
+
 ## Education / InstituteGPT Boundary
 
 InstituteGPT is the canonical owner of learning and competency semantics. Education may involve physical, online, hybrid, workplace, field, simulation and self-directed modes. InstituteGPT may orchestrate admission, application, internships, SIWES, practical training, examinations, proctoring/invigilation integrations, CPD, promotion examinations and certification preparation while leaving legal issuance and professional authorization to the competent authority.

@@ -44,6 +44,7 @@ test("ABBA command composes capability routing without authorizing execution", a
   assert.equal(result.routes.length, 1);
   assert.equal(result.routes[0].authorized, false);
   assert.equal(result.relationships.length, 1);
+  assert.equal(result.relationshipStatus, "contextual");
   assert.equal(result.nextBoundary, "MISSION_OR_AUTHORITY");
 });
 
@@ -60,4 +61,30 @@ test("ABBA command refuses empty capability discovery rather than inventing a pr
   assert.equal(result.routes[0].candidates.length, 0);
   assert.equal(result.nextBoundary, "CAPABILITY_GAP");
   assert.deepEqual(result.warnings, ["no_active_provider:capability.unknown"]);
+});
+
+test("ABBA command marks a missing capability declaration as a gap", async () => {
+  const runtime = new AbbaOrchestrationRuntime(new CapabilityRouterRuntime(new CapabilityRegistryRuntime()));
+  const result = await runtime.command({
+    principal: "human-1",
+    command: "explain this request",
+    capabilityIds: [],
+    correlationId: "corr-3",
+    idempotencyKey: "cmd-3",
+  });
+  assert.equal(result.nextBoundary, "CAPABILITY_GAP");
+  assert.deepEqual(result.warnings, ["capability_required"]);
+});
+
+test("ABBA does not promote caller-supplied relationships to canonical graph truth", async () => {
+  const runtime = new AbbaOrchestrationRuntime(new CapabilityRouterRuntime(new CapabilityRegistryRuntime()));
+  const result = await runtime.command({
+    principal: "human-1",
+    command: "use relationship context",
+    capabilityIds: [],
+    correlationId: "corr-4",
+    idempotencyKey: "cmd-4",
+    relationships: [{ id: "r-2", type: "claims", source: "a", target: "b" }],
+  });
+  assert.equal(result.relationshipStatus, "contextual");
 });

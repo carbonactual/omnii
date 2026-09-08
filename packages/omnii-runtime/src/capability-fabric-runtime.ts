@@ -1,3 +1,4 @@
+import type { AbbaCapabilityRecord } from "./abba-runtime";
 import { JsonObject } from "./types";
 
 export type CapabilityStatus = "candidate" | "available" | "verified" | "unavailable" | "deprecated" | "retired";
@@ -48,6 +49,10 @@ export interface CapabilityAdapterResult {
 export interface CapabilityAdapter {
   descriptor: CapabilityDescriptor;
   execute(input: JsonObject, context: CapabilityExecutionContext): Promise<CapabilityAdapterResult>;
+}
+
+export interface CapabilityCatalog {
+  lookup(predicate: (record: AbbaCapabilityRecord) => boolean, actor?: string): Promise<AbbaCapabilityRecord[]>;
 }
 
 const credentialKey = /(api[_-]?key|token|secret|password|credential|private[_-]?key|authorization|bearer)/i;
@@ -107,5 +112,29 @@ export class CapabilityRegistryRuntime {
     const updated = { ...item, status: "deprecated" as const };
     this.descriptors.set(key, updated);
     return structuredClone(updated);
+  }
+}
+
+export class CapabilityCatalogAdapter implements CapabilityCatalog {
+  constructor(private readonly registry: CapabilityRegistryRuntime) {}
+
+  async lookup(predicate: (record: AbbaCapabilityRecord) => boolean): Promise<AbbaCapabilityRecord[]> {
+    const descriptors = await this.registry.list();
+    return descriptors.map((descriptor): AbbaCapabilityRecord => ({
+      id: descriptor.id,
+      name: descriptor.name,
+      version: descriptor.version,
+      status: descriptor.status,
+      authority: { class: descriptor.authorityClass, granted: false },
+      provenance: {
+        ...structuredClone(descriptor.provenance),
+        provider_id: descriptor.providerId,
+      },
+      constraints: {
+        riskClass: descriptor.riskClass,
+        sideEffect: descriptor.sideEffect,
+        identityScope: descriptor.identityScope,
+      },
+    })).filter(predicate).sort((left, right) => left.id.localeCompare(right.id) || left.version.localeCompare(right.version));
   }
 }

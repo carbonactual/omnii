@@ -7,7 +7,7 @@ import { AbbaCommandRequest, AbbaCommandResult, AbbaOrchestrationRuntime } from 
 export interface DelegationRequest { subject: string; capability: string; purpose: string; resourceIds: string[]; context: JsonObject; }
 export interface AuthorityBroker { request(request: DelegationRequest): Authority | null | Promise<Authority | null>; }
 export interface AbbaCapabilityRecord { id: string; name: string; version: string; status: string; authority: JsonObject; provenance: JsonObject; constraints: JsonObject; }
-export interface CapabilityCatalog { lookup(predicate: (record: AbbaCapabilityRecord) => boolean, actor?: string): Promise<AbbaCapabilityRecord[]>; }
+interface CapabilityCatalog { lookup(predicate: (record: AbbaCapabilityRecord) => boolean, actor?: string): Promise<AbbaCapabilityRecord[]>; }
 export interface AbbaPlan { purpose: string; capability: string; targetAgent: string; input: JsonObject; mode: "recommend" | "confirm" | "delegate" | "execute" | "simulate" | "defer" | "escalate"; approvalRequired: boolean; }
 export interface AbbaBoundary {
   perceive(input: JsonObject): JsonObject;

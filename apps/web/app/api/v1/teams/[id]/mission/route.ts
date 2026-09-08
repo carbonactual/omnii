@@ -4,11 +4,22 @@ import {
   MissionIntelligenceRuntime,
   MissionTeamMember,
 } from "@/packages/omnii-runtime/src/mission-intelligence-runtime";
+import { createSupabaseServerClient } from "@/apps/web/lib/supabase/server";
 
 export async function POST(
   request: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
   const { id } = await context.params;
   if (!id || id.length > 160) {
     return NextResponse.json({ error: "invalid_team_id" }, { status: 400 });

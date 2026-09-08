@@ -14,7 +14,7 @@ const request: ExecutionRequest = {
   input: {},
 };
 
-const dispatch: DispatchDecision = { allowed: true, reason: "allowed" };
+const dispatch: DispatchDecision = { allowed: true, reason: undefined, correlationId: "corr-1" };
 
 const readyAssessment: MissionAssessment = {
   readiness: "ready",

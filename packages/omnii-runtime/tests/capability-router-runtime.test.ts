@@ -51,3 +51,15 @@ test("never converts route selection into permission", async () => {
   assert.equal(result.requiresApproval, true);
   assert.equal(result.requiresAuthority, true);
 });
+
+test("uses non-authoritative provider selection evidence only as a routing preference", async () => {
+  const registry = new CapabilityRegistryRuntime();
+  await registry.register(descriptor({ providerId: "provider-a", reliabilityHint: 0.8 }), "ABBA");
+  await registry.register(descriptor({ providerId: "provider-b", reliabilityHint: 0.8 }), "ABBA");
+  const result = await new CapabilityRouterRuntime(registry).route({
+    capabilityId: descriptor().id,
+    selectionHints: { "capability.build.application::provider-b": 1, "capability.build.application::provider-a": 0 },
+  });
+  assert.equal(result.candidates[0].providerId, "provider-b");
+  assert.equal(result.authorized, false);
+});

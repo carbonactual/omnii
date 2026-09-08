@@ -5,6 +5,7 @@ import { AuthorityRecord, AuthorityRuntime } from "./authority-runtime";
 import { OperatingContext } from "./operating-context-runtime";
 import { RuntimeSignal } from "./runtime-signal";
 import { MemoryPersistenceAdapter, PersistencePort } from "./persistence";
+import { AdmissionRuntime } from "./admission-runtime";
 
 export type DispatchStatus = "accepted" | "blocked";
 
@@ -13,7 +14,7 @@ export interface ActivationResolution { context?: OperatingContext; authority?: 
 export interface ActivationExecutionResult { execution: Execution; evidence: JsonObject; completionProjected: boolean; }
 export interface ReconciliationResult { matched: boolean; expected: JsonObject; observed: JsonObject; discrepancy?: JsonObject; }
 export interface FeedbackObservation { kind: string; value: number; unit: string; dimension: string; provenance: JsonObject; }
-export interface RuntimeActivationDependencies { contextResolver: (signal: RuntimeSignal) => Promise<OperatingContext | undefined>; routeResolver: (signal: RuntimeSignal, context: OperatingContext, authority: AuthorityRecord) => Promise<ActivationRoute | undefined>; executionHandler: (route: ActivationRoute, signal: RuntimeSignal) => Promise<JsonObject>; persistence?: PersistencePort; authorityRuntime?: AuthorityRuntime; executionRuntime?: ExecutionRuntime; events?: EventStore; }
+export interface RuntimeActivationDependencies { contextResolver: (signal: RuntimeSignal) => Promise<OperatingContext | undefined>; routeResolver: (signal: RuntimeSignal, context: OperatingContext, authority: AuthorityRecord) => Promise<ActivationRoute | undefined>; executionHandler: (route: ActivationRoute, signal: RuntimeSignal) => Promise<JsonObject>; admission: AdmissionRuntime; persistence?: PersistencePort; authorityRuntime?: AuthorityRuntime; executionRuntime?: ExecutionRuntime; events?: EventStore; }
 export interface RuntimeActivationResult { signal: RuntimeSignal; resolution: ActivationResolution; execution?: ActivationExecutionResult; reconciliation?: ReconciliationResult; feedback?: FeedbackObservation; eventIds: string[]; }
 
 export class RuntimeActivation {
@@ -33,7 +34,14 @@ export class RuntimeActivation {
     const existing = await this.replayIfCompleted(signal);
     if (existing) return existing;
 
-    const intake = await this.events.append({ type: "RUNTIME_SIGNAL_RECEIVED", actor: signal.actorId ?? signal.source, subject: signal.subjectId, correlation_id: signal.correlationId, idempotency_key: `runtime:signal:${signal.idempotencyKey}`, outcome: "received", provenance: signal.provenance ?? {}, payload: { signal_id: signal.id, event_type: signal.eventType, source: signal.source, operating_context_id: signal.operatingContextId ?? null } });
+    const admission = await this.deps.admission.admit({
+      id: signal.id,
+      kind: signal.eventType,
+      provenance: signal.provenance ?? {},
+    });
+    if (admission.status === "blocked") return this.blocked(signal, `admission:${admission.reason ?? "rejected"}`, []);
+
+    const intake = await this.events.append({ type: "RUNTIME_SIGNAL_RECEIVED", actor: signal.actorId ?? signal.source, subject: signal.subjectId, correlation_id: signal.correlationId, idempotency_key: `runtime:signal:${signal.idempotencyKey}`, outcome: "received", provenance: signal.provenance ?? {}, payload: { signal_id: signal.id, event_type: signal.eventType, source: signal.source, operating_context_id: signal.operatingContextId ?? null, canonical_id: admission.canonicalId ?? null } });
     const eventIds = [intake.id];
     const context = await this.deps.contextResolver(signal);
     if (!context) return this.blocked(signal, "context_unresolved", eventIds);
@@ -47,14 +55,14 @@ export class RuntimeActivation {
     try { await this.authorities.authorizeAction(authority.id, route.capability, { context: { operatingContextId: context.id } }); } catch { return this.blocked(signal, "capability_denied", eventIds); }
 
     const resolution: ActivationResolution = { context, authority, route, status: "accepted" };
-    const execution = await this.executions.create({ intentReference: signal.eventType, actorIdentity: route.actorIdentity, authorityContext: authority as Authority, capability: route.capability, resources: route.resources ?? [], dependencies: [], input: signal.payload, provenance: { source: signal.source, signalId: signal.id, routeId: route.routeId, workflowReference: route.workflowReference ?? null, workflowVersion: route.workflowVersion ?? null, operatingContextId: context.id }, correlationId: signal.correlationId, idempotencyKey: `runtime:execution:${signal.idempotencyKey}` });
+    const execution = await this.executions.create({ intentReference: signal.eventType, actorIdentity: route.actorIdentity, authorityContext: authority as Authority, capability: route.capability, resources: route.resources ?? [], dependencies: [], input: signal.payload, provenance: { source: signal.source, signalId: signal.id, routeId: route.routeId, workflowReference: route.workflowReference ?? null, workflowVersion: route.workflowVersion ?? null, operatingContextId: context.id, canonicalSignalId: admission.canonicalId ?? null }, correlationId: signal.correlationId, idempotencyKey: `runtime:execution:${signal.idempotencyKey}` });
     const validated = await this.executions.validate(execution.id);
     const authorized = await this.executions.authorize(validated.id);
     const completed = await this.executions.run(authorized.id, (input) => this.deps.executionHandler(route, { ...signal, payload: input }));
 
     const executionEvent = await this.events.append({ type: completed.state === "completed" ? "RUNTIME_EXECUTION_COMPLETED" : "RUNTIME_EXECUTION_FAILED", actor: route.actorIdentity, subject: completed.id, correlation_id: signal.correlationId, idempotency_key: `runtime:execution-event:${signal.idempotencyKey}`, outcome: completed.state, provenance: { signalId: signal.id, authorityId: authority.id, routeId: route.routeId, operatingContextId: context.id }, payload: completed.output ?? {} });
     eventIds.push(executionEvent.id);
-    const evidence: JsonObject = { executionId: completed.id, status: completed.state, output: completed.output ?? {}, capability: route.capability, authorityId: authority.id, recordedAt: new Date().toISOString() };
+    const evidence: JsonObject = { executionId: completed.id, status: completed.state, output: completed.output ?? {}, capability: route.capability, authorityId: authority.id, canonicalSignalId: admission.canonicalId ?? null, recordedAt: new Date().toISOString() };
     const completionProjected = completed.state === "completed";
     const observed = this.observedState(completed);
     const expected = this.expectedState(signal, route);

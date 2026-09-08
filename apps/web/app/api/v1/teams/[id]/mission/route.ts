@@ -4,7 +4,7 @@ import {
   MissionIntelligenceRuntime,
   MissionTeamMember,
 } from "@/packages/omnii-runtime/src/mission-intelligence-runtime";
-import { createSupabaseServerClient } from "@/apps/web/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function POST(
   request: NextRequest,

@@ -16,12 +16,13 @@ AUTO-TEAM / TEAM
 MISSION INTELLIGENCE
         ↓
 coverage
-+ swirm coverage
++ SWIRM coverage
 + dependencies
 + conflicts
 + authority requirements
 + human approval
 + execution order
++ readiness explanation
         ↓
 READY | INCOMPLETE | BLOCKED
         ↓
@@ -32,17 +33,17 @@ GOVERNED EXECUTION
 
 ## Readiness rules
 
-A mission is **blocked** when any required capability or SWIRM is uncovered, a dependency is missing, a dependency cycle exists, selected members explicitly conflict, or a member requires authority without a declared authority reference.
+A mission is **blocked** when any required capability or SWIRM is uncovered, a dependency is missing, a dependency cycle exists, selected members explicitly conflict, a member requires authority without a declared authority reference, or the team has no executable member.
 
 A mission is **incomplete** when structural readiness exists but human approval is required before consequential execution.
 
 A mission is **ready** only when structural requirements are satisfied and no approval gate remains unresolved.
 
-Warnings do not grant readiness. Recommendations do not grant authority.
+Warnings never grant readiness. Recommendations never grant authority. Readiness never grants permission.
 
 ## Dependency semantics
 
-`dependsOn` expresses execution prerequisites between TEAM members. Mission Intelligence uses deterministic topological ordering and fails closed on missing dependencies or cycles.
+`dependsOn` expresses execution prerequisites between TEAM members. Mission Intelligence uses deterministic topological ordering and blocks missing dependencies or dependency cycles. The resulting order must not be used for execution when readiness is `blocked` or `incomplete`.
 
 ## Conflict semantics
 
@@ -50,15 +51,21 @@ Warnings do not grant readiness. Recommendations do not grant authority.
 
 ## Authority semantics
 
-`authorityRequired=true` declares that the member cannot participate in consequential execution without an attached authority reference. Mission Intelligence checks the presence of the reference; the canonical authority runtime remains responsible for validating its legal/constitutional validity.
+`authorityRequired=true` declares that the member cannot participate in consequential execution without an attached authority reference. Mission Intelligence checks structural presence only; the canonical authority runtime remains responsible for validating issuer, scope, capability, validity, revocation, jurisdiction and other legal/constitutional constraints.
 
 ## Human approval
 
-`humanApprovalRequired=true` never becomes an automatic authorization. Mission readiness becomes `incomplete` until the existing human authority/SEAL workflow resolves the requirement.
+`humanApprovalRequired=true` never becomes automatic authorization. Mission readiness becomes `incomplete` until the existing human authority/SEAL workflow resolves the requirement.
 
-## Safe stop
+## Safe stop and recovery
 
-Mission execution should preserve the TEAM execution behavior already established: ordered members, per-member outcomes, stop on blocking failure, and provenance back to each member's originating SWIRM.
+Mission execution should preserve the TEAM execution behavior already established: ordered members, per-member outcomes, stop on blocking failure, attribution to the originating SWIRM, and controlled substitution/recovery rather than silent continuation.
+
+A mission assessment must remain replayable from its objective, team membership, selected capability versions, dependency graph and applicable constraints.
+
+## Explainability
+
+Mission Intelligence returns explicit coverage, missing requirements, dependency findings, conflict findings, authority requirements, execution order, warnings, blocking reasons and a compact explanation. This makes the selection/mission chain inspectable rather than a hidden model decision.
 
 ## ABBA role
 

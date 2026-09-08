@@ -29,10 +29,10 @@ export interface AdmissionRuntimeOptions {
 }
 
 export class AdmissionRuntime {
-  private readonly existingCanonicalIds: ReadonlySet<string>;
+  private readonly existingCanonicalIds: Set<string>;
 
   constructor(options: AdmissionRuntimeOptions = {}) {
-    this.existingCanonicalIds = options.existingCanonicalIds ?? new Set<string>();
+    this.existingCanonicalIds = new Set(options.existingCanonicalIds ?? []);
   }
 
   admit(candidate: AdmissionCandidate): AdmissionResult {
@@ -51,6 +51,7 @@ export class AdmissionRuntime {
     if (this.existingCanonicalIds.has(candidate.canonicalId)) {
       return { status: "reused", candidateId: candidate.id, canonicalId: candidate.canonicalId };
     }
+    this.existingCanonicalIds.add(candidate.canonicalId);
     return { status: "admitted", candidateId: candidate.id, canonicalId: candidate.canonicalId };
   }
 }

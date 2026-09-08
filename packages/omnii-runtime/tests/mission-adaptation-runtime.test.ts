@@ -55,9 +55,13 @@ test("MissionAdaptationRuntime does not widen authority during recovery", () => 
     ...mission,
     authorityRefs: ["authority:ops"],
   };
+  const authorityPreservingMembers: MissionTeamMember[] = [
+    { id: "a", swirm: "ops", capabilities: ["dispatch"], status: "selected" },
+    { id: "observe", swirm: "intel", capabilities: ["observe"], status: "selected" },
+  ];
   const result = new MissionAdaptationRuntime().adapt(
     restrictedMission,
-    [{ id: "a", swirm: "ops", capabilities: ["dispatch"], status: "selected" }],
+    authorityPreservingMembers,
     [{ memberId: "a", reason: "revoked" }],
     [
       { id: "unsafe", swirm: "ops", capabilities: ["dispatch"], authorityRequired: true, authorityRef: "authority:other", status: "available" },
@@ -67,6 +71,7 @@ test("MissionAdaptationRuntime does not widen authority during recovery", () => 
 
   assert.equal(result.status, "adapted");
   assert.equal(result.changes[0]?.replacementMemberId, "safe");
+  assert.equal(result.assessment.readiness, "ready");
 });
 
 test("MissionAdaptationRuntime halts when no safe replacement exists", () => {

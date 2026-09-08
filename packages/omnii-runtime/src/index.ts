@@ -64,6 +64,7 @@ export * from "./task-queue-runtime";
 export * from "./process-progression-runtime";
 export * from "./process-worker-runtime";
 export * from "./management-runtime";
+export * from "./mission-intelligence-runtime";
 export * from "./bunk-property-ontology";
 export * from "./bunk-property-lifecycle";
 export * from "./bunk-economic-boundary";

@@ -69,6 +69,7 @@ export * from "./mission-adaptation-runtime";
 export * from "./mission-learning-runtime";
 export * from "./capability-fabric-runtime";
 export * from "./capability-router-runtime";
+export * from "./capability-feedback-runtime";
 export * from "./admission-runtime";
 export * from "./bunk-property-ontology";
 export * from "./bunk-property-lifecycle";

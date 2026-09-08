@@ -5,8 +5,8 @@ import { MissionDefinition, MissionAssessment, MissionIntelligenceRuntime, Missi
 
 export interface DelegationRequest { subject: string; capability: string; purpose: string; resourceIds: string[]; context: JsonObject; }
 export interface AuthorityBroker { request(request: DelegationRequest): Authority | null | Promise<Authority | null>; }
-export interface CapabilityRecord { id: string; name: string; version: string; status: string; authority: JsonObject; provenance: JsonObject; constraints: JsonObject; }
-export interface CapabilityCatalog { lookup(predicate: (record: CapabilityRecord) => boolean, actor?: string): Promise<CapabilityRecord[]>; }
+export interface AbbaCapabilityRecord { id: string; name: string; version: string; status: string; authority: JsonObject; provenance: JsonObject; constraints: JsonObject; }
+export interface CapabilityCatalog { lookup(predicate: (record: AbbaCapabilityRecord) => boolean, actor?: string): Promise<AbbaCapabilityRecord[]>; }
 export interface AbbaPlan { purpose: string; capability: string; targetAgent: string; input: JsonObject; mode: "recommend" | "confirm" | "delegate" | "execute" | "simulate" | "defer" | "escalate"; approvalRequired: boolean; }
 export interface AbbaBoundary {
   perceive(input: JsonObject): JsonObject;
@@ -86,7 +86,7 @@ export class AbbaRuntime implements AbbaBoundary {
     return plan.capability;
   }
 
-  async discoverCapability(name: string): Promise<CapabilityRecord[]> {
+  async discoverCapability(name: string): Promise<AbbaCapabilityRecord[]> {
     if (!this.capabilities) return [];
     return this.capabilities.lookup((record) => record.name === name && ["verified", "available"].includes(record.status), this.abbaIdentity);
   }

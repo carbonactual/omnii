@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://carbonactual.org/schemas/omnii-canonical-authority-record.schema.json",
+  "title": "OMNII Canonical Authority Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "canonical_id",
+    "name",
+    "status",
+    "authority_level",
+    "introduced_at",
+    "canonical_source"
+  ],
+  "properties": {
+    "canonical_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._/-]*$"},
+    "name": {"type": "string", "minLength": 1},
+    "status": {
+      "type": "string",
+      "enum": [
+        "FROZEN",
+        "CANONICAL",
+        "AMENDMENT",
+        "CAPABILITY",
+        "DOMAIN",
+        "IMPLEMENTATION",
+        "EXPERIMENTAL",
+        "DEPRECATED",
+        "HISTORICAL"
+      ]
+    },
+    "authority_level": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9
+    },
+    "introduced_at": {"type": "string", "format": "date"},
+    "canonical_source": {"type": "string", "minLength": 1},
+    "supersedes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "superseded_by": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "aliases": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "depends_on": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "implements": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "extends": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "branch": {"type": ["string", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "FROZEN"}}},
+      "then": {"properties": {"authority_level": {"maximum": 1}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "CANONICAL"}}},
+      "then": {"properties": {"authority_level": {"maximum": 2}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "AMENDMENT"}}},
+      "then": {"properties": {"authority_level": {"maximum": 3}}}
+    }
+  ]
+}

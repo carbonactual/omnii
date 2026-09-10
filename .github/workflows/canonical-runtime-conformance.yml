@@ -1,0 +1,34 @@
+name: Canonical Runtime Conformance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  architecture:
+    name: Canonical runtime invariants
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate canonical authority
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const registry = JSON.parse(fs.readFileSync('config/canonical-authority-registry.json', 'utf8'));
+            if (!Array.isArray(registry.records) || registry.records.length < 1) core.setFailed('authority registry is empty');
+            const ids = new Set();
+            for (const record of registry.records) {
+              if (ids.has(record.canonical_id)) core.setFailed(`duplicate canonical id: ${record.canonical_id}`);
+              ids.add(record.canonical_id);
+              if (!record.canonical_source) core.setFailed(`missing canonical source: ${record.canonical_id}`);
+              if (record.status === 'FROZEN' && record.authority_level !== 1) core.setFailed(`frozen concept has non-constitutional authority: ${record.canonical_id}`);
+              if (record.status === 'CANONICAL' && record.authority_level !== 2) core.setFailed(`canonical record has invalid authority: ${record.canonical_id}`);
+            }
+      - name: Validate runtime invariants
+        run: node scripts/validate-canonical-runtime-v2.mjs

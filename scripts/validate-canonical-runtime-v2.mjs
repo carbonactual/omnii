@@ -11,6 +11,7 @@ const mustExist = [
   'docs/CARBON_ACTUAL_PRODUCT_BLUEPRINT.md',
   'docs/CARBON_ACTUAL_BUILD_CONSTITUTION.md',
   'docs/CARBON_ACTUAL_ARCHITECTURE_TRACEABILITY.md',
+  'docs/architecture/OMNII_CANONICAL_ARCHITECTURE.md',
   'docs/architecture/OMNII_CANONICAL_OBJECT_SCHEMA.md',
   'schemas/omnii-canonical-object.schema.json',
   'schemas/omnii-canonical-authority-record.schema.json',
@@ -60,7 +61,13 @@ const bunk = productRegistry.records.find((r) => r.product_id === 'BUNK');
 if (bunk?.repository_role !== 'mixed-legacy-host' || bunk?.status !== 'separation-required') errors.push('BUNK legacy repository boundary is not explicit');
 
 const freeze = read('docs/CARBON_ACTUAL_ARCHITECTURE_FREEZE.md');
-const invariantText = `${freeze}\n${read('docs/CARBON_ACTUAL_UNIVERSAL_CAPABILITY_ONTOLOGY.md')}\n${read('docs/CARBON_ACTUAL_BUILD_CONSTITUTION.md')}\n${read('docs/architecture/OMNII_CANONICAL_RUNTIME_RECONCILIATION.md')}`;
+const invariantText = [
+  freeze,
+  read('docs/architecture/OMNII_CANONICAL_ARCHITECTURE.md'),
+  read('docs/CARBON_ACTUAL_UNIVERSAL_CAPABILITY_ONTOLOGY.md'),
+  read('docs/CARBON_ACTUAL_BUILD_CONSTITUTION.md'),
+  read('docs/architecture/OMNII_CANONICAL_RUNTIME_RECONCILIATION.md')
+].join('\n');
 if (!/\*\*Status:\*\*\s+FROZEN/.test(freeze)) errors.push('architecture freeze status is not FROZEN');
 if (!invariantText.includes('Freezing the architecture does not freeze technology selection or prevent improvement.')) errors.push('missing architecture evolution rule');
 for (const text of ['Pulse is ecosystem feedback', 'Evidence is not authority', 'Interpretation ≠ Authority', 'Match ≠ Authorization']) {

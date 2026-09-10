@@ -13,7 +13,7 @@ const manifest = json('config/canonical-runtime-manifest.json');
 
 const byId = new Map(registry.records.map((r) => [r.canonical_id, r]));
 
- test('authority registry has unique canonical identifiers', () => {
+test('authority registry has unique canonical identifiers', () => {
   assert.equal(byId.size, registry.records.length);
 });
 
@@ -51,4 +51,19 @@ test('core boundary statements remain explicit', () => {
   ]) {
     assert.match(corpus, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
+});
+
+test('canonical freeze states implementation evolution without changing the architecture', () => {
+  const freeze = read('docs/CARBON_ACTUAL_ARCHITECTURE_FREEZE.md');
+  assert.match(freeze, /\*\*Status:\*\*\s+FROZEN/);
+  assert.match(freeze, /Freezing the architecture does not freeze technology selection or prevent improvement\./);
+});
+
+test('semantic boundaries cannot be silently inverted', () => {
+  const manifestText = read('config/canonical-runtime-manifest.json');
+  assert.match(manifestText, /"mixed_repository_hosting_is_silent"\s*:\s*false/);
+  assert.match(manifestText, /"match_grants_authority"\s*:\s*false/);
+  assert.match(manifestText, /"interpretation_grants_authority"\s*:\s*false/);
+  assert.match(manifestText, /"pulse_is_automatic_currency"\s*:\s*false/);
+  assert.doesNotMatch(manifestText, /"product_may_create_competing_universal_primitive"\s*:\s*true/);
 });

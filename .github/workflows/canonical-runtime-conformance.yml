@@ -13,22 +13,12 @@ jobs:
     name: Canonical runtime invariants
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Validate canonical authority
-        uses: actions/github-script@v7
+      - name: Checkout exact revision
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          script: |
-            const fs = require('fs');
-            const registry = JSON.parse(fs.readFileSync('config/canonical-authority-registry.json', 'utf8'));
-            if (!Array.isArray(registry.records) || registry.records.length < 1) core.setFailed('authority registry is empty');
-            const ids = new Set();
-            for (const record of registry.records) {
-              if (ids.has(record.canonical_id)) core.setFailed(`duplicate canonical id: ${record.canonical_id}`);
-              ids.add(record.canonical_id);
-              if (!record.canonical_source) core.setFailed(`missing canonical source: ${record.canonical_id}`);
-              if (record.status === 'FROZEN' && record.authority_level !== 1) core.setFailed(`frozen concept has non-constitutional authority: ${record.canonical_id}`);
-              if (record.status === 'CANONICAL' && record.authority_level !== 2) core.setFailed(`canonical record has invalid authority: ${record.canonical_id}`);
-            }
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - name: Validate canonical authority
+        run: node scripts/validate-canonical-authority.mjs
       - name: Validate runtime invariants
         run: node scripts/validate-canonical-runtime-v2.mjs

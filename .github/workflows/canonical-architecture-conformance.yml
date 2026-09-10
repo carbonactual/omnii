@@ -26,3 +26,5 @@ jobs:
         run: node scripts/validate-canonical-authority.mjs
       - name: Validate JSON syntax
         run: node -e "JSON.parse(require('fs').readFileSync('config/canonical-authority-registry.json','utf8')); JSON.parse(require('fs').readFileSync('schemas/omnii-canonical-authority-record.schema.json','utf8'))"
+      - name: Validate canonical package boundaries
+        run: node packages/omnii-products/tests/adapter.test.mjs && node packages/omnii-products/tests/catalog-and-crossing.test.mjs

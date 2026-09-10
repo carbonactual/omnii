@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/canonical-product-branch-record.schema.json",
+  "version": "1.0.0",
+  "rule": "A product is a domain composition over canonical OMNII capabilities. Repository location does not grant architectural authority. Mixed/legacy repository hosting must remain explicit until a separately verified migration is completed.",
+  "records": [
+    {"product_id":"ABBA","architectural_class":"intelligence","repository":"carbonactual/abba","repository_role":"product-repository","status":"canonical"},
+    {"product_id":"ABBA_MAS","architectural_class":"reusable-capability","repository":"carbonactual/abba-mas","repository_role":"capability-product-repository","status":"canonical"},
+    {"product_id":"HAPI_WORLD","architectural_class":"ecosystem-composition","repository":"carbonactual/hapi-world","repository_role":"product-repository","status":"canonical"},
+    {"product_id":"HAPI_WORLD_NEXUS","architectural_class":"presentation","repository":"carbonactual/hapi-world-nexus","repository_role":"presentation-repository","status":"canonical"},
+    {"product_id":"RITES","architectural_class":"continuity-domain","repository":"carbonactual/RITES","repository_role":"product-repository","status":"canonical"},
+    {"product_id":"NGIN","architectural_class":"institutional-domain","repository":"carbonactual/NGIN","repository_role":"product-repository","status":"canonical-intent","notes":"Repository existence/contents must be verified before deployment claims."},
+    {"product_id":"BUNK","architectural_class":"property-domain","repository":"carbonactual/omnii","repository_role":"mixed-legacy-host","status":"separation-required","notes":"BUNK remains a product composition; the current host is explicitly treated as legacy/mixed until independently verified extraction is complete."},
+    {"product_id":"INSTITUTEGPT","architectural_class":"education-domain","repository":"carbonactual/omnii","repository_role":"mixed-legacy-host","status":"composition-on-shared-host","notes":"Education remains a product branch; shared hosting does not create constitutional authority."},
+    {"product_id":"NOUN_BOT","architectural_class":"institutional-education-deployment","repository":"carbonactual/noun-student-bot","repository_role":"deployment-repository","status":"canonical"},
+    {"product_id":"DIRECT_BANK_APP","architectural_class":"financial-domain","repository":"carbonactual/direct-bank-app","repository_role":"product-repository","status":"canonical-intent"},
+    {"product_id":"NASC","architectural_class":"institutional-domain","repository":"carbonactual/abba-automation-ecosystem","repository_role":"legacy-or-reference-repository","status":"composition-reference"}
+  ]
+}

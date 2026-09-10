@@ -68,10 +68,12 @@ const invariantText = [
   read('docs/CARBON_ACTUAL_BUILD_CONSTITUTION.md'),
   read('docs/architecture/OMNII_CANONICAL_RUNTIME_RECONCILIATION.md')
 ].join('\n');
-if (!/\*\*Status:\*\*\s+FROZEN/.test(freeze)) errors.push('architecture freeze status is not FROZEN');
-if (!invariantText.includes('Freezing the architecture does not freeze technology selection or prevent improvement.')) errors.push('missing architecture evolution rule');
-for (const text of ['Pulse is ecosystem feedback', 'Evidence is not authority', 'Interpretation ≠ Authority', 'Match ≠ Authorization']) {
-  if (!invariantText.includes(text)) errors.push(`missing invariant: ${text}`);
-}
+const normalized = invariantText.toLowerCase();
+if (!/\*\*status:\*\*\s+frozen/.test(freeze.toLowerCase())) errors.push('architecture freeze status is not FROZEN');
+if (!normalized.includes('freezing the architecture does not freeze technology selection or prevent improvement.')) errors.push('missing architecture evolution rule');
+if (!normalized.includes('pulse is ecosystem feedback')) errors.push('missing invariant: Pulse is ecosystem feedback');
+if (!normalized.includes('evidence is not authority')) errors.push('missing invariant: Evidence is not authority');
+if (!normalized.includes('interpretation ≠ authority')) errors.push('missing invariant: Interpretation ≠ Authority');
+if (!normalized.includes('match ≠ authorization')) errors.push('missing invariant: Match ≠ Authorization');
 if (errors.length) { errors.forEach((e) => console.error(`canonical-runtime: ${e}`)); process.exit(1); }
 console.log(`canonical-runtime: PASS (${registry.records.length} authority records, ${productRegistry.records.length} product branches)`);

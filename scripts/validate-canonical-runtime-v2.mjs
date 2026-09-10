@@ -74,7 +74,7 @@ const normalized = invariantText.toLowerCase();
 if (!/\*\*status:\*\*\s+frozen/.test(normalized)) errors.push('architecture freeze status is not FROZEN');
 if (!normalized.includes('freezing the architecture does not freeze technology selection or prevent improvement.')) errors.push('missing architecture evolution rule');
 if (!normalized.includes('pulse is ecosystem feedback')) errors.push('missing invariant: Pulse is ecosystem feedback');
-if (!normalized.includes('evidence is not authority')) errors.push('missing invariant: Evidence is not authority');
+if (!normalized.includes('evidence ≠ authority') && !normalized.includes('evidence is not authority')) errors.push('missing invariant: Evidence is not authority');
 if (!normalized.includes('interpretation ≠ authority')) errors.push('missing invariant: Interpretation ≠ Authority');
 if (!normalized.includes('match ≠ authorization')) errors.push('missing invariant: Match ≠ Authorization');
 if (errors.length) { errors.forEach((e) => console.error(`canonical-runtime: ${e}`)); process.exit(1); }

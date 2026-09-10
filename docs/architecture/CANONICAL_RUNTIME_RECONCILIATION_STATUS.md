@@ -1,8 +1,8 @@
 # Canonical Runtime Reconciliation Status
 
-**Status:** Baseline established
+**Status:** Control-plane reconciliation implemented; deeper runtime/product verification remains tracked by conformance gates.
 **Branch:** `reconcile/canonical-runtime-2026-09-10`
-**Purpose:** Record the verified canonical architecture baseline before strengthening implementation boundaries.
+**Purpose:** Record the verified canonical architecture baseline and the strengthening added beneath the frozen Carbon Actual constitution.
 
 ## Authority baseline
 
@@ -16,21 +16,25 @@ The older `ECOSYSTEM_ARCHITECTURE.md` is historical and superseded. It must not 
 - Universal object schema exists as documentation and machine-readable schema.
 - Common Layer work exists for canonical primitive registration and intent/capability matching.
 - Runtime validation exists for identity/authority separation and event lifecycle behavior.
-- Recent hardening already routes ABBA orchestration through mission intelligence/readiness and common-layer-first reuse.
+- ABBA orchestration is already being strengthened through common-layer-first reuse and mission/readiness controls.
 - Product/domain compositions have explicit traceability back to shared OMNII semantics.
 
-## Reconciliation categories
+## Reconciliation controls implemented on this branch
 
-Every implementation is to be classified as exactly one primary role:
-
-1. canonical-backed shared implementation
-2. branch/domain implementation
-3. provider/infrastructure adapter
-4. historical/superseded artifact
-5. experimental/candidate implementation
-6. unresolved/unknown implementation
-
-A second implementation must not claim authority over the same universal primitive unless the registry explicitly classifies it as an adapter, branch, experiment, migration successor, or historical artifact.
+1. Machine-readable canonical authority registry and authority precedence.
+2. Canonical runtime manifest and non-regression invariant validators.
+3. Runtime boundary matrix and change-classification contract.
+4. Event/evidence/state integrity boundary.
+5. Capability/provider adapter boundary.
+6. ABBA/Swarm/Team/workflow boundary.
+7. Root/Index/Vault/Actual/Atlas projection boundary.
+8. Economic/ledger/tokenization boundary.
+9. Ash/Phoenix/continuity boundary.
+10. Product-branch reconciliation contract.
+11. Proposal/contradiction intake contract.
+12. Runtime observability boundary.
+13. Canonical runtime conformance matrix.
+14. Canonical architecture landing page now links the runtime reconciliation surface.
 
 ## Non-regression invariants
 
@@ -43,16 +47,10 @@ A second implementation must not claim authority over the same universal primiti
 - Unknown subjects remain representable but provisional.
 - Provider implementations remain replaceable behind contracts.
 - Exact economic formulas remain empirical/jurisdiction-aware.
+- Historical/superseded material remains traceable without current authority.
 
-## Next strengthening sequence
+## Verification state
 
-1. Machine-readable canonical authority registry.
-2. Universal object/event/state integrity checks.
-3. Common capability/adaptor contract hardening.
-4. ABBA/Swarm/Team/workflow gate verification.
-5. Projection boundary verification.
-6. Economic/ledger/tokenization boundary verification.
-7. Ash/Phoenix continuity/security verification.
-8. Product-branch reconciliation.
-9. Proposal/contradiction ingestion controls.
-10. Observability and end-to-end conformance CI.
+The branch has a canonical PR and machine-readable conformance controls. Hosted workflow execution must be treated as authoritative only when GitHub reports the run result for the current head commit; local/container network execution is not available in this environment.
+
+No constitutional source has been changed by this reconciliation.

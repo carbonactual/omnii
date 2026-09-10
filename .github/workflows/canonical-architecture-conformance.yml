@@ -1,0 +1,25 @@
+name: Canonical Architecture Conformance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-authority:
+    name: Canonical authority registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+      - name: Set up Node
+        uses: actions/setup-node@v4.4.0
+        with:
+          node-version: 22
+      - name: Validate authority registry
+        run: node scripts/validate-canonical-authority.mjs
+      - name: Validate JSON syntax
+        run: node -e "JSON.parse(require('fs').readFileSync('config/canonical-authority-registry.json','utf8')); JSON.parse(require('fs').readFileSync('schemas/omnii-canonical-authority-record.schema.json','utf8'))"

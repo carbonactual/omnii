@@ -63,7 +63,7 @@ const freeze = read('docs/CARBON_ACTUAL_ARCHITECTURE_FREEZE.md');
 const invariantText = `${freeze}\n${read('docs/CARBON_ACTUAL_UNIVERSAL_CAPABILITY_ONTOLOGY.md')}\n${read('docs/CARBON_ACTUAL_BUILD_CONSTITUTION.md')}\n${read('docs/architecture/OMNII_CANONICAL_RUNTIME_RECONCILIATION.md')}`;
 if (!/\*\*Status:\*\*\s+FROZEN/.test(freeze)) errors.push('architecture freeze status is not FROZEN');
 if (!invariantText.includes('Freezing the architecture does not freeze technology selection or prevent improvement.')) errors.push('missing architecture evolution rule');
-for (const text of ['Pulse is feedback/evidence', 'Interpretation ≠ Authority', 'Match ≠ Authorization']) {
+for (const text of ['Pulse is ecosystem feedback', 'Evidence is not authority', 'Interpretation ≠ Authority', 'Match ≠ Authorization']) {
   if (!invariantText.includes(text)) errors.push(`missing invariant: ${text}`);
 }
 if (errors.length) { errors.forEach((e) => console.error(`canonical-runtime: ${e}`)); process.exit(1); }

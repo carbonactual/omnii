@@ -13,6 +13,7 @@ const mustExist = [
   'docs/CARBON_ACTUAL_ARCHITECTURE_TRACEABILITY.md',
   'docs/architecture/OMNII_CANONICAL_ARCHITECTURE.md',
   'docs/architecture/OMNII_CANONICAL_OBJECT_SCHEMA.md',
+  'docs/architecture/OMNII_PRODUCT_CONFORMANCE_MATRIX.md',
   'schemas/omnii-canonical-object.schema.json',
   'schemas/omnii-canonical-authority-record.schema.json',
   'config/canonical-authority-registry.json',
@@ -60,16 +61,17 @@ for (const id of requiredProducts) if (!productIds.has(id)) errors.push(`missing
 const bunk = productRegistry.records.find((r) => r.product_id === 'BUNK');
 if (bunk?.repository_role !== 'mixed-legacy-host' || bunk?.status !== 'separation-required') errors.push('BUNK legacy repository boundary is not explicit');
 
-const freeze = read('docs/CARBON_ACTUAL_ARCHITECTURE_FREEZE.md');
-const invariantText = [
-  freeze,
-  read('docs/architecture/OMNII_CANONICAL_ARCHITECTURE.md'),
-  read('docs/CARBON_ACTUAL_UNIVERSAL_CAPABILITY_ONTOLOGY.md'),
-  read('docs/CARBON_ACTUAL_BUILD_CONSTITUTION.md'),
-  read('docs/architecture/OMNII_CANONICAL_RUNTIME_RECONCILIATION.md')
-].join('\n');
+const invariantCorpusPaths = [
+  'docs/CARBON_ACTUAL_ARCHITECTURE_FREEZE.md',
+  'docs/architecture/OMNII_CANONICAL_ARCHITECTURE.md',
+  'docs/CARBON_ACTUAL_UNIVERSAL_CAPABILITY_ONTOLOGY.md',
+  'docs/CARBON_ACTUAL_BUILD_CONSTITUTION.md',
+  'docs/architecture/OMNII_CANONICAL_RUNTIME_RECONCILIATION.md',
+  'docs/architecture/OMNII_PRODUCT_CONFORMANCE_MATRIX.md'
+];
+const invariantText = invariantCorpusPaths.map(read).join('\n');
 const normalized = invariantText.toLowerCase();
-if (!/\*\*status:\*\*\s+frozen/.test(freeze.toLowerCase())) errors.push('architecture freeze status is not FROZEN');
+if (!/\*\*status:\*\*\s+frozen/.test(normalized)) errors.push('architecture freeze status is not FROZEN');
 if (!normalized.includes('freezing the architecture does not freeze technology selection or prevent improvement.')) errors.push('missing architecture evolution rule');
 if (!normalized.includes('pulse is ecosystem feedback')) errors.push('missing invariant: Pulse is ecosystem feedback');
 if (!normalized.includes('evidence is not authority')) errors.push('missing invariant: Evidence is not authority');

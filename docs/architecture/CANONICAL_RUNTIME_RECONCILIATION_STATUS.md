@@ -1,25 +1,17 @@
 # Canonical Runtime Reconciliation Status
 
-**Status:** Control-plane reconciliation implemented; deeper runtime/product verification remains tracked by conformance gates.
+**Status:** APP-BUILD READY — canonical runtime reconciliation and hosted app-readiness gates pass on the current approved branch revision.
 **Branch:** `reconcile/canonical-runtime-2026-09-10`
+**Verified branch head:** `00bdb8c1dfe24c4846d1ec68396035b201934047`
 **Purpose:** Record the verified canonical architecture baseline and the strengthening added beneath the frozen Carbon Actual constitution.
 
 ## Authority baseline
 
-The authoritative architecture package is the 2026-08-18 Carbon Actual Architecture Freeze and its companion Universal Capability Ontology, Economic Ontology, Product Blueprint, and Build Constitution.
+The authoritative architecture package is the Carbon Actual Architecture Freeze and its companion Universal Capability Ontology, Economic Ontology, Product Blueprint, Build Constitution, and canonical OMNII architecture documents.
 
-The older `ECOSYSTEM_ARCHITECTURE.md` is historical and superseded. It must not be used as current architectural direction.
+The older `ECOSYSTEM_ARCHITECTURE.md` is historical/superseded and must not silently override the current canonical architecture.
 
-## Existing canonical/runtime assets verified
-
-- Canonical architecture and object/runtime documentation exist under `docs/architecture/`.
-- Universal object schema exists as documentation and machine-readable schema.
-- Common Layer work exists for canonical primitive registration and intent/capability matching.
-- Runtime validation exists for identity/authority separation and event lifecycle behavior.
-- ABBA orchestration is already being strengthened through common-layer-first reuse and mission/readiness controls.
-- Product/domain compositions have explicit traceability back to shared OMNII semantics.
-
-## Reconciliation controls implemented on this branch
+## Reconciliation controls implemented
 
 1. Machine-readable canonical authority registry and authority precedence.
 2. Canonical runtime manifest and non-regression invariant validators.
@@ -34,7 +26,9 @@ The older `ECOSYSTEM_ARCHITECTURE.md` is historical and superseded. It must not 
 11. Proposal/contradiction intake contract.
 12. Runtime observability boundary.
 13. Canonical runtime conformance matrix.
-14. Canonical architecture landing page now links the runtime reconciliation surface.
+14. Canonical product adapter contract and missing adapter implementation restored from existing tests.
+15. Canonical app-readiness gate covering install, conformance, tests, typecheck and web build.
+16. Pinned GitHub Actions for new conformance workflows.
 
 ## Non-regression invariants
 
@@ -42,15 +36,27 @@ The older `ECOSYSTEM_ARCHITECTURE.md` is historical and superseded. It must not 
 - Interpretation does not grant authority.
 - Matching does not grant authorization.
 - Identity, authority, capability, evidence, state and execution remain distinct.
-- Pulse is not automatically currency, permission or authority.
+- Pulse is ecosystem feedback and is not automatically currency, permission or authority.
 - Products compose shared primitives rather than creating competing universal primitives.
 - Unknown subjects remain representable but provisional.
 - Provider implementations remain replaceable behind contracts.
 - Exact economic formulas remain empirical/jurisdiction-aware.
 - Historical/superseded material remains traceable without current authority.
+- BUNK remains explicitly `mixed-legacy-host` + `separation-required` until its independent repository extraction is verified; no false extraction claim is made.
 
-## Verification state
+## Verification evidence
 
-The branch has a canonical PR and machine-readable conformance controls. Hosted workflow execution must be treated as authoritative only when GitHub reports the run result for the current head commit; local/container network execution is not available in this environment.
+The exact approved branch revision has passed the following hosted checks:
+
+- **Canonical Architecture Conformance:** success.
+- **Canonical Runtime Conformance:** success.
+- **CI:** success through dependency install, movement contract, repository typecheck, runtime tests, runtime package typecheck/build, production build and SHA evidence.
+- **App Readiness:** success through locked dependency install, canonical conformance, full test suite, TypeScript typecheck and production web build.
+
+This establishes the shared substrate as ready for application construction. Product-specific work should compose the existing OMNII capabilities and contracts rather than introduce competing primitives.
+
+## Remaining separately scoped work
+
+BUNK repository extraction remains an independent repository-boundary task. It is intentionally not represented as complete by this reconciliation.
 
 No constitutional source has been changed by this reconciliation.

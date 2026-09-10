@@ -1,0 +1,26 @@
+name: Canonical Runtime Conformance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  architecture:
+    name: Canonical runtime invariants
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - name: Validate canonical authority
+        run: node scripts/validate-canonical-authority.mjs
+      - name: Validate runtime invariants
+        run: node scripts/validate-canonical-runtime-v2.mjs
+      - name: Validate product branch registry
+        run: node scripts/validate-product-branch-registry.mjs

@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "architecture": "carbon-actual-canonical-runtime",
   "constitution_source": "docs/CARBON_ACTUAL_ARCHITECTURE_FREEZE.md",
   "ontology_sources": [
@@ -9,6 +9,7 @@
     "docs/CARBON_ACTUAL_BUILD_CONSTITUTION.md"
   ],
   "authority_registry": "config/canonical-authority-registry.json",
+  "product_branch_registry": "config/canonical-product-branch-registry.json",
   "precedence": "config/architecture-authority-precedence.json",
   "runtime_reconciliation": "docs/architecture/OMNII_CANONICAL_RUNTIME_RECONCILIATION.md",
   "policy": {
@@ -17,6 +18,7 @@
     "interpretation_grants_authority": false,
     "pulse_is_automatic_currency": false,
     "provider_is_constitutional_dependency": false,
-    "product_may_create_competing_universal_primitive": false
+    "product_may_create_competing_universal_primitive": false,
+    "mixed_repository_hosting_is_silent": false
   }
 }

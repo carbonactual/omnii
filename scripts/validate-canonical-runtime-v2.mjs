@@ -59,8 +59,11 @@ for (const id of requiredProducts) if (!productIds.has(id)) errors.push(`missing
 const bunk = productRegistry.records.find((r) => r.product_id === 'BUNK');
 if (bunk?.repository_role !== 'mixed-legacy-host' || bunk?.status !== 'separation-required') errors.push('BUNK legacy repository boundary is not explicit');
 
-const invariantText = `${read('docs/CARBON_ACTUAL_ARCHITECTURE_FREEZE.md')}\n${read('docs/CARBON_ACTUAL_UNIVERSAL_CAPABILITY_ONTOLOGY.md')}\n${read('docs/CARBON_ACTUAL_BUILD_CONSTITUTION.md')}\n${read('docs/architecture/OMNII_CANONICAL_RUNTIME_RECONCILIATION.md')}`;
-for (const text of ['Architecture is frozen; implementation is free to evolve within it.','Pulse is feedback/evidence','Interpretation ≠ Authority','Match ≠ Authorization']) {
+const freeze = read('docs/CARBON_ACTUAL_ARCHITECTURE_FREEZE.md');
+const invariantText = `${freeze}\n${read('docs/CARBON_ACTUAL_UNIVERSAL_CAPABILITY_ONTOLOGY.md')}\n${read('docs/CARBON_ACTUAL_BUILD_CONSTITUTION.md')}\n${read('docs/architecture/OMNII_CANONICAL_RUNTIME_RECONCILIATION.md')}`;
+if (!/\*\*Status:\*\*\s+FROZEN/.test(freeze)) errors.push('architecture freeze status is not FROZEN');
+if (!invariantText.includes('Freezing the architecture does not freeze technology selection or prevent improvement.')) errors.push('missing architecture evolution rule');
+for (const text of ['Pulse is feedback/evidence', 'Interpretation ≠ Authority', 'Match ≠ Authorization']) {
   if (!invariantText.includes(text)) errors.push(`missing invariant: ${text}`);
 }
 if (errors.length) { errors.forEach((e) => console.error(`canonical-runtime: ${e}`)); process.exit(1); }

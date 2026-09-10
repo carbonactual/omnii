@@ -22,3 +22,5 @@ jobs:
         run: node scripts/validate-canonical-authority.mjs
       - name: Validate runtime invariants
         run: node scripts/validate-canonical-runtime-v2.mjs
+      - name: Validate product branch registry
+        run: node scripts/validate-product-branch-registry.mjs

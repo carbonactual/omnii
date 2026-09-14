@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { EventEngine, CanonicalEvent } from "./event-engine";
-import { JourneyExecutionEvent, JourneyExecutionState } from "./charter-journey-execution-runtime";
+import type { JourneyExecutionEvent, JourneyExecutionState } from "./charter-journey-execution-runtime";
 
 export class CharterJourneyEventStore {
   constructor(private readonly events: EventEngine) {}
@@ -20,7 +20,7 @@ export class CharterJourneyEventStore {
       source: "charter-journey-execution-runtime",
       provenance: input.provenance,
       evidence_refs: input.evidenceRefs ?? [],
-      metadata: { authority_ref: input.authorityRef },
+      metadata: { authority_ref: input.authorityRef ?? null },
       payload: {
         journey_id: input.journeyId,
         event_type: input.eventType,

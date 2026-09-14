@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "product": "BUNK",
+  "source_repository": "carbonactual/omnii",
+  "target_repository": "B3C0M1NG/BUNK",
+  "status": "source-mapped-awaiting-repository-creation",
+  "extraction_safety": "Do not delete or rewrite source files until the standalone repository exists, contents are verified, consumers are mapped, and rollback is possible."
+}

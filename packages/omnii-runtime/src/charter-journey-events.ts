@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type { EventEngine, CanonicalEvent } from "./event-engine";
 import { JourneyExecutionEvent, JourneyExecutionState } from "./charter-journey-execution-runtime";
 
@@ -27,7 +28,7 @@ export class CharterJourneyEventStore {
         resulting_state: input.resultingState,
         payload: input.payload,
       },
-      idempotency_key: `charter-journey:${input.journeyId}:${input.eventType}:${cryptoRandomId()}`,
+      idempotency_key: `charter-journey:${input.journeyId}:${input.eventType}:${randomUUID()}`,
     });
     return this.toJourneyEvent(event);
   }
@@ -53,8 +54,4 @@ export class CharterJourneyEventStore {
       evidenceRefs: event.evidence_refs as string[],
     };
   }
-}
-
-function cryptoRandomId(): string {
-  return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }

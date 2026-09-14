@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "registry": "omnii-control-plane",
   "status": "canonical-seed",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authority": "OMNII_CONTROL_PLANE_CANONICAL",
   "promotion_ladder": [
     "idea",
@@ -127,6 +127,38 @@
       "canonical_id": "omnii.control.provider-managed-extension-boundary",
       "owner": "Security / Provider Boundary",
       "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "implemented"
+    },
+    {
+      "canonical_id": "omnii.control.repository-estate",
+      "owner": "Control Plane",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "implemented"
+    },
+    {
+      "canonical_id": "omnii.control.runtime-integration",
+      "owner": "Universal Runtime / ABBA",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "implemented"
+    },
+    {
+      "canonical_id": "omnii.control.verification-evidence",
+      "owner": "Control Plane",
+      "authority_class": "runtime_contract",
+      "lifecycle": "production",
+      "version": "1.0.0",
+      "conformance_status": "specified"
+    },
+    {
+      "canonical_id": "omnii.control.human-boundary",
+      "owner": "Human Authority / Control Plane",
+      "authority_class": "canonical_architecture",
       "lifecycle": "production",
       "version": "1.0.0",
       "conformance_status": "implemented"

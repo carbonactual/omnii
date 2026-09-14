@@ -1,0 +1,55 @@
+name: OMNII Integration Fabric
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/omnii-runtime/src/integration/**'
+      - 'packages/omnii-runtime/tests/integration-fabric.test.ts'
+      - 'docs/canonical/INTEGRATION_FIRST_INTEROPERABILITY_FABRIC_V1.md'
+      - 'docs/canonical/IDENTITY_NAMING_RESOLUTION_MESH_V1.md'
+      - 'docs/canonical/CAPABILITY_TRUST_EXCHANGE_V1.md'
+      - 'docs/canonical/PROTOCOL_SELECTION_ROUTER_V1.md'
+      - 'docs/ARCHITECTURE_BOUNDARY_V1.md'
+      - 'builds/BUNK/STANDALONE_EXTRACTION_MANIFEST_V1.json'
+      - '.github/workflows/integration-fabric.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'packages/omnii-runtime/src/integration/**'
+      - 'packages/omnii-runtime/tests/integration-fabric.test.ts'
+      - '.github/workflows/integration-fabric.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-integration-fabric:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.23.2
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Typecheck integration fabric
+        run: >-
+          npx tsc --ignoreConfig --noEmit --strict --skipLibCheck
+          --target ES2022 --module ESNext --moduleResolution Bundler
+          --types node --lib ES2022,DOM
+          packages/omnii-runtime/src/types.ts
+          packages/omnii-runtime/src/integration/integration.ts
+          packages/omnii-runtime/src/integration/lifecycle.ts
+          packages/omnii-runtime/src/integration/identity.ts
+          packages/omnii-runtime/src/integration/resolution.ts
+          packages/omnii-runtime/src/integration/capability.ts
+          packages/omnii-runtime/src/integration/protocols.ts
+          packages/omnii-runtime/src/integration/routing.ts
+          packages/omnii-runtime/src/integration/accountability.ts
+          packages/omnii-runtime/src/integration/adapters/resolvers.ts
+          packages/omnii-runtime/src/integration/adapters/protocols.ts
+      - name: Integration behavior tests
+        run: node --import tsx --test packages/omnii-runtime/tests/integration-fabric.test.ts

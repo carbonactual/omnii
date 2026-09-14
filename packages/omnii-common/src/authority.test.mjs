@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
-import { canonicalActionGate, isConsequentialCapability } from './authority.mjs';
+import {
+  canonicalActionGate,
+  canonicalExecutionGate,
+  isConsequentialCapability,
+} from './authority.mjs';
 
 const blocked = canonicalActionGate({ capabilityRef: 'execution.transfer' });
 assert.equal(blocked.consequential, true);
@@ -19,5 +23,38 @@ const humanRequired = canonicalActionGate({ capabilityRef: 'world.learn', requir
 assert.equal(humanRequired.consequential, true);
 assert.equal(humanRequired.allowed, false);
 
+const fullBlocked = canonicalExecutionGate({
+  capabilityRef: 'execution.transfer',
+  authorityRef: 'seal:human:1',
+  identityRef: 'hash:human:1',
+  policyAllowed: true,
+  capabilityReady: true,
+  resourceReady: false,
+});
+assert.equal(fullBlocked.allowed, false);
+assert.equal(fullBlocked.checks.resource, false);
+
+const fullAllowed = canonicalExecutionGate({
+  capabilityRef: 'execution.transfer',
+  authorityRef: 'seal:human:1',
+  identityRef: 'hash:human:1',
+  policyAllowed: true,
+  capabilityReady: true,
+  resourceReady: true,
+});
+assert.equal(fullAllowed.allowed, true);
+assert.equal(fullAllowed.reason, 'execution-ready');
+
+const policyBlocked = canonicalExecutionGate({
+  capabilityRef: 'execution.transfer',
+  authorityRef: 'seal:human:1',
+  identityRef: 'hash:human:1',
+  policyAllowed: false,
+  capabilityReady: true,
+  resourceReady: true,
+});
+assert.equal(policyBlocked.allowed, false);
+assert.equal(policyBlocked.checks.policy, false);
+
 assert.equal(isConsequentialCapability(' EXECUTION.SEND '), true);
-console.log('canonical authority gate tests: 5/5 assertions passed');
+console.log('canonical authority gate tests: 8/8 assertions passed');

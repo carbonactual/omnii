@@ -45,11 +45,11 @@ export { intentRecord, capabilityDescriptor } from './intent.mjs';
 export { discover } from './discovery.mjs';
 export { match } from './matching.mjs';
 export { contextRecord, availabilityRecord } from './context.mjs';
-export { authorityContext, authorizationDecision, isConsequentialCapability, canonicalActionGate } from './authority.mjs';
+export { authorityContext, authorizationDecision, isConsequentialCapability, canonicalActionGate, canonicalExecutionGate } from './authority.mjs';
 export { evidenceRecord, assertEvidenceIsNotAuthority } from './evidence.mjs';
 export { valueReference, pulseObservation } from './value.mjs';
 export { workflowRecord, executionRecord } from './workflow.mjs';
 export { ioRecord, isIoRecord, IO_KINDS, IO_STATUSES } from './io.mjs';
 export { toIoOccurrence, withIoOccurrence } from './io-boundary.mjs';
 
-export const OMNII_COMMON_VERSION = '1.1.0';
+export const OMNII_COMMON_VERSION = '1.1.1';

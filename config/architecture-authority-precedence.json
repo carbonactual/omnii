@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "levels": {
+    "CONSTITUTIONAL": 1,
+    "CANONICAL": 2,
+    "AMENDMENT": 3,
+    "CAPABILITY": 4,
+    "DOMAIN": 5,
+    "IMPLEMENTATION": 6,
+    "EXPERIMENTAL": 7,
+    "CONVERSATION": 8
+  },
+  "rule": "Lower numeric level has higher authority. Chronology never overrides authority. A lower-authority record may clarify, implement, extend or branch from a higher-authority record but may not redefine it without an explicit amendment."
+}

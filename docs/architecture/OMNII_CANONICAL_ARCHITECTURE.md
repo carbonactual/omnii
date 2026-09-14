@@ -80,6 +80,8 @@ Registries index canonical objects, relationships, dependencies, capabilities, r
 
 A registry MUST preserve identity, provenance, authority, lifecycle, ownership/custody, relationships and auditability and MUST NOT create competing definitions for the same semantic domain.
 
+The canonical runtime reconciliation adds a machine-readable authority registry beneath this architecture, but does not replace the constitutional sources.
+
 ## 10. Universal Runtime
 
 The governed execution route is:
@@ -210,3 +212,25 @@ A new real-world requirement is handled in this order:
 `compose existing primitives → configure schema/policy/workflow → extend a domain composition → record evidence → propose constitutional amendment only if a genuine foundational semantic is missing`
 
 This makes the ecosystem adaptive without making the foundation unstable.
+
+## 23. Canonical Runtime Reconciliation
+
+The approved technical reconciliation is maintained beneath this constitutional architecture. It defines the runtime planes, authority precedence, event/state integrity, capability/provider boundary, ABBA→Swarm→Team workflow boundary, projection roles, economic/ledger/tokenization boundary, Ash/Phoenix continuity boundary, product-branch rules, proposal contradiction intake, observability boundary and machine-readable conformance matrix.
+
+Canonical runtime documents:
+
+- `OMNII_CANONICAL_RUNTIME_RECONCILIATION.md`
+- `CANONICAL_RUNTIME_BOUNDARY_MATRIX.md`
+- `OMNII_CANONICAL_AUTHORITY_REGISTRY.md`
+- `OMNII_CANONICAL_EVENT_STATE_INTEGRITY.md`
+- `OMNII_CAPABILITY_ADAPTER_CONTRACT.md`
+- `OMNII_ABBA_SWARM_TEAM_WORKFLOW_BOUNDARY.md`
+- `OMNII_PROJECTION_BOUNDARY.md`
+- `OMNII_ECONOMIC_LEDGER_TOKENIZATION_BOUNDARY.md`
+- `OMNII_ASH_PHOENIX_CONTINUITY_BOUNDARY.md`
+- `OMNII_PRODUCT_BRANCH_RECONCILIATION.md`
+- `OMNII_PROPOSAL_CONTRADICTION_INTAKE.md`
+- `OMNII_RUNTIME_OBSERVABILITY_BOUNDARY.md`
+- `CANONICAL_RUNTIME_CONFORMANCE_MATRIX.md`
+
+These documents constrain implementation without introducing another constitutional kernel.

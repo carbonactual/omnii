@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://carbonactual.github.io/omnii/schemas/canonical-product-branch-record.schema.json",
+  "title": "Canonical Product Branch Record",
+  "type": "object",
+  "required": ["product_id", "architectural_class", "repository", "repository_role", "status"],
+  "properties": {
+    "product_id": {"type":"string","minLength":1},
+    "architectural_class": {"type":"string","minLength":1},
+    "repository": {"type":"string","minLength":1},
+    "repository_role": {"type":"string","enum":["product-repository","capability-product-repository","presentation-repository","deployment-repository","mixed-legacy-host","composition-reference","legacy-or-reference-repository"]},
+    "status": {"type":"string","enum":["canonical","canonical-intent","composition-on-shared-host","separation-required","composition-reference"]},
+    "notes": {"type":"string"}
+  },
+  "additionalProperties": false
+}

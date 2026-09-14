@@ -1,0 +1,30 @@
+name: Canonical Architecture Conformance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-authority:
+    name: Canonical authority registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.23.2
+      - name: Validate authority registry
+        run: node scripts/validate-canonical-authority.mjs
+      - name: Validate JSON syntax
+        run: node -e "JSON.parse(require('fs').readFileSync('config/canonical-authority-registry.json','utf8')); JSON.parse(require('fs').readFileSync('schemas/omnii-canonical-authority-record.schema.json','utf8'))"
+      - name: Validate canonical package boundaries
+        run: node packages/omnii-products/tests/adapter.test.mjs && node packages/omnii-products/tests/catalog-and-crossing.test.mjs

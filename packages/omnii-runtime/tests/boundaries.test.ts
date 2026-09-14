@@ -44,8 +44,11 @@ test("ABBA receives delegated authority and does not mint it", async () => {
 
 test("ABBA preserves common-layer context and explicit execution modes", () => {
   const persistence = new MemoryPersistenceAdapter(); const events = new EventStore(persistence); const executions = new ExecutionRuntime(events, persistence); const agents = new AgentRuntime(executions, events, persistence); const abba = new AbbaRuntime({ request: () => null }, agents, events);
-  const context = abba.contextualize({ requested: { capability: "execute", targetAgent: "agent-4", purpose: "test", mode: "confirm", approvalRequired: true } });
+  const requested = { capability: "execute", targetAgent: "agent-4", purpose: "test", mode: "confirm", approvalRequired: true };
+  const context = abba.contextualize(requested);
   assert.equal((context.common_layer as Record<string, unknown>).authority, "AUTHORITY");
-  const plan = abba.plan(abba.reason(context));
+  const reasoning = abba.reason(context);
+  assert.deepEqual(reasoning.requested, requested);
+  const plan = abba.plan(reasoning);
   assert.equal(plan.mode, "confirm"); assert.equal(plan.approvalRequired, true);
 });

@@ -47,3 +47,43 @@ export function canonicalActionGate({ capabilityRef, authorityRef = null, requir
     ownershipChanged: false,
   };
 }
+
+/**
+ * Full gate for consequential execution. Identity, authority, policy,
+ * capability and resource readiness remain separate inputs. Supplying a
+ * matching candidate or interpretation alone cannot satisfy this gate.
+ */
+export function canonicalExecutionGate({
+  identityRef = null,
+  authorityRef = null,
+  capabilityRef,
+  policyAllowed = false,
+  capabilityReady = false,
+  resourceReady = false,
+  requiresHuman = false,
+} = {}) {
+  if (!capabilityRef) throw new Error('capabilityRef is required');
+
+  const action = canonicalActionGate({ capabilityRef, authorityRef, requiresHuman });
+  const normalizedCapability = String(capabilityRef).trim().toLowerCase();
+  const consequential = action.consequential;
+  const identitySatisfied = Boolean(identityRef);
+  const authoritySatisfied = Boolean(authorityRef);
+  const requirements = consequential
+    ? identitySatisfied && authoritySatisfied && Boolean(policyAllowed) && Boolean(capabilityReady) && Boolean(resourceReady)
+    : Boolean(capabilityReady);
+
+  return {
+    capabilityRef: normalizedCapability,
+    consequential,
+    allowed: requirements,
+    checks: {
+      identity: identitySatisfied,
+      authority: authoritySatisfied,
+      policy: Boolean(policyAllowed),
+      capability: Boolean(capabilityReady),
+      resource: Boolean(resourceReady),
+    },
+    reason: requirements ? 'execution-ready' : 'execution-gate-failed',
+  };
+}

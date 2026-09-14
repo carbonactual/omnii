@@ -21,12 +21,15 @@ Documentation is evidence of specification, not proof of execution.
 | Common Layer | YES | YES | YES (registry/runtime contracts) | PARTIAL | UNVERIFIED | NO | Canonical capability catalog exists |
 | AuthorityRuntime | YES | YES | YES (runtime path) | YES (prior live evidence) | UNVERIFIED | NO | Strong runtime boundary; current repository CI still required |
 | RuntimeActivation | YES | YES | YES (source path) | PARTIAL | UNVERIFIED | NO | Context → authority → route → execution → reconciliation → feedback implemented |
+| Event Engine | YES | YES (targeted tests present) | YES (canonical runtime path) | PARTIAL | UNVERIFIED | NO | Canonical event envelope, deterministic hashing, idempotency, replay and governed Supabase append boundary |
+| CHARTER Journey Runtime | YES | YES (targeted lifecycle/module tests present) | YES (canonical runtime path) | PARTIAL | UNVERIFIED | NO | Canonical journey transitions, event history, handoff, evidence references and bounded recovery |
+| Integration / Interoperability Fabric | YES | YES (targeted interoperability tests present) | YES (canonical runtime path) | PARTIAL | UNVERIFIED | NO | Identity/resolution mesh, capability admission, protocol routing, adapter boundaries and accountability bridge |
 | ABBA | YES | YES | PARTIAL | PARTIAL | UNVERIFIED | NO | Orchestration boundary established; production intelligence provider not evidenced |
 | Mission Intelligence | YES | YES | YES (runtime tests) | PARTIAL | UNVERIFIED | NO | Readiness gate exists and does not itself authorize execution |
 | Agent Runtime | YES | YES | YES (runtime path) | PARTIAL | UNVERIFIED | NO | Capability and delegated authority checks exist |
 | Repository Estate | YES | PARTIAL | YES (audit evidence) | PARTIAL | UNVERIFIED | NO | Account inventory exists; canonical binding should be kept current |
 | Product Composition | YES | PARTIAL | PARTIAL | UNVERIFIED | UNVERIFIED | NO | Increasingly composed through common capabilities |
-| Observability | PARTIAL | PARTIAL | UNVERIFIED | PARTIAL | UNVERIFIED | NO | Common event semantics exist; operational evidence remains incomplete |
+| Observability | PARTIAL | PARTIAL | UNVERIFIED | PARTIAL | UNVERIFIED | NO | Worker/event telemetry and canonical event semantics exist; current operational evidence remains incomplete |
 | Supabase / PostgreSQL | YES | YES | YES | YES (prior live evidence) | UNVERIFIED | YES for durable environment | Canonical durable project is known and healthy from prior verification |
 | RLS | YES | YES/N/A | UNVERIFIED | Restrictive boundary verified previously | UNVERIFIED | N/A | Application identity → authority mapping still unresolved |
 | Deployment | YES | N/A | UNVERIFIED | UNVERIFIED | UNVERIFIED | NO | Environment evidence required |
@@ -46,6 +49,9 @@ Documentation is evidence of specification, not proof of execution.
 - `RuntimeActivation` exists and performs context resolution, authority validation, route resolution, capability authorization, execution, reconciliation and feedback using durable idempotency.
 - `MissionIntelligenceRuntime` exists and supplies structural readiness for TEAM/MISSION composition.
 - The Common Layer capability registry exists and defines the canonical catalog of reusable capabilities.
+- The Event Engine is now the canonical event substrate for append, idempotency, replay, and governed durable event persistence.
+- CHARTER journey history routes through the Event Engine rather than creating a competing journey-event store.
+- The Integration Fabric is provider-neutral and treats DID/ENS/HNS/DNS, MCP/A2A/API/SDK/CLI/WEB/LOCAL as replaceable adapters/rails.
 - The Control Plane defines the promotion ladder and truth precedence.
 
 ## Promotion rule

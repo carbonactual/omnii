@@ -36,7 +36,7 @@ async function fixture() {
     status: "active",
   };
   await persistence.create("authorities", root);
-  return { events, authorities, executions };
+  return { events, authorities, executions, persistence };
 }
 
 test("RuntimeActivation completes the governed loop and is replay-safe", async () => {
@@ -112,5 +112,51 @@ test("RuntimeActivation blocks consequential work when authority is absent", asy
 
   assert.equal(result.resolution.status, "blocked");
   assert.equal(result.resolution.reason, "authority_unresolved");
+  assert.equal(handlerCalls, 0);
+});
+
+test("RuntimeActivation blocks consequential work when authority is revoked", async () => {
+  const { events, authorities, executions, persistence } = await fixture();
+  await persistence.update("authorities", "auth-1", {
+    id: "auth-1",
+    subject: "operator-1",
+    issuer: "governance",
+    scope: ["service.execute"],
+    capabilities: ["service.execute"],
+    constraints: {},
+    context: {},
+    issued_at: "2026-09-03T00:00:00Z",
+    revocable: true,
+    version: "1",
+    status: "revoked",
+    revoked_at: "2026-09-04T00:00:00Z",
+  });
+  let handlerCalls = 0;
+  const runtime = new RuntimeActivation({
+    authorityRuntime: authorities,
+    executionRuntime: executions,
+    events,
+    contextResolver: async () => context,
+    routeResolver: async () => ({ routeId: "route-3", capability: "service.execute", actorIdentity: "operator-1" }),
+    executionHandler: async () => {
+      handlerCalls += 1;
+      return { accepted: true };
+    },
+  });
+
+  const result = await runtime.activate(createRuntimeSignal({
+    source: "test",
+    eventType: "service.requested",
+    payload: { requestId: "r-3" },
+    correlationId: "corr-3",
+    idempotencyKey: "idem-3",
+    actorId: "operator-1",
+    subjectId: "subject-3",
+    operatingContextId: "ctx-1",
+    provenance: { authorityId: "auth-1" },
+  }));
+
+  assert.equal(result.resolution.status, "blocked");
+  assert.match(result.resolution.reason ?? "", /authority/i);
   assert.equal(handlerCalls, 0);
 });

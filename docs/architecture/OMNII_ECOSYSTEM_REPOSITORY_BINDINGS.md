@@ -1,6 +1,6 @@
 # OMNII Ecosystem Repository Bindings
 
-**Status:** Canonical estate binding view — 2026-09-14
+**Status:** Canonical estate binding view — 2026-09-15
 
 Repository binding is a control-plane classification. It does not turn a repository into constitutional truth and does not require copying, merging, deleting or archiving repositories.
 
@@ -23,9 +23,13 @@ Repository binding is a control-plane classification. It does not turn a reposit
 
 | Repository | Binding | Rule |
 |---|---|---|
-| `carbonactual/hapi-world` | HAPI World environment | World/model/surface for AI-side human/entity relationships; uses OMNII truth and authority |
-| `carbonactual/hapi-world-nexus` | HAPI World/Nexus presentation | Discoverable projection/navigation, not a competing source of truth |
-| `carbonactual/RITES` | Specialized operating environment | Domain-specialized composition over common primitives |
+| `carbonactual/hapi-world` | HAPi World environment | World/model/surface for AI-side human/entity relationships; uses OMNII truth and authority |
+| `carbonactual/hapi-world-nexus` | HAPi World/Nexus integration surface | Discoverable projection/navigation and integration boundary, not a competing source of truth |
+| `carbonactual/naire` | Human operating environment | Human/household environment boundary; uses canonical identity, authority and value primitives |
+| `carbonactual/ngin` | Organization/territory operating environment | Organization/territory boundary; uses canonical governance, identity and value primitives |
+| `carbonactual/RITES` | Specialized operating environment | Domain-specialized continuity/regeneration composition over common primitives |
+| `carbonactual/io` | Governed movement/value interface | Movement boundary; consequential movement remains authority and evidence gated |
+| `carbonactual/value-system` | Canonical value/economic boundary | Value/regeneration semantics; does not create a competing financial constitution |
 
 ## Products
 
@@ -64,6 +68,10 @@ BUNK remains a downstream property/housing composition. Its code currently resid
 ## Promotion rule
 
 A repository binding is not a production claim. Production status requires runtime/deployment evidence under the Control Plane promotion ladder.
+
+## Verification boundary
+
+The current GitHub connector exposes the authenticated personal-account repository estate. It does not establish organization-level administration or prove repositories outside that observable account boundary. Those remain explicit verification items rather than inferred facts.
 
 ## Estate rule
 

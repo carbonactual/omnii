@@ -5,10 +5,11 @@
 | Priority | Gap | Status | Exact evidence required to close |
 |---|---|---|---|
 | P0 | Phase 27 has no package/commit evidence. | IMPLEMENTATION GAP / NOT EVIDENCED | Explicit Phase 27 implementation or an authoritative decision that it is not required for the canonical runtime. No implementation was fabricated in this pass. |
-| P1 | Current repository execution is unavailable through connected tooling. | UNVERIFIED — ENVIRONMENT LIMITATION | Fresh execution of `pnpm install`, `pnpm typecheck`, `pnpm test`, `pnpm test:runtime`, and runtime build in an execution-capable environment. |
-| P1 | Current CI run is unavailable. | UNVERIFIED — ENVIRONMENT LIMITATION | A current GitHub Actions run for the current HEAD with install, typecheck, runtime tests and runtime build all successful. |
+| P1 | Current repository execution is unavailable through connected tooling. | UNVERIFIED — ENVIRONMENT LIMITATION | Fresh execution of `npm install`, `npm run typecheck`, `npm test`, `npm run test:runtime`, and the production build in an execution-capable environment. |
+| P1 | Current CI run is unavailable. | UNVERIFIED — NO RUN FOR CURRENT HEAD | A current GitHub Actions run for the current PR/head with install, typecheck, runtime tests and runtime build all successful. Current commit status reports `pending` with zero statuses rather than success. |
 | P1 | Production deployment is not evidenced. | UNVERIFIED | Actual deployment target, environment configuration, deployment run and post-deploy health evidence. |
 | P1 | Production ABBA intelligence is not implemented in this repository. | UNIMPLEMENTED / INTEGRATION BOUNDARY | Authorized production intelligence/model provider connected behind the existing ABBA boundary, with authority remaining external to ABBA. |
+| P1 | Supabase public exposure/security-advisor findings remain. | PARTIAL / PROVIDER-MANAGED | Current advisors show 15 RLS-enabled tables with no policies, `public.spatial_ref_sys` without RLS, PostGIS in `public`, and SECURITY DEFINER exposure. Safe PostGIS function revocation was attempted in live migration but managed privileges reasserted; closure requires a supported provider-safe boundary change or an explicit accepted risk. |
 | P2 | Authenticated/anonymous application-role identity → authority mapping is not canonical. | BLOCKED / RESTRICTIVE BY DESIGN | Authoritative identity contract sufficient to define narrow RLS policies, followed by live authenticated/anonymous policy tests. |
 | P2 | Full database-side parent-authority containment is not implemented. | PARTIAL BY DESIGN | Only required if the canonical runtime needs atomic database-side delegation; otherwise runtime containment remains the single authority semantic. |
 | P2 | Distributed event transport is not proven. | UNIMPLEMENTED | Production transport adapter and live delivery evidence without changing canonical event semantics. |
@@ -17,22 +18,16 @@
 | P3 | Ledger is a boundary, not a production settlement engine. | PARTIAL BY DESIGN | Domain-specific settlement implementation only if a product requires it. |
 | P4 | Phase 31–40 are horizon/composition concerns. | FUTURE | Future implementation only when explicitly authorized; not required to close the current runtime boundary. |
 
-## Resolved in this closure pass
+## Resolved/verified during the current closure work
 
-- Repository migration defects in `0008` and `0009` were found and corrected: their `GRANT EXECUTE` signatures now exactly match the created PostgreSQL functions.
-- Canonical Supabase `omnii-canonical` (`fomkrgrsqakabftymbjn`) is `ACTIVE_HEALTHY`.
-- Live migrations `0003` through `0009` are present.
-- Live OMNII mutating RPCs use `search_path = public, pg_temp`.
-- Live OMNII mutating RPCs are `SECURITY INVOKER` and execution is granted to `service_role`; no anon/authenticated execution was observed.
-- Fresh live state/event, execution/audit and ledger/audit transaction paths were exercised with isolated verification identifiers.
-- Fresh live authority issuance, idempotency, revocation, suspension and stale-version behavior were exercised.
+- The canonical control-plane validator was strengthened in-place rather than creating a second validator primitive. It now checks required fields, duplicate canonical IDs, declared authority classes, declared lifecycle states and required canonical control IDs.
+- Canonical Supabase `omnii-canonical` (`fomkrgrsqakabftymbjn`) remains `ACTIVE_HEALTHY`.
+- Live inspection confirmed `omnii_has_active_authority(text)` is intentionally executable by `authenticated` because existing authenticated RLS policies call it; it was not revoked merely to reduce an advisor warning.
+- Live inspection confirmed the three `public.st_estimatedextent(...)` PostGIS SECURITY DEFINER overloads are executable by `anon` and `authenticated`; restrictive revocation was applied through Supabase migration tooling but the managed provider reasserted the grants on subsequent inspection.
+- Repository-side migration evidence for the PostGIS restriction attempt is recorded in `supabase/migrations/20260915110700_restrict_postgis_estimatedextent_api_execution.sql`.
 - RLS remains enabled and restrictive with no invented application-role policies.
 
-## Evidence boundary
-
-The live database evidence is real database execution evidence. It does not prove current repository compilation/tests/build, GitHub Actions execution, browser/authenticated RLS behavior, or production deployment.
-
-## Architectural invariants preserved
+## Existing verified architectural invariants
 
 - `CAPABILITY ≠ AUTHORITY`
 - `INTELLIGENCE ≠ AUTHORITY`
@@ -45,8 +40,13 @@ The live database evidence is real database execution evidence. It does not prov
 - one persistence boundary
 - Phase 40 remains an adapter/view, not a competing graph
 - BUNK remains downstream; no BUNK → OMNII dependency
+- OMNI remains a separate product from OMNII
 - Phase 41 not started
+
+## Evidence boundary
+
+Live database evidence is real database execution evidence. It does not prove current repository compilation/tests/build, current GitHub Actions execution, browser/authenticated RLS behavior, or production deployment.
 
 ## Final status
 
-The remaining gaps are verification, deployment, application-identity integration and intentionally unimplemented production integrations. No new constitutional architecture is required by the evidence gathered in this pass.
+The architecture itself is not waiting on a new constitutional layer. The remaining work is evidence closure, provider-safe database hardening, deployment verification, application-identity integration, distributed transport/observability proof, and intentionally external production integrations.

@@ -243,6 +243,10 @@ The first canonical domain ontology in this family is:
 
 - `docs/constitution/UNIVERSAL_ECOSYSTEM_EVENT_INTERACTION_ONTOLOGY.md` — universal Event, Interaction, Capacity, Authority, Representation, Protocol, Procedure, Floor, Communication, Accessibility, Media, Evidence, Witnessing, Claims, Reporting, Records, Physical-World and Outcome semantics.
 
+Its governed extensions are:
+
+- `docs/constitution/UNIVERSAL_ECOSYSTEM_EVENT_INTERACTION_EXTENSIONS.md` — emerging and future semantics for event discovery/federation, digital twins, spatial state, professional production and broadcast, media synchronization/provenance, immersive media, personalized accessibility, resource orchestration, credential/admission, audience/public views, rehearsal/simulation/drills, event intelligence and bounded automation, safety/emergency operations, environmental/social/economic impact, event actuality, nested/parallel events, handover/succession, rights/consent/publication controls, safeguarding, external authority federation, and event reconstruction/certification.
+
 Domain ontologies are constitutional extensions of the meta-layer. Product names, repository names and product UX MUST NOT redefine their meanings.
 
 ## Governance of extension
@@ -294,5 +298,3 @@ Products remain compositions. New products do not create private ontologies that
 ## Final invariant
 
 > **OMNII must be able to represent the existence of something before it knows what that something is.**
-
-That is the constitutional condition for a genuinely open-world, stateless and formless ecosystem.

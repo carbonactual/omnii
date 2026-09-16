@@ -235,6 +235,16 @@ Examples include future:
 
 OMNII records what the technology enables, what it controls, what evidence it produces, its authority boundary and how it maps to existing primitives.
 
+## Canonical universal domain ontologies
+
+The meta-ontology governs domain ontologies that become universal ecosystem contracts.
+
+The first canonical domain ontology in this family is:
+
+- `docs/constitution/UNIVERSAL_ECOSYSTEM_EVENT_INTERACTION_ONTOLOGY.md` — universal Event, Interaction, Capacity, Authority, Representation, Protocol, Procedure, Floor, Communication, Accessibility, Media, Evidence, Witnessing, Claims, Reporting, Records, Physical-World and Outcome semantics.
+
+Domain ontologies are constitutional extensions of the meta-layer. Product names, repository names and product UX MUST NOT redefine their meanings.
+
 ## Governance of extension
 
 Promotion to canonical status requires:
@@ -271,6 +281,8 @@ The meta-layer is deliberately small. It governs **how the ontology grows** rath
 CONSTITUTIONAL CORE
         ↓
 META-ONTOLOGY
+        ↓
+CANONICAL DOMAIN ONTOLOGY
         ↓
 NEW TYPE / RELATION / RESOURCE / CAPABILITY / EVENT
         ↓

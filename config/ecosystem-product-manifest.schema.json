@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://carbonactual.local/schema/ecosystem-product-manifest.v1.json",
+  "title": "Carbon Actual Ecosystem Product Composition Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version","product_id","name","status","purpose","entities","domain_capabilities","consumed_capabilities","provided_capabilities","workflows","interfaces","providers_adapters","authority_model","data_model","evidence_model","economic_model","pulse_model","continuity_model","exit_handoff","compatibility_identifiers"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "product_id": {"type": "string","pattern":"^[a-z0-9][a-z0-9._-]*$"},
+    "name": {"type":"string","minLength":1},
+    "status": {"enum":["active","planned","historical","experimental","deprecated"]},
+    "purpose": {"type":"string","minLength":1},
+    "entities": {"type":"array","items":{"type":"string"}},
+    "domain_capabilities": {"type":"array","items":{"type":"string"}},
+    "consumed_capabilities": {"type":"array","items":{"type":"string"}},
+    "provided_capabilities": {"type":"array","items":{"type":"string"}},
+    "workflows": {"type":"array","items":{"type":"string"}},
+    "interfaces": {"type":"array","items":{"type":"string"}},
+    "providers_adapters": {"type":"array","items":{"type":"string"}},
+    "authority_model": {"type":"string","minLength":1},
+    "data_model": {"type":"string","minLength":1},
+    "evidence_model": {"type":"string","minLength":1},
+    "economic_model": {"type":"string","minLength":1},
+    "pulse_model": {"type":"string","minLength":1},
+    "continuity_model": {"type":"string","minLength":1},
+    "exit_handoff": {"type":"string","minLength":1},
+    "compatibility_identifiers": {"type":"array","items":{"type":"string"}}
+  }
+}

@@ -8,8 +8,17 @@ on:
       - 'docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md'
       - 'docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md'
       - 'docs/architecture/OMNII_SECURITY_POSTURE_AND_PROVIDER_BOUNDARIES.md'
+      - 'docs/architecture/OMNII_INSTITUTIONAL_COMPOSITION_INDEX.md'
+      - 'docs/architecture/OMNII_OMNI_DESK_REPOSITORY_RECONCILIATION.md'
+      - 'docs/ecosystem-manifests/**'
+      - 'config/ecosystem-capabilities/**'
+      - 'config/ecosystem-product-manifest.schema.json'
+      - 'config/ecosystem-capability-manifest.schema.json'
       - 'scripts/validate-control-plane.mjs'
       - 'scripts/validate-security-posture.mjs'
+      - 'scripts/ecosystem-composition-conformance.mjs'
+      - 'scripts/ecosystem-composition-conformance.test.mjs'
+      - 'package.json'
       - '.github/workflows/control-plane-conformance.yml'
   pull_request:
     branches: [main]
@@ -18,8 +27,17 @@ on:
       - 'docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md'
       - 'docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md'
       - 'docs/architecture/OMNII_SECURITY_POSTURE_AND_PROVIDER_BOUNDARIES.md'
+      - 'docs/architecture/OMNII_INSTITUTIONAL_COMPOSITION_INDEX.md'
+      - 'docs/architecture/OMNII_OMNI_DESK_REPOSITORY_RECONCILIATION.md'
+      - 'docs/ecosystem-manifests/**'
+      - 'config/ecosystem-capabilities/**'
+      - 'config/ecosystem-product-manifest.schema.json'
+      - 'config/ecosystem-capability-manifest.schema.json'
       - 'scripts/validate-control-plane.mjs'
       - 'scripts/validate-security-posture.mjs'
+      - 'scripts/ecosystem-composition-conformance.mjs'
+      - 'scripts/ecosystem-composition-conformance.test.mjs'
+      - 'package.json'
       - '.github/workflows/control-plane-conformance.yml'
   workflow_dispatch:
 
@@ -51,3 +69,6 @@ jobs:
 
       - name: Validate security posture
         run: node scripts/validate-security-posture.mjs
+
+      - name: Validate ecosystem composition
+        run: npm run ecosystem:conformance

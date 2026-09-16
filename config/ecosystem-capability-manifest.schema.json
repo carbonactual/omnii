@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://carbonactual.local/schema/ecosystem-capability-manifest.v1.json",
+  "title": "Carbon Actual Reusable Capability Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version","capability_id","version","maturity","canonical_registry_key","family","purpose","parent","inputs","outputs","authority","data_classes","events","dependencies","providers_adapters","provenance","health","replacement"],
+  "properties": {
+    "schema_version": {"const":"1.0.0"},
+    "capability_id": {"type":"string","pattern":"^cap\\.[a-z0-9][a-z0-9._-]*$"},
+    "version": {"type":"string","pattern":"^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "maturity": {"enum":["local-use","reusable-candidate","shared","canonical","deprecated","experimental"]},
+    "canonical_registry_key": {"type":"string","minLength":1},
+    "family": {"type":"string","minLength":1},
+    "purpose": {"type":"string","minLength":1},
+    "parent": {"type":["string","null"]},
+    "inputs": {"type":"array","items":{"type":"string"}},
+    "outputs": {"type":"array","items":{"type":"string"}},
+    "authority": {"type":"string","minLength":1},
+    "data_classes": {"type":"array","items":{"type":"string"}},
+    "events": {"type":"array","items":{"type":"string"}},
+    "dependencies": {"type":"array","items":{"type":"string"}},
+    "providers_adapters": {"type":"array","items":{"type":"string"}},
+    "provenance": {"type":"string","minLength":1},
+    "health": {"type":"string","minLength":1},
+    "replacement": {"type":"string","minLength":1}
+  }
+}

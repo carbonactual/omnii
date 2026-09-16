@@ -12,10 +12,10 @@ export class CharterJourneyRecoveryRuntime {
   }
 
   async reassign(input: JourneyRecovery, replacementCapabilityId: string): Promise<JourneyRecovery> {
+    if (replacementCapabilityId === input.failedCapabilityId) throw new Error("Replacement capability must differ from failed capability");
     const replacement = await this.objects.read(replacementCapabilityId);
     if (!replacement) throw new Error(`Replacement capability not found: ${replacementCapabilityId}`);
     if (!["available", "eligible", "discoverable", "ready"].includes(replacement.status)) throw new Error(`Replacement capability is not executable: ${replacement.status}`);
-    if (replacement.id === input.failedCapabilityId) throw new Error("Replacement capability must differ from failed capability");
     return { ...input, replacementCapabilityId, state: "reassigned" };
   }
 

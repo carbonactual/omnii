@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://carbonactual.github.io/omnii/schemas/canonical/omnii-interaction-envelope.schema.json",
+  "title": "OMNII Canonical Interaction Envelope",
+  "description": "Machine-readable binding for the canonical OMNII ecosystem interaction grammar. Transport is external; this schema expresses ecosystem semantics only.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["interaction_type", "interaction_id", "state", "actor", "intent", "provenance"],
+  "properties": {
+    "interaction_type": { "type": "string", "enum": ["command", "request", "response", "event", "signal", "intent", "proposal", "instruction", "delegation", "authorization", "consent", "challenge", "acknowledgement", "receipt", "status", "heartbeat", "presence", "discovery", "capability_advertisement", "capability_invocation", "result", "error", "exception", "escalation", "alert", "notification", "observation", "evidence", "fact", "assertion", "inference", "decision", "resolution", "task", "commitment", "handoff", "transfer", "cancellation", "revocation", "expiry", "reconciliation", "feedback", "value_pulse_outcome"] },
+    "interaction_id": { "type": "string", "minLength": 1 },
+    "parent_interaction_id": { "type": ["string", "null"] },
+    "correlation_id": { "type": ["string", "null"] },
+    "session_id": { "type": ["string", "null"] },
+    "actor": { "$ref": "#/$defs/party" },
+    "subject": { "type": ["object", "null"] },
+    "recipients": { "type": "array", "items": { "$ref": "#/$defs/party" } },
+    "distribution": { "$ref": "#/$defs/distribution" },
+    "hierarchy": { "$ref": "#/$defs/hierarchy" },
+    "authority": { "$ref": "#/$defs/authority" },
+    "consent": { "$ref": "#/$defs/consent" },
+    "intent": { "type": "string", "minLength": 1 },
+    "capability": { "type": ["string", "null"] },
+    "action": { "type": ["string", "null"] },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "classification": { "$ref": "#/$defs/classification" },
+    "urgency": { "$ref": "#/$defs/urgency" },
+    "temporal": { "$ref": "#/$defs/temporal" },
+    "custody": { "$ref": "#/$defs/custody" },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "authenticity": { "$ref": "#/$defs/authenticity" },
+    "integrity": { "$ref": "#/$defs/integrity" },
+    "content_status": { "$ref": "#/$defs/contentStatus" },
+    "transformations": { "type": "array", "items": { "$ref": "#/$defs/transformation" } },
+    "disclosure": { "$ref": "#/$defs/disclosure" },
+    "evidence": { "type": "array", "items": { "type": "object" } },
+    "state": { "type": "string", "minLength": 1 },
+    "expected_outcome": { "type": ["string", "null"] },
+    "actual_outcome": { "type": ["string", "null"] },
+    "handoff": { "$ref": "#/$defs/handoff" },
+    "escalation": { "$ref": "#/$defs/escalation" },
+    "feedback": { "$ref": "#/$defs/feedback" },
+    "retention": { "$ref": "#/$defs/retention" },
+    "security": { "$ref": "#/$defs/security" },
+    "next_action": { "type": ["string", "null"] },
+    "timestamps": { "type": "object", "additionalProperties": { "type": "string", "format": "date-time" } }
+  },
+  "$defs": {
+    "party": {
+      "type": "object",
+      "required": ["reference"],
+      "properties": {
+        "reference": { "type": "string", "minLength": 1 },
+        "role": { "type": ["string", "null"] },
+        "representation": { "type": ["string", "null"] },
+        "authority_scope": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "distribution": {
+      "type": "object",
+      "properties": {
+        "to": { "type": "array", "items": { "type": "string" } },
+        "cc": { "type": "array", "items": { "type": "string" } },
+        "bcc": { "type": "array", "items": { "type": "string" } },
+        "mode": { "type": "string", "enum": ["targeted", "group", "distribution_list", "circular", "broadcast", "multicast", "public", "restricted", "invite_only", "escalation_only", "fyi", "action_required"] },
+        "forwarding_allowed": { "type": "boolean" },
+        "publication_allowed": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "hierarchy": {
+      "type": "object",
+      "properties": {
+        "direction": { "type": "string", "enum": ["upward", "downward", "lateral", "cross_domain", "delegated", "referred", "escalated", "returned"] },
+        "level": { "type": ["string", "null"] },
+        "parent_level": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "authority": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "granted": { "type": "boolean" },
+        "scope": { "type": ["string", "null"] },
+        "delegated": { "type": "boolean" },
+        "seal_reference": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "consent": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string", "enum": ["not_required", "requested", "granted", "denied", "withdrawn", "unknown", "limited"] },
+        "scope": { "type": ["string", "null"] },
+        "forwarding": { "type": ["boolean", "null"] },
+        "publication": { "type": ["boolean", "null"] },
+        "transformation": { "type": ["boolean", "null"] },
+        "secondary_use": { "type": ["boolean", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "classification": {
+      "type": "object",
+      "properties": {
+        "level": { "type": "string", "enum": ["general", "internal", "restricted", "confidential", "secret", "need_to_know", "sensitive", "privileged", "safety_critical", "private", "intimate_private", "credential_secret", "commercially_sensitive", "unreleased", "custody_controlled", "official"] },
+        "handling": { "type": "array", "items": { "type": "string", "enum": ["view", "receive", "copy", "forward", "download", "edit", "transform", "share", "publish", "index", "retain", "archive", "delete_destroy"] } }
+      },
+      "additionalProperties": true
+    },
+    "urgency": { "type": "string", "enum": ["routine", "timely", "urgent", "critical", "emergency", "life_safety"] },
+    "temporal": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["immediate", "scheduled", "deadline_bound", "event_triggered", "recurring", "ongoing", "expiring", "ephemeral", "persistent"] },
+        "expires_at": { "type": ["string", "null"], "format": "date-time" },
+        "deadline_at": { "type": ["string", "null"], "format": "date-time" }
+      },
+      "additionalProperties": true
+    },
+    "custody": {
+      "type": "object",
+      "properties": {
+        "custodian": { "type": ["string", "null"] },
+        "status": { "type": "string", "enum": ["created", "received", "registered", "custodied", "transferred", "acknowledged", "reviewed", "acted", "returned", "closed", "archived", "unresolved"] },
+        "chain": { "type": "array", "items": { "type": "object" } },
+        "next_custodian": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "type": "string", "enum": ["known", "claimed", "partial", "unknown", "conflicting"] },
+        "origin": { "type": ["string", "null"] },
+        "source": { "type": ["string", "null"] },
+        "ancestors": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "authenticity": {
+      "type": "string",
+      "enum": ["original_confirmed", "original_claimed", "copy_confirmed", "derivative_confirmed", "altered", "partially_altered", "synthetic", "ai_modified", "translated", "re_encoded", "source_unknown", "unresolved", "conflicting"]
+    },
+    "integrity": {
+      "type": "string",
+      "enum": ["intact", "hash_match", "cryptographically_verified", "altered", "corrupted", "truncated", "re_encoded", "replayed", "duplicated", "reordered", "injected", "partially_missing", "unknown"]
+    },
+    "contentStatus": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["observed", "reported", "asserted", "alleged", "unverified", "corroborated", "contradicted", "verified", "disproven_by_available_evidence", "ambiguous", "outdated", "context_missing", "satire_parody", "hoax", "fabricated", "manipulated", "impersonated", "deceptive_context", "synthetic_manufactured"] }
+    },
+    "transformation": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["copy", "forward", "screenshot", "download", "reupload", "edit", "clip", "translate", "transcribe", "summarize", "quote", "remix", "synthetic_derivative", "publication", "re_encode"] },
+        "source_reference": { "type": ["string", "null"] },
+        "actor": { "type": ["string", "null"] },
+        "timestamp": { "type": ["string", "null"], "format": "date-time" }
+      },
+      "additionalProperties": true
+    },
+    "disclosure": {
+      "type": "object",
+      "properties": {
+        "state": { "type": "string", "enum": ["authorized", "restricted", "unauthorized_suspected", "unauthorized_confirmed", "unknown"] },
+        "intended_audience": { "type": "array", "items": { "type": "string" } },
+        "actual_audience": { "type": "array", "items": { "type": "string" } },
+        "detected_at": { "type": ["string", "null"], "format": "date-time" }
+      },
+      "additionalProperties": true
+    },
+    "handoff": {
+      "type": "object",
+      "properties": {
+        "from": { "type": ["string", "null"] },
+        "to": { "type": ["string", "null"] },
+        "acceptance": { "type": "string", "enum": ["pending", "accepted", "rejected", "partial", "deferred", "escalated", "returned"] },
+        "next_owner": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "escalation": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "reason": { "type": ["string", "null"] },
+        "target": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "feedback": {
+      "type": "object",
+      "properties": {
+        "kind": { "type": "string" },
+        "pulse": { "type": ["number", "null"] },
+        "minted_record": { "type": "boolean" },
+        "tokenization_eligible": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "retention": {
+      "type": "object",
+      "properties": {
+        "policy": { "type": ["string", "null"] },
+        "expires_at": { "type": ["string", "null"], "format": "date-time" },
+        "archive_required": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "security": {
+      "type": "object",
+      "properties": {
+        "authentication": { "type": ["string", "null"] },
+        "authorization": { "type": ["string", "null"] },
+        "integrity_protection": { "type": ["string", "null"] },
+        "replay_protection": { "type": ["boolean", "null"] },
+        "audit_required": { "type": ["boolean", "null"] }
+      },
+      "additionalProperties": true
+    }
+  }
+}

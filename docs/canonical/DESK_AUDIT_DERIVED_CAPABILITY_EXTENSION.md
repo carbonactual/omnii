@@ -1,10 +1,12 @@
 # Desk — Audit-Derived Capability Extension
 
+> **Canonical naming (Sept 16, 2026):** The trade product is **TIP** — repository `carbonactual/tip` (formerly Desk, briefly OMNI). Repository `carbonactual/omni` is the OMNI Browser and is unrelated to this product.
+
 **Ecosystem:** Carbon Actual / OMNII  
 **Status:** CANONICAL PRODUCT CAPABILITY EXTENSION  
 **Applies to:** Desk  
 **Parent contracts:** `DESK_ECOSYSTEM_CONFORMANCE_AND_CAPABILITY_CONTRACT.md`, `DESK_MASTER_SCOPE_AND_VALUE_CHAIN.md`  
-**Source:** capability and ontology audit of the existing `carbonactual/desk` product repository plus the canonical Universal Event & Interaction ontology.
+**Source:** capability and ontology audit of the existing `carbonactual/tip` product repository plus the canonical Universal Event & Interaction ontology.
 
 ---
 

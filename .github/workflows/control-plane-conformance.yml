@@ -12,16 +12,19 @@ on:
       - 'docs/architecture/OMNII_OMNI_DESK_REPOSITORY_RECONCILIATION.md'
       - 'docs/architecture/OMNII_INTERNET_RECYCLE_BIN.md'
       - 'docs/architecture/OMNII_INTERNET_RIGHTS_CONSENT_RELATIONSHIP_LIFECYCLE.md'
+      - 'docs/architecture/OMNII_INTERNET_INTERACTION_REQUEST_LIFECYCLE.md'
       - 'docs/ecosystem-manifests/**'
       - 'config/ecosystem-capabilities/**'
       - 'config/ecosystem-product-manifest.schema.json'
       - 'config/ecosystem-capability-manifest.schema.json'
       - 'schemas/omnii-digital-disposition.schema.json'
       - 'schemas/omnii-rights-consent.schema.json'
+      - 'schemas/omnii-interaction-request.schema.json'
       - 'scripts/validate-control-plane.mjs'
       - 'scripts/validate-security-posture.mjs'
       - 'scripts/validate-digital-disposition.mjs'
       - 'scripts/validate-rights-consent.mjs'
+      - 'scripts/validate-interaction-request.mjs'
       - 'scripts/ecosystem-composition-conformance.mjs'
       - 'scripts/ecosystem-composition-conformance.test.mjs'
       - '.github/workflows/control-plane-conformance.yml'
@@ -37,16 +40,19 @@ on:
       - 'docs/architecture/OMNII_OMNI_DESK_REPOSITORY_RECONCILIATION.md'
       - 'docs/architecture/OMNII_INTERNET_RECYCLE_BIN.md'
       - 'docs/architecture/OMNII_INTERNET_RIGHTS_CONSENT_RELATIONSHIP_LIFECYCLE.md'
+      - 'docs/architecture/OMNII_INTERNET_INTERACTION_REQUEST_LIFECYCLE.md'
       - 'docs/ecosystem-manifests/**'
       - 'config/ecosystem-capabilities/**'
       - 'config/ecosystem-product-manifest.schema.json'
       - 'config/ecosystem-capability-manifest.schema.json'
       - 'schemas/omnii-digital-disposition.schema.json'
       - 'schemas/omnii-rights-consent.schema.json'
+      - 'schemas/omnii-interaction-request.schema.json'
       - 'scripts/validate-control-plane.mjs'
       - 'scripts/validate-security-posture.mjs'
       - 'scripts/validate-digital-disposition.mjs'
       - 'scripts/validate-rights-consent.mjs'
+      - 'scripts/validate-interaction-request.mjs'
       - 'scripts/ecosystem-composition-conformance.mjs'
       - 'scripts/ecosystem-composition-conformance.test.mjs'
       - '.github/workflows/control-plane-conformance.yml'
@@ -87,6 +93,9 @@ jobs:
 
       - name: Validate internet rights and consent
         run: node scripts/validate-rights-consent.mjs
+
+      - name: Validate internet interaction requests
+        run: node scripts/validate-interaction-request.mjs
 
       - name: Validate ecosystem composition
         run: npm run ecosystem:conformance

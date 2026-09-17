@@ -27,6 +27,13 @@ See `docs/architecture/OMNII_REPOSITORY_BOUNDARY.md` for the authoritative bound
 - **Contradiction Resolution: `docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md`**
 - **Control Registry: `data/canonical/omnii-control-plane-registry.json`**
 - **Security & Provider Boundaries: `docs/architecture/OMNII_SECURITY_POSTURE_AND_PROVIDER_BOUNDARIES.md`**
+- **Internet Strain Coverage Law: `docs/canonical/OMNII_INTERNET_STRAIN_COVERAGE_LAW.md`**
+- **Internet Strain Catalog: `docs/architecture/OMNII_INTERNET_STRAIN_CATALOG.md`**
+- **Universal Internet Action Catalog: `docs/architecture/OMNII_INTERNET_UNIVERSAL_ACTION_CATALOG.md`**
+- **Internet Gap & Loophole Register: `docs/architecture/OMNII_INTERNET_GAP_AND_LOophOLE_REGISTER.md`**
+- **Watch/Check Contract: `docs/schema/OMNII_WATCH_CHECK_CONTRACT.md`**
+
+The internet action catalog is a coverage inventory, not a competing primitive. It maps internet actions, checks, reviews, failures, protections, recoveries and exits onto the existing universal body.
 
 Historical Carbon Actual architecture documents remain in the repository for provenance but do not override these canonical OMNII sources. Contradictions are governed by the canonical contradiction-resolution doctrine rather than erased.
 

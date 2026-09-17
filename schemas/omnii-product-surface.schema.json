@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "omnii://schemas/product-surface/v1",
+  "title": "OMNII Installable Product Surface",
+  "description": "Conformance manifest for an actual ecosystem product. This is not a constitutional object or authority primitive.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "product_id",
+    "canonical_url",
+    "version",
+    "launch_url",
+    "scope",
+    "display_mode",
+    "installability",
+    "supported_surfaces",
+    "deep_links",
+    "permissions",
+    "update_policy",
+    "continuity_policy",
+    "exit_policy"
+  ],
+  "properties": {
+    "product_id": { "type": "string", "minLength": 1 },
+    "canonical_url": { "type": "string", "format": "uri" },
+    "version": { "type": "string", "minLength": 1 },
+    "launch_url": { "type": "string", "minLength": 1 },
+    "scope": { "type": "string", "minLength": 1 },
+    "display_mode": { "type": "string", "enum": ["browser", "standalone", "minimal-ui", "fullscreen", "tabbed", "platform-adaptive"] },
+    "installability": {
+      "type": "object",
+      "required": ["web", "platforms"],
+      "properties": {
+        "web": { "type": "boolean" },
+        "platforms": { "type": "array", "items": { "type": "string" } },
+        "requirements": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "supported_surfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "deep_links": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "permissions": {
+      "type": "object",
+      "required": ["declared", "least_privilege"],
+      "properties": {
+        "declared": { "type": "array", "items": { "type": "string" } },
+        "least_privilege": { "type": "boolean" },
+        "user_mediation": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "update_policy": {
+      "type": "object",
+      "required": ["versioned", "provenance", "revalidate_authority"],
+      "properties": {
+        "versioned": { "type": "boolean" },
+        "provenance": { "type": "boolean" },
+        "revalidate_authority": { "type": "boolean" },
+        "rollback": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "continuity_policy": {
+      "type": "object",
+      "required": ["preserve_identity", "preserve_state", "preserve_evidence"],
+      "properties": {
+        "preserve_identity": { "type": "boolean" },
+        "preserve_state": { "type": "boolean" },
+        "preserve_evidence": { "type": "boolean" },
+        "offline": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "exit_policy": {
+      "type": "object",
+      "required": ["uninstall", "revocation", "residual_state"],
+      "properties": {
+        "uninstall": { "type": "string" },
+        "revocation": { "type": "string" },
+        "residual_state": { "type": "string" },
+        "export": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

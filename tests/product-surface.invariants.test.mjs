@@ -17,13 +17,13 @@ test('product surface schema requires canonical product lifecycle fields', () =>
   assert.equal(schema.additionalProperties, true);
 });
 
-test('canonical law preserves authority and offline invariants', () => {
+test('canonical law preserves product/contract and authority/offline invariants', () => {
   for (const phrase of [
     'Product ≠ Constitution',
     'Authentication is not authorization.',
     'Authorization is not approval.',
     'Approval is not execution.',
-    'offline/cache semantics',
+    'Offline cache cannot silently create fresh authority or settlement state.',
     'residual-state'
   ]) {
     assert.equal(law.includes(phrase), true, `missing law phrase: ${phrase}`);

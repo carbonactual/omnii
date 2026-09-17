@@ -7,7 +7,11 @@ const requiredFiles = [
   'docs/architecture/OMNII_INTERNET_STRAIN_CATALOG.md',
   'docs/architecture/OMNII_INTERNET_STRAIN_CONFORMANCE_MATRIX.md',
   'docs/schema/OMNII_WATCH_CHECK_CONTRACT.md',
-  'schemas/omnii-watch-check.schema.json'
+  'schemas/omnii-watch-check.schema.json',
+  'docs/canonical/OMNII_DIGITAL_STATE_TRANSPARENCY_LAW.md',
+  'docs/architecture/OMNII_DIGITAL_STATE_TRANSPARENCY_CATALOG.md',
+  'docs/architecture/OMNII_DIGITAL_STATE_GAP_AND_LOOPHOLE_REGISTER.md',
+  'docs/architecture/OMNII_DIGITAL_STATE_EXTERNAL_RESEARCH_CORPUS.md'
 ];
 
 const requiredDimensions = [
@@ -31,6 +35,15 @@ const requiredDomains = [
   'Temporal and Lifecycle Strain'
 ];
 
+const transparencyTerms = [
+  'terms', 'policies', 'consent', 'permissions', 'cookies', 'web storage',
+  'CacheStorage', 'service-worker', 'tracking pixels', 'link decoration',
+  'fingerprinting', 'bookmarks', 'uploads', 'downloads', 'telemetry',
+  'notifications', 'profiles', 'inferred', 'deletion', 'portability',
+  'credentials', 'federation', 'verifiable credentials', 'DIDs', 'AI memory',
+  'partitioned', 'credential mediation', 'dark patterns', 'reviews', 'recommender'
+];
+
 function read(relativePath) {
   const file = path.join(root, relativePath);
   if (!fs.existsSync(file)) throw new Error(`missing required file: ${relativePath}`);
@@ -41,6 +54,10 @@ const law = read(requiredFiles[0]);
 const catalog = read(requiredFiles[1]);
 const matrix = read(requiredFiles[2]);
 const watchSchema = JSON.parse(read(requiredFiles[4]));
+const transparencyLaw = read(requiredFiles[5]);
+const transparencyCatalog = read(requiredFiles[6]);
+const gapRegister = read(requiredFiles[7]);
+const corpus = read(requiredFiles[8]);
 
 for (const dimension of requiredDimensions) {
   if (!law.includes(dimension)) throw new Error(`missing canonical dimension: ${dimension}`);
@@ -63,6 +80,13 @@ for (const phrase of [
   }
 }
 
+const transparencyCorpus = `${transparencyLaw}\n${transparencyCatalog}\n${gapRegister}\n${corpus}`.toLowerCase();
+for (const term of transparencyTerms) {
+  if (!transparencyCorpus.includes(term.toLowerCase())) {
+    throw new Error(`digital transparency coverage missing term: ${term}`);
+  }
+}
+
 for (const field of ['id', 'subject', 'condition', 'trigger', 'severity', 'authority', 'evidence', 'response']) {
   if (!watchSchema.properties?.[field]) throw new Error(`watch schema missing field: ${field}`);
 }
@@ -73,4 +97,4 @@ if (watchSchema.additionalProperties !== true) {
 
 if (!matrix.includes('Conformance rule')) throw new Error('conformance matrix rule missing');
 
-console.log(`internet strain coverage validated: ${requiredDomains.length} core domains, ${requiredDimensions.length} canonical dimensions`);
+console.log(`internet coverage validated: ${requiredDomains.length} core strain domains, ${requiredDimensions.length} canonical dimensions, ${transparencyTerms.length} digital transparency terms`);

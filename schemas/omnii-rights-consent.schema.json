@@ -19,10 +19,10 @@
       "required":["purpose"],
       "properties": {
         "purpose":{"type":"string","minLength":1},
-        "rights":[{"type":"string"}],
-        "actions":[{"type":"string"}],
-        "territory":[{"type":"string"}],
-        "context":[{"type":"string"}]
+        "rights":{"type":"array","items":{"type":"string"}},
+        "actions":{"type":"array","items":{"type":"string"}},
+        "territory":{"type":"array","items":{"type":"string"}},
+        "context":{"type":"array","items":{"type":"string"}}
       }
     },
     "instrument": {"type":"string"},

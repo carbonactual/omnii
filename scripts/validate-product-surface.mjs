@@ -19,9 +19,7 @@ const REQUIRED_LAW_TERMS = [
   'Authentication is not authorization.',
   'Authorization is not approval.',
   'Approval is not execution.',
-  'Balance is not Capacity',
-  'Credit is not Cash',
-  'offline/cache semantics',
+  'Offline cache cannot silently create fresh authority or settlement state.',
   'residual-state'
 ];
 

@@ -11,6 +11,7 @@ This index binds the reusable institutional architecture into one navigable buil
 - `CARBON_ACTUAL_UNIVERSAL_CAPABILITY_ONTOLOGY.md` — universal capability vocabulary and compressed architectural families.
 - `CARBON_ACTUAL_UNIVERSAL_COMPOSITION_ENGINE.md` — machine composition and LEGO rules.
 - `CARBON_ACTUAL_PRODUCT_COMPOSER.md` — request-to-deployment composition pipeline.
+- `../canonical/OMNII_REUSABILITY_AND_CAPABILITY_MATURITY_AMENDMENT.md` — canonical reusable-by-default maturity rule: context never traps a capability inside its first product.
 
 ## Universal institutional machinery
 
@@ -42,7 +43,24 @@ This index binds the reusable institutional architecture into one navigable buil
 ## Institutional market and deployment intelligence
 
 - `OMNII_INSTITUTIONAL_OPPORTUNITY_MAP_2026.md` — government, private, nonprofit, research and community opportunity families plus NASC reference composition.
+- `OMNII_ECOSYSTEM_PRODUCT_CAPABILITY_COMPOSITION_MAP_2026-09-16.md` — cross-product capability composition and receiving handoff map.
+- `OMNII_OMNI_DESK_REPOSITORY_RECONCILIATION.md` — explicit separation of OMNI Economic Participation, OMNI Operating Surface and DESK presentation while preserving compatibility identifiers.
+- `OMNII_REUSABLE_IMPROVEMENT_LIFECYCLE.md` — product-to-shared-to-canonical improvement promotion path.
 - Product/domain documents under `docs/products/` and `docs/architecture/` remain downstream compositions and must consume the shared machinery.
+
+## Machine-verifiable composition
+
+- `config/ecosystem-capabilities/` — reusable capability manifests.
+- `docs/ecosystem-manifests/` — product/composition manifests.
+- `config/ecosystem-*.schema.json` — handoff, improvement, capability and product manifest contracts.
+- `scripts/ecosystem-composition-conformance.mjs` — deterministic ecosystem manifest validator.
+- `scripts/ecosystem-composition-conformance.test.mjs` — regression fixture for composition conformance.
+
+## Internet lifecycle coverage
+
+- `OMNII_INTERNET_RECYCLE_BIN.md` — digital exit, recovery, preservation and purge lifecycle.
+- `OMNII_INTERNET_RIGHTS_CONSENT_RELATIONSHIP_LIFECYCLE.md` — copyright, patent, ownership, licensing, consent, approval, partnership, delegation, assignment and transfer lifecycle.
+- `OMNII_INTERNET_INTERACTION_REQUEST_LIFECYCLE.md` — enquiry, contact, report, suggestion, feedback, complaint, dispute, appeal, escalation, support and request lifecycle.
 
 ## Mandatory assembly order
 
@@ -112,6 +130,7 @@ Before implementing an institution-specific requirement:
 5. Keep local law, institutional authority, data and policy at the configuration/domain boundary.
 6. Version every deployable shared component.
 7. Produce an explicit handoff/exit package.
+8. Treat every new implementation as reusable-by-default and record its maturity/compatibility path.
 
 ## Strategic rule
 

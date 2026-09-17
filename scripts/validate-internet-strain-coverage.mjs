@@ -10,7 +10,8 @@ const requiredFiles = [
   'schemas/omnii-watch-check.schema.json',
   'docs/canonical/OMNII_DIGITAL_STATE_TRANSPARENCY_LAW.md',
   'docs/architecture/OMNII_DIGITAL_STATE_TRANSPARENCY_CATALOG.md',
-  'docs/architecture/OMNII_DIGITAL_STATE_GAP_AND_LOOPHOLE_REGISTER.md'
+  'docs/architecture/OMNII_DIGITAL_STATE_GAP_AND_LOOPHOLE_REGISTER.md',
+  'docs/architecture/OMNII_DIGITAL_STATE_EXTERNAL_RESEARCH_CORPUS.md'
 ];
 
 const requiredDimensions = [
@@ -39,7 +40,8 @@ const transparencyTerms = [
   'CacheStorage', 'service-worker', 'tracking pixels', 'link decoration',
   'fingerprinting', 'bookmarks', 'uploads', 'downloads', 'telemetry',
   'notifications', 'profiles', 'inferred', 'deletion', 'portability',
-  'credentials', 'federation', 'verifiable credentials', 'DIDs', 'AI memory'
+  'credentials', 'federation', 'verifiable credentials', 'DIDs', 'AI memory',
+  'partitioned', 'credential mediation', 'dark patterns', 'reviews', 'recommender'
 ];
 
 function read(relativePath) {
@@ -55,6 +57,7 @@ const watchSchema = JSON.parse(read(requiredFiles[4]));
 const transparencyLaw = read(requiredFiles[5]);
 const transparencyCatalog = read(requiredFiles[6]);
 const gapRegister = read(requiredFiles[7]);
+const corpus = read(requiredFiles[8]);
 
 for (const dimension of requiredDimensions) {
   if (!law.includes(dimension)) throw new Error(`missing canonical dimension: ${dimension}`);
@@ -77,9 +80,9 @@ for (const phrase of [
   }
 }
 
+const transparencyCorpus = `${transparencyLaw}\n${transparencyCatalog}\n${gapRegister}\n${corpus}`.toLowerCase();
 for (const term of transparencyTerms) {
-  const haystack = `${transparencyLaw}\n${transparencyCatalog}\n${gapRegister}`.toLowerCase();
-  if (!haystack.includes(term.toLowerCase())) {
+  if (!transparencyCorpus.includes(term.toLowerCase())) {
     throw new Error(`digital transparency coverage missing term: ${term}`);
   }
 }

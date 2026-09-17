@@ -1,5 +1,7 @@
 # Desk — Master Scope, Market Universe & End-to-End Value Chain
 
+> **Canonical naming (Sept 16, 2026):** The trade product is **TIP** — repository `carbonactual/tip` (formerly Desk, briefly OMNI). Repository `carbonactual/omni` is the OMNI Browser and is unrelated to this product.
+
 **Ecosystem:** Carbon Actual / OMNII  
 **Status:** CANONICAL PRODUCT SCOPE — ecosystem-conformant composition  
 **Depends on:** Carbon Actual constitutional layer, OMNII Core, ABBA, Actual, Atlas, TIP, registries, IO/Ledger, Pulse, Universal Movement/Charter, shared forms/workflows and policy infrastructure.

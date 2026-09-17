@@ -8,9 +8,24 @@ on:
       - 'docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md'
       - 'docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md'
       - 'docs/architecture/OMNII_SECURITY_POSTURE_AND_PROVIDER_BOUNDARIES.md'
+      - 'docs/architecture/OMNII_INSTITUTIONAL_COMPOSITION_INDEX.md'
+      - 'docs/architecture/OMNII_OMNI_DESK_REPOSITORY_RECONCILIATION.md'
+      - 'docs/architecture/OMNII_INTERNET_RECYCLE_BIN.md'
+      - 'docs/architecture/OMNII_INTERNET_RIGHTS_CONSENT_RELATIONSHIP_LIFECYCLE.md'
+      - 'docs/ecosystem-manifests/**'
+      - 'config/ecosystem-capabilities/**'
+      - 'config/ecosystem-product-manifest.schema.json'
+      - 'config/ecosystem-capability-manifest.schema.json'
+      - 'schemas/omnii-digital-disposition.schema.json'
+      - 'schemas/omnii-rights-consent.schema.json'
       - 'scripts/validate-control-plane.mjs'
       - 'scripts/validate-security-posture.mjs'
+      - 'scripts/validate-digital-disposition.mjs'
+      - 'scripts/validate-rights-consent.mjs'
+      - 'scripts/ecosystem-composition-conformance.mjs'
+      - 'scripts/ecosystem-composition-conformance.test.mjs'
       - '.github/workflows/control-plane-conformance.yml'
+      - 'package.json'
   pull_request:
     branches: [main]
     paths:
@@ -18,9 +33,24 @@ on:
       - 'docs/architecture/OMNII_CONTROL_PLANE_CANONICAL.md'
       - 'docs/architecture/OMNII_CONTRADICTION_RESOLUTION_DOCTRINE.md'
       - 'docs/architecture/OMNII_SECURITY_POSTURE_AND_PROVIDER_BOUNDARIES.md'
+      - 'docs/architecture/OMNII_INSTITUTIONAL_COMPOSITION_INDEX.md'
+      - 'docs/architecture/OMNII_OMNI_DESK_REPOSITORY_RECONCILIATION.md'
+      - 'docs/architecture/OMNII_INTERNET_RECYCLE_BIN.md'
+      - 'docs/architecture/OMNII_INTERNET_RIGHTS_CONSENT_RELATIONSHIP_LIFECYCLE.md'
+      - 'docs/ecosystem-manifests/**'
+      - 'config/ecosystem-capabilities/**'
+      - 'config/ecosystem-product-manifest.schema.json'
+      - 'config/ecosystem-capability-manifest.schema.json'
+      - 'schemas/omnii-digital-disposition.schema.json'
+      - 'schemas/omnii-rights-consent.schema.json'
       - 'scripts/validate-control-plane.mjs'
       - 'scripts/validate-security-posture.mjs'
+      - 'scripts/validate-digital-disposition.mjs'
+      - 'scripts/validate-rights-consent.mjs'
+      - 'scripts/ecosystem-composition-conformance.mjs'
+      - 'scripts/ecosystem-composition-conformance.test.mjs'
       - '.github/workflows/control-plane-conformance.yml'
+      - 'package.json'
   workflow_dispatch:
 
 permissions:
@@ -51,3 +81,12 @@ jobs:
 
       - name: Validate security posture
         run: node scripts/validate-security-posture.mjs
+
+      - name: Validate digital disposition
+        run: node scripts/validate-digital-disposition.mjs
+
+      - name: Validate internet rights and consent
+        run: node scripts/validate-rights-consent.mjs
+
+      - name: Validate ecosystem composition
+        run: npm run ecosystem:conformance

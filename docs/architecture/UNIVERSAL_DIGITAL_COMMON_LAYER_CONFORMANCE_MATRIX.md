@@ -11,7 +11,7 @@
 | Evidence | §14.7 | `evidence` | evidence presence/lineage | transaction evidence | signed/provider evidence |
 | Provenance | §14.8 | `provenance` | lineage checks | source/provider provenance | adapter source mapping |
 | Dependency | §14.9 | `dependencies` | dependency conformance | continuity view | cloud/DNS/payment/API/provider graphs |
-| Continuity | §14.10 | `continuity` | recovery/last-known-good checks | recovery/handoff | failover/provider replacement |
+| Continuity | §14.10 | `continuity` references existing `#/HASH`, `SEAL`, `ROOT`, `EVENT/TRACEABILITY`, `VAULT`, `ASH`, `PHOENIX`, `ACTUAL/ATLAS`, `I/O` | recovery/last-known-good and primitive-binding checks | recovery/handoff | failover/provider replacement |
 | Portability | §14.11, §14.15 | `portability`, lifecycle exit | export/exit conformance | Desk handoff/export | provider migration |
 | Trust | §14.13 | `trust` | evidence/status checks | trust context | PKI/DNSSEC/VC/attestations |
 | Settlement | §14.14 | `settlement` | reconciliation checks | exchange/finance workflows | payment/ledger rails |
@@ -20,3 +20,7 @@
 | Provider neutrality | §14.12, §14.17 | Integration Adapter contract | adapter/conformance checks | provider adapters only | ordinary internet remains usable |
 
 The matrix is an anti-duplication contract: a new product implementation must attach to an existing row or demonstrate a constitutional amendment is required.
+
+## Continuity anti-duplication rule
+
+`continuity` in the canonical object is a cross-cutting reference surface. It must point to existing canonical primitives and contracts; it must not become a new independent identity, authority, storage, recovery, ledger, registry or truth system.

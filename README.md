@@ -32,8 +32,12 @@ See `docs/architecture/OMNII_REPOSITORY_BOUNDARY.md` for the authoritative bound
 - **Universal Internet Action Catalog: `docs/architecture/OMNII_INTERNET_UNIVERSAL_ACTION_CATALOG.md`**
 - **Internet Gap & Loophole Register: `docs/architecture/OMNII_INTERNET_GAP_AND_LOophOLE_REGISTER.md`**
 - **Watch/Check Contract: `docs/schema/OMNII_WATCH_CHECK_CONTRACT.md`**
+- **Digital State & Transparency Law: `docs/canonical/OMNII_DIGITAL_STATE_TRANSPARENCY_LAW.md`**
+- **Digital State & Transparency Catalog: `docs/architecture/OMNII_DIGITAL_STATE_TRANSPARENCY_CATALOG.md`**
+- **Digital State Gap & Loophole Register: `docs/architecture/OMNII_DIGITAL_STATE_GAP_AND_LOOPHOLE_REGISTER.md`**
+- **Digital State External Research Corpus: `docs/architecture/OMNII_DIGITAL_STATE_EXTERNAL_RESEARCH_CORPUS.md`**
 
-The internet action catalog is a coverage inventory, not a competing primitive. It maps internet actions, checks, reviews, failures, protections, recoveries and exits onto the existing universal body.
+The internet action and digital-state catalogs are coverage inventories, not competing primitives. They map internet actions, hidden state, checks, reviews, failures, protections, recoveries and exits onto the existing universal body.
 
 Historical Carbon Actual architecture documents remain in the repository for provenance but do not override these canonical OMNII sources. Contradictions are governed by the canonical contradiction-resolution doctrine rather than erased.
 

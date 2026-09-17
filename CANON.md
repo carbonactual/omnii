@@ -106,3 +106,114 @@ For any proposed object, capability, workflow, or integration, ask:
 7. How is it observed, evidenced, reconciled, and recoverable?
 
 Failure to answer these questions is a governance failure, not merely a product-design issue.
+
+## 14. Universal Digital Common Layer Law
+
+The ecosystem is not required to model itself according to ordinary internet account, application, provider, database, API, or platform boundaries. It integrates with those structures while maintaining a deeper canonical model.
+
+The universal digital common layer is the semantic and governance substrate through which digital and real-world representations interoperate.
+
+The canonical dimensions are:
+
+`Entity → Identity → Authority → Relationship → Capability → Intent → Policy → State → Event → Evidence → Provenance → Dependency → Continuity → Portability → Trust → Settlement → Liability → Lifecycle`
+
+These dimensions are complementary and must not be collapsed into one primitive.
+
+### 14.1 Identity is not Authority
+
+Authentication, identification, credential possession, ownership, control, authorization, delegation, and accountability are distinct facts. Possessing a credential or successfully authenticating does not silently create authority outside its declared scope.
+
+### 14.2 Ownership is not Account Access
+
+A provider account, login session, device, passkey, authenticator, or API token is an access mechanism. It is not, by itself, the canonical record of ownership or underlying rights.
+
+Loss of an access mechanism must not erase canonical identity, asset, relationship, provenance, authority, or continuity information.
+
+### 14.3 Authority is Scoped and Delegable
+
+Authority must be explicit in subject, principal, scope, operation, resource, value/risk limits, context, duration, conditions, and revocation state where applicable.
+
+Delegation must preserve the originating principal and the complete delegation chain. An agent cannot acquire unlimited authority merely by representing an authorized human or organization.
+
+### 14.4 Capability is Not Permission
+
+A capability describes what can be done. Authority determines whether the actor may do it. Capability ownership does not grant execution authority.
+
+### 14.5 Intent is First-Class
+
+A consequential workflow must be able to distinguish a user's or institution's intended outcome from the low-level mechanism used to achieve it. Implementations must not treat a low-level command as semantic proof of the higher-level objective without appropriate context.
+
+### 14.6 State is Explicit and Reconstructable
+
+Canonical objects must preserve meaningful state transitions. States such as active, suspended, revoked, disputed, expired, migrating, recovering, archived, and destroyed are not interchangeable.
+
+A material state transition must be attributable, time/context-bound, and reconstructable from events and evidence subject to lawful privacy/retention requirements.
+
+### 14.7 Events and Evidence Travel with Meaning
+
+Material actions, decisions, state changes, transfers, delegations, settlements, provenance transitions, and security events must produce attributable event records and appropriate evidence references.
+
+A log that cannot identify the subject, actor, authority, action, time/context, result or evidence boundary is insufficient for canonical reconstruction.
+
+### 14.8 Provenance Cannot Be Silently Severed
+
+When an object, assertion, dataset, credential, media item, model output, financial/value record, or service state is transformed, copied, migrated, composed, or derived, its material lineage must remain traceable unless a lawful and explicit boundary declares what provenance is unavailable.
+
+### 14.9 Dependencies Are Canonical Information
+
+Consequential objects must expose relevant dependencies and foreseeable failure relationships. A user-facing service is treated as a dependency graph rather than an isolated application where such structure exists.
+
+### 14.10 Continuity Survives Provider Failure
+
+Provider outage, account lock, credential loss, service replacement, product retirement, operator change, or deployment failure must not silently destroy canonical state. Continuity mechanisms must preserve the last verified state, authority context, evidence, dependencies, and viable recovery or handoff paths to the degree applicable.
+
+### 14.11 Portability Includes Semantics
+
+Portability is not satisfied by exporting bytes alone. Where applicable, portable state includes identity, schema, semantics, relationships, authority, permissions, configuration, provenance, dependencies, lifecycle state, evidence, and operational handoff information.
+
+### 14.12 Provider Neutrality
+
+External providers and ordinary internet mechanisms remain valid integration rails. No provider may become a hidden constitutional dependency. Provider adapters must be replaceable, provenance-bearing, permission-scoped, observable, and governed by the canonical object they implement.
+
+### 14.13 Trust Has Lifecycle
+
+Trust must carry issuer/source, evidence, scope, time, status, confidence, revocation/replacement state, and relevant provenance. Trust is not a permanent boolean.
+
+### 14.14 Settlement and Liability Are Distinct
+
+Settlement describes how an obligation/value movement resolves. Liability describes responsibility, exposure, or obligation arising from an action or relationship. Neither may be inferred solely from a transaction token or technical execution trace.
+
+### 14.15 Exit is a Constitutional Property
+
+Canonical objects, relationships, authority records, evidence, and material history must remain representable after product, provider, protocol, or deployment replacement. Product boundaries must define lawful exit, handoff, migration, recovery, and continuity behavior.
+
+### 14.16 AI and Agents
+
+AI entities and agents are ordinary canonical actors with additional capability, delegation, risk and audit requirements. Every consequential agent action must retain the principal, granted authority, capability used, intent/context where known, tool/provider path, result, evidence and liability chain.
+
+### 14.17 External Integration Rule
+
+The ecosystem integrates with the normal internet rather than replacing it. DNS, DNSSEC, TLS/PKI, WebAuthn, OAuth, DIDs, Verifiable Credentials, ENS/HNS and other naming systems, APIs, MCP, A2A, repositories, cloud platforms, payment rails, messaging systems, registries, databases and physical-world systems may be used as adapters or transport mechanisms.
+
+Their local representations must map into canonical ecosystem semantics before being treated as authoritative ecosystem facts.
+
+### 14.18 Loophole Closure
+
+No lower-level mechanism may be used to bypass a higher-level authority or continuity requirement.
+
+In particular:
+
+- credential possession must not launder authority;
+- provider lock-in must not become canonical ownership;
+- multi-hop delegation must not erase the principal;
+- state transitions must not become invisible configuration changes;
+- representations must not silently become underlying truth;
+- provenance must not disappear at integration boundaries;
+- recovery must not become an unlogged privilege escalation;
+- AI delegation must not become unlimited inherited authority;
+- provider failure must not erase canonical state;
+- portability must not be reduced to a vendor-specific export;
+- liability must not disappear between technical hops;
+- event histories must not be silently rewritten to conceal material changes.
+
+This section is constitutional law. Detailed implementations, schemas, adapters and tests must conform downward to it.

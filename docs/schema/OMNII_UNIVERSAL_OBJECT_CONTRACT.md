@@ -26,6 +26,30 @@ These are explicit surfaces rather than hidden provider metadata.
 
 The object contract records authority context, but the existence of an authority field does not grant authority. The applicable SEAL/authorization mechanism remains governing.
 
-## Continuity
+## Continuity is cross-cutting
 
-Objects that represent externally hosted or operationally critical services should preserve continuity metadata sufficient to identify last-known-good state, critical dependencies, recovery/owner escalation, replacement/exit paths and material evidence.
+`continuity` is a contract surface, not a competing primitive. Its implementation is bound to the existing ecosystem continuity chain:
+
+`# / HASH → SEAL → ROOT → canonical state → EVENT / TRACEABILITY → VAULT → ASH → PHOENIX → ACTUAL / ATLAS → I/O`
+
+The continuity surface should reference, where applicable, the canonical IDs for these existing primitives rather than create a second identity, storage, recovery or authority system.
+
+Minimum continuity metadata for externally hosted or operationally critical objects:
+
+- `canonical_object_id`
+- `last_verified_state`
+- `last_verified_at`
+- `authority_context`
+- `protected_evidence_refs`
+- `critical_dependency_refs`
+- `vault_refs`
+- `event_refs`
+- `recovery_path`
+- `successor_or_replacement`
+- `exit_handoff`
+
+A provider account, session, credential, backup export or vendor recovery record may be referenced as evidence or implementation state, but never becomes the canonical continuity root solely by existing there.
+
+## Portability
+
+Portable state must preserve the semantic information necessary to reconstitute the object outside a provider where applicable: identity, semantics, relationships, authority, configuration, provenance, dependencies, lifecycle state, evidence, value/settlement position, obligations/liability and handoff information.

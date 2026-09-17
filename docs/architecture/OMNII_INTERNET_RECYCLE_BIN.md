@@ -10,9 +10,9 @@ It is **not** a new identity, ownership, authority, ledger, storage, registry or
 
 ## Core rule
 
-> Delete is a disposition instruction; it is not proof that every copy, derivative, dependency or permission has disappeared.
+> Delete is a disposition instruction; it is not proof that every copy, derivative, dependency, permission, right or relationship has disappeared.
 
-An object is not considered fully exited merely because its active reference is gone. Exit requires determination of remaining state, dependencies, copies, rights, retention requirements, recoverability and final disposition.
+An object is not considered fully exited merely because its active reference is gone. Exit requires determination of remaining state, dependencies, copies, rights, permissions, obligations, recoverability and final disposition.
 
 ## Canonical lifecycle
 
@@ -20,7 +20,8 @@ An object is not considered fully exited merely because its active reference is 
 ACTIVE
   -> DEACTIVATED
   -> DISPOSITION REQUESTED
-  -> DEPENDENCY / COPY RESOLUTION
+  -> RIGHT / CONSENT / RELATIONSHIP INVENTORY
+  -> DEPENDENCY / COPY / OBLIGATION RESOLUTION
   -> recoverable | revoked | expired | orphaned
      | quarantined | preserved | archived | suppressed
   -> PURGABLE
@@ -37,16 +38,36 @@ ACTIVE
 | `deactivated` | Removed from normal active use without completing disposition. |
 | `disposition_requested` | An authorized lifecycle action has been requested. |
 | `recoverable` | Restoration remains possible. |
-| `revoked` | Previously granted access or authority is no longer valid. |
+| `revoked` | Previously granted access, consent or authority is no longer valid. |
 | `expired` | Validity period has ended. |
 | `orphaned` | Detached from its expected owner, parent or relationship. |
 | `quarantined` | Isolated pending security, trust or operational determination. |
 | `preserved` | Retained because evidence, legal, policy, safety or other governing requirements prevent destruction. |
 | `archived` | Intentionally retained outside active use. |
 | `suppressed` | No longer exposed or operationally used while underlying copies may remain temporarily. |
-| `purgable` | All known blocking retention/dependency conditions permit irreversible destruction. |
+| `purgable` | All known blocking retention/dependency/rights conditions permit irreversible destruction. |
 | `purged` | Destruction has been completed and the disposition outcome is evidenced. |
 | `unknown` | Current disposition cannot yet be reliably classified. |
+
+## Rights, consent and relationship state
+
+The Recycle Bin covers more than technical storage. Before final disposition, inventory and classify related digital rights and relationships using `omnii://schemas/rights-consent/v1`.
+
+Covered classes include:
+
+- copyright and creative rights;
+- patent and other intellectual-property interests;
+- ownership claims and co-ownership interests;
+- licenses and bounded use rights;
+- consent and withdrawal/revocation;
+- approvals and governed decisions;
+- partnerships/collaborations and obligations;
+- delegations and permissions;
+- assignments and transfers.
+
+Do not collapse these into one `owner` flag. Ownership, license, consent, approval, authority, partnership and transfer have different semantics and lifecycle states.
+
+Deleting a file does not automatically delete its copyright claim. Revoking consent does not automatically erase evidence that consent existed. Ending a partnership does not automatically erase accrued obligations. A transfer of one right does not silently transfer unrelated rights.
 
 ## Dependency-aware disposition
 
@@ -58,6 +79,8 @@ Disposition follows relationships, not merely the primary object. Relevant relat
 - thumbnails, previews, OCR, transcripts, embeddings and other derivatives;
 - credentials, sessions, permissions, tokens and delegated access;
 - subscriptions, recurring instructions and financial obligations;
+- copyright, patent, license, consent, approval and partnership records;
+- assignments, transfers and successor-holder references;
 - API integrations, webhooks and external provider relationships;
 - public projections, indexes and search representations;
 - AI memory, agent configuration and tool-state derivatives; and
@@ -69,7 +92,7 @@ A provider may implement these mechanisms differently, but the semantic disposit
 
 Recovery may restore an object, reconstruct it from preserved state, replace a failed provider, or hand the object to another compatible environment. Recovery does not grant new authority merely because material was recoverable.
 
-Restoration must preserve, or explicitly re-establish, the principal, identity, authority scope, provenance, dependencies, lifecycle history and liability context required by the canonical object.
+Restoration must preserve, or explicitly re-establish, the principal, identity, authority scope, rights/relationship scope, provenance, dependencies, lifecycle history and liability context required by the canonical object.
 
 ## Retention and preservation
 
@@ -79,7 +102,7 @@ A retention condition should identify its reason, authority/policy basis where a
 
 ## Purge
 
-Permanent destruction is a material lifecycle event. A purge is not complete merely because the primary storage record disappeared. The system should account for known copies, derivatives, dependencies and provider-side deletion outcomes to the extent the adapter can observe them.
+Permanent destruction is a material lifecycle event. A purge is not complete merely because the primary storage record disappeared. The system should account for known copies, derivatives, rights, relationships, dependencies and provider-side deletion outcomes to the extent the adapter can observe them.
 
 Where cryptographic erasure, physical destruction, provider-side garbage collection or another specialized mechanism is used, that mechanism remains an implementation adapter. OMNII records the semantic result and evidence rather than adopting the mechanism as a constitutional primitive.
 
@@ -92,7 +115,7 @@ The Internet Recycle Bin binds into the existing lifecycle:
 - **ASH** remains the retained classification space for residual, failed, unknown, unreconciled or security-relevant output; the Recycle Bin does not replace it.
 - **PHOENIX** remains the governed response mechanism for harmful, fraudulent, unauthorized or security-nonconforming conditions.
 - **VAULT** remains protected preservation/storage for critical recoverable material.
-- **TRACEABILITY/EVENT** records material disposition transitions and evidence.
+- **TRACEABILITY/EVENT** records material disposition transitions, approvals, transfers and evidence.
 - **CONTINUITY** ensures recovery, replacement, migration, replay/rebuild and exit can survive provider failure.
 - **ACTUAL / ATLAS** remain projections and operational/public views, not sources of disposal authority.
 
@@ -100,9 +123,10 @@ The Internet Recycle Bin binds into the existing lifecycle:
 
 A material disposition transition should preserve:
 
-`who → for whom → authority → intent → requested action → subject → dependencies → copies/derivatives → policy/retention → execution → result → evidence → remaining access → next state → exit/purge outcome`
+`who → for whom → authority → intent → requested action → subject → rights/relationships → dependencies → copies/derivatives → policy/retention → execution → result → evidence → remaining access → residual obligations → next state → exit/purge outcome`
 
 The disposition schema is `omnii://schemas/digital-disposition/v1`.
+The rights/consent/relationship schema is `omnii://schemas/rights-consent/v1`.
 
 ## Product boundary
 
@@ -119,4 +143,6 @@ Actual ecosystem products may expose an installable user-facing Recycle Bin/Reco
 7. A provider's deletion API is not the canonical semantic model.
 8. Unknown state is not permission to destroy.
 9. Destruction is auditable.
-10. Exit preserves portability and semantic provenance where technically and legally possible.
+10. Rights and relationships must survive object deletion as distinct lifecycle records where applicable.
+11. Transfer preserves provenance and history.
+12. Consent is not approval; approval is not blanket authority.

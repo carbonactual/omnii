@@ -1,0 +1,31 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"omnii://schemas/interaction-request/v1",
+  "title":"OMNII Internet Interaction Request",
+  "description":"Provider-neutral lifecycle record for internet enquiries, contacts, reports, suggestions, feedback, complaints, disputes, appeals, escalations, support and other requests.",
+  "type":"object",
+  "additionalProperties":true,
+  "required":["id","class","principal","intent","target","state","provenance","evidence","lifecycle"],
+  "properties":{
+    "id":{"type":"string","minLength":1},
+    "class":{"enum":["enquiry","contact","request","report","suggestion","feedback","review","complaint","grievance","dispute","appeal","escalation","support","notification_acknowledgement","consent_request","approval_request","service_request","information_request","access_request","correction_request","deletion_request","revocation_request","portability_request","transfer_request","recovery_request","safety_report","abuse_report","security_report","legal_notice","procurement_request","quotation_request","partnership_request","expression_of_interest","cancellation_request","termination_request","other"]},
+    "principal":{"type":"string","minLength":1},
+    "actor":{"type":"string"},
+    "intent":{"type":"string","minLength":1},
+    "target":{"type":"string","minLength":1},
+    "context":{"type":"object","additionalProperties":true},
+    "authority":{"type":"object","additionalProperties":true},
+    "state":{"enum":["draft","submitted","received","identified","classified","routed","acknowledged","triaged","assigned","in_progress","waiting","blocked","escalated","responded","resolved","partially_resolved","rejected","withdrawn","appealed","reopened","closed","retained","archived","recoverable","purgeable","purged","unknown"]},
+    "route":{"type":"object","additionalProperties":true},
+    "owner":{"type":"string"},
+    "sla":{"type":"object","additionalProperties":true},
+    "decision":{"type":"object","additionalProperties":true},
+    "response":{"type":"object","additionalProperties":true},
+    "outcome":{"type":"object","additionalProperties":true},
+    "residual_obligations":{"type":"array","items":{"type":"string"}},
+    "attachments":{"type":"array","items":{"type":"string"}},
+    "evidence":{"type":"array","items":{"type":"string"}},
+    "provenance":{"type":"object","required":["source"],"additionalProperties":true,"properties":{"source":{"type":"string","minLength":1},"parent_refs":{"type":"array","items":{"type":"string"}},"version_refs":{"type":"array","items":{"type":"string"}}}},
+    "lifecycle":{"type":"object","required":["submitted_at","last_transition_at"],"additionalProperties":true,"properties":{"submitted_at":{"type":"string","format":"date-time"},"acknowledged_at":{"type":"string","format":"date-time"},"resolved_at":{"type":"string","format":"date-time"},"closed_at":{"type":"string","format":"date-time"},"last_transition_at":{"type":"string","format":"date-time"}}}
+  }
+}

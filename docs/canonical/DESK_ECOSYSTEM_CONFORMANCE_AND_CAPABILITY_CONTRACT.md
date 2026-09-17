@@ -1,5 +1,7 @@
 # Desk — Ecosystem Conformance & Capability Contract
 
+> **Canonical naming (Sept 16, 2026):** The trade product is **TIP** — repository `carbonactual/tip` (formerly Desk, briefly OMNI). Repository `carbonactual/omni` is the OMNI Browser and is unrelated to this product.
+
 **Ecosystem:** Carbon Actual / OMNII  
 **Status:** CANONICAL DESIGN  
 **Role:** Ecosystem economic coordination composition  

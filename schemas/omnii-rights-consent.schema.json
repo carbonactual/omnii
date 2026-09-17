@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "omnii://schemas/rights-consent/v1",
+  "title": "OMNII Rights Consent Relationship",
+  "description": "Provider-neutral lifecycle record for rights, ownership interests, permissions, consent, approvals, partnerships, licenses, assignments and transfers. It does not determine jurisdiction-specific legal validity.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["id", "subject", "class", "status", "holder_or_principal", "scope", "provenance", "evidence", "lifecycle"],
+  "properties": {
+    "id": {"type":"string","minLength":1},
+    "subject": {"type":"string","minLength":1},
+    "class": {"enum":["copyright","patent","intellectual_property","ownership","license","consent","approval","partnership","delegation","transfer","assignment","other_right"]},
+    "status": {"enum":["asserted","identified","verified","active","disputed","unknown","revoked","expired","terminated","transferred","assigned","preserved","archived","recoverable","purgable","purged"]},
+    "holder_or_principal": {"type":"string","minLength":1},
+    "counterparty": {"type":"string"},
+    "scope": {
+      "type":"object",
+      "additionalProperties": true,
+      "required":["purpose"],
+      "properties": {
+        "purpose":{"type":"string","minLength":1},
+        "rights":[{"type":"string"}],
+        "actions":[{"type":"string"}],
+        "territory":[{"type":"string"}],
+        "context":[{"type":"string"}]
+      }
+    },
+    "instrument": {"type":"string"},
+    "authority": {
+      "type":"object",
+      "additionalProperties": true,
+      "properties": {
+        "principal":{"type":"string"},
+        "scope":{"type":"string"},
+        "grant_ref":{"type":"string"}
+      }
+    },
+    "conditions": {"type":"array","items":{"type":"string"}},
+    "obligations": {"type":"array","items":{"type":"string"}},
+    "dependencies": {"type":"array","items":{"type":"string"}},
+    "provenance": {
+      "type":"object",
+      "additionalProperties": true,
+      "required":["source"],
+      "properties":{"source":{"type":"string","minLength":1},"parent_refs":{"type":"array","items":{"type":"string"}},"version_refs":{"type":"array","items":{"type":"string"}}}
+    },
+    "evidence": {"type":"array","items":{"type":"string"}},
+    "jurisdiction": {"type":"string"},
+    "lifecycle": {
+      "type":"object",
+      "additionalProperties": true,
+      "required":["created_at","last_transition_at"],
+      "properties": {
+        "created_at":{"type":"string","format":"date-time"},
+        "effective_at":{"type":"string","format":"date-time"},
+        "expires_at":{"type":"string","format":"date-time"},
+        "last_transition_at":{"type":"string","format":"date-time"},
+        "revoked_at":{"type":"string","format":"date-time"},
+        "transferred_at":{"type":"string","format":"date-time"},
+        "purged_at":{"type":"string","format":"date-time"}
+      }
+    },
+    "successor_refs": {"type":"array","items":{"type":"string"}},
+    "residual_obligations": {"type":"array","items":{"type":"string"}}
+  }
+}
